@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * Convenient Utils for Vert.x Future
  */
-public class FutureUtils {
+public final class FutureUtils {
 
     /**
      * convert a callback style Vert.x call to Future result style
