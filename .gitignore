@@ -1,4 +1,7 @@
 .idea
 .gradle
-build
+/build
 *.iml
+/out
+/src/main/generated/
+/src/test/generated_tests/
