@@ -24,4 +24,28 @@ public final class FutureUtils {
         consumer.accept(promise);
         return promise.future();
     }
+
+    /**
+     * if a Future succeed with null, map it with the default value
+     *
+     * @param future the Future
+     * @param v0     the default value
+     * @param <T>    the type parameter of the Future
+     * @return the result Future
+     */
+    public static <T> Future<T> defaultWith(Future<T> future, T v0) {
+        return future.map(x -> x == null ? v0 : x);
+    }
+
+    /**
+     * if a Future failed or succeed with null, replace it with a Future that succeed with the default value
+     *
+     * @param future the Future
+     * @param v0     the default value
+     * @param <T>    the type parameter of the Future
+     * @return the result Future
+     */
+    public static <T> Future<T> fallbackWith(Future<T> future, T v0) {
+        return defaultWith(future.otherwise(v0), v0);
+    }
 }

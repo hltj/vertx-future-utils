@@ -46,13 +46,25 @@ class FutureUtilsTest {
         }
     }
 
-    @SuppressWarnings("SameParameterValue")
+    @Test
+    void defaultWith() {
+        assertSucceedWith("value", FutureUtils.defaultWith(Future.succeededFuture("value"), "default"));
+        assertSucceedWith("default", FutureUtils.defaultWith(Future.succeededFuture(), "default"));
+        assertFailedWith("error", FutureUtils.defaultWith(Future.failedFuture("error"), "default"));
+    }
+
+    @Test
+    void fallbackWith() {
+        assertSucceedWith("value", FutureUtils.fallbackWith(Future.succeededFuture("value"), "fallback"));
+        assertSucceedWith("fallback", FutureUtils.fallbackWith(Future.succeededFuture(), "fallback"));
+        assertSucceedWith("fallback", FutureUtils.fallbackWith(Future.failedFuture("error"), "fallback"));
+    }
+
     private <T> void assertSucceedWith(T expected, Future<T> actual) {
         assertTrue(actual.succeeded());
         assertEquals(expected, actual.result());
     }
 
-    @SuppressWarnings("SameParameterValue")
     private <T> void assertFailedWith(String expectedMessage, Future<T> actual) {
         assertTrue(actual.failed());
         assertEquals(expectedMessage, actual.cause().getMessage());
