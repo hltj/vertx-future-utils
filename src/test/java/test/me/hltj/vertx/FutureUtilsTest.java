@@ -6,28 +6,28 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import lombok.SneakyThrows;
 import me.hltj.vertx.FutureUtils;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FutureUtilsTest {
 
     @SneakyThrows
-    @org.junit.jupiter.api.Test
-    void futurize_simple() {
-        Future<Integer> future1 = FutureUtils.<Integer>futurize(x -> delayParseInt("1", x))
-                .map(i -> i + 1)
-                .otherwise(0);
+    @Test
+    void futurize() {
+        Future<Integer> future0 = FutureUtils.<Integer>futurize(x -> delayParseInt("1", x))
+                .map(i -> i + 1);
 
-        Future<Integer> future2 = FutureUtils.<Integer>futurize(x -> delayParseInt("%", x))
-                .map(i -> i + 1)
-                .otherwise(0);
+        Future<Integer> future1 = FutureUtils.<Integer>futurize(x -> delayParseInt("%", x))
+                .map(i -> i + 1);
 
         CountDownLatch latch = new CountDownLatch(1);
-        CompositeFuture.join(future1, future2).onComplete(future -> {
-            assertEquals(2, future.result().<Integer>resultAt(0));
-            assertEquals(0, future.result().<Integer>resultAt(1));
+        CompositeFuture.join(future0, future1).onComplete(future -> {
+            assertSucceedWith(2, future0);
+            assertFailedWith("For input string: \"%\"", future1);
             latch.countDown();
         });
 
@@ -44,5 +44,17 @@ class FutureUtilsTest {
         } catch (NumberFormatException e) {
             handler.handle(Future.failedFuture(e));
         }
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private <T> void assertSucceedWith(T expected, Future<T> actual) {
+        assertTrue(actual.succeeded());
+        assertEquals(expected, actual.result());
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private <T> void assertFailedWith(String expectedMessage, Future<T> actual) {
+        assertTrue(actual.failed());
+        assertEquals(expectedMessage, actual.cause().getMessage());
     }
 }
