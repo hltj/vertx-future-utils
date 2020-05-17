@@ -125,7 +125,11 @@ public final class FutureUtils {
      * @return the evaluated Future for main scenario & failed Future if a non-checked Exception thrown
      */
     public static <R> Future<R> joinWrap(Supplier<Future<R>> supplier) {
-        throw new RuntimeException("unimplemented");
+        try {
+            return supplier.get();
+        } catch (Throwable t) {
+            return Future.failedFuture(t);
+        }
     }
 
     /**
@@ -138,6 +142,6 @@ public final class FutureUtils {
      * @return the function returned Future for main scenario & failed Future if a non-checked Exception thrown
      */
     public static <T, R> Future<R> joinWrap(T v, Function<T, Future<R>> function) {
-        throw new RuntimeException("unimplemented");
+        return joinWrap(() -> function.apply(v));
     }
 }
