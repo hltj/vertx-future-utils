@@ -152,6 +152,23 @@ class FutureUtilsTest {
         assertFalse(numbers.contains(2));
     }
 
+    @Test
+    void wrap() {
+        assertSucceedWith(1, FutureUtils.wrap(() -> Integer.parseInt("1")));
+        assertFailedWith(NumberFormatException.class, "For input string: \"@\"",
+                FutureUtils.wrap(() -> Integer.parseInt("@"))
+        );
+    }
+
+    @Test
+    void wrap_function() {
+        assertSucceedWith(1, FutureUtils.wrap("1", Integer::parseInt));
+        assertFailedWith(
+                NumberFormatException.class, "For input string: \"@\"",
+                FutureUtils.wrap("@", Integer::parseInt)
+        );
+    }
+
     private <T> void assertSucceedWith(T expected, Future<T> actual) {
         assertTrue(actual.succeeded());
         assertEquals(expected, actual.result());

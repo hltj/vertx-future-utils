@@ -88,4 +88,28 @@ public final class FutureUtils {
     public static <T> Future<T> fallbackWith(Future<T> future, Function<Throwable, T> mapper, Supplier<T> supplier) {
         return defaultWith(future.otherwise(mapper), supplier);
     }
+
+    /**
+     * wrap a evaluation result within Future
+     *
+     * @param supplier the evaluation
+     * @param <R>      the result type of the evaluation
+     * @return succeed Future for main scenario & failed Future if a non-checked Exception thrown
+     */
+    public static <R> Future<R> wrap(Supplier<R> supplier) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * wrap a function application result within Future
+     *
+     * @param v        a value
+     * @param function a function applied to the value
+     * @param <T>      the type of the value
+     * @param <R>      the result type of the function
+     * @return succeed Future for main scenario & failed Future if a non-checked Exception thrown
+     */
+    public static <T, R> Future<R> wrap(T v, Function<T, R> function) {
+        throw new RuntimeException("unimplemented");
+    }
 }
