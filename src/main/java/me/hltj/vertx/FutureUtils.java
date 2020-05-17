@@ -116,4 +116,28 @@ public final class FutureUtils {
     public static <T, R> Future<R> wrap(T v, Function<T, R> function) {
         return wrap(() -> function.apply(v));
     }
+
+    /**
+     * wrap a evaluation result within Future, where the evaluation itself return a Future
+     *
+     * @param supplier the evaluation
+     * @param <R>      the type parameter for the result Future
+     * @return the evaluated Future for main scenario & failed Future if a non-checked Exception thrown
+     */
+    public static <R> Future<R> joinWrap(Supplier<Future<R>> supplier) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * wrap a function application result within Future, where the function itself return a Future
+     *
+     * @param v        a value
+     * @param function a function applied to the value
+     * @param <T>      the type of the value
+     * @param <R>      the type parameter for the result Future
+     * @return the function returned Future for main scenario & failed Future if a non-checked Exception thrown
+     */
+    public static <T, R> Future<R> joinWrap(T v, Function<T, Future<R>> function) {
+        throw new RuntimeException("unimplemented");
+    }
 }

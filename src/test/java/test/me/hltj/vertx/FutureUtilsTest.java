@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -169,6 +170,33 @@ class FutureUtilsTest {
         );
     }
 
+    @Test
+    void joinWrap() {
+        Future<Integer> future0 = FutureUtils.wrap("0", Integer::parseInt);
+        Future<Integer> future1 = FutureUtils.wrap("1", Integer::parseInt);
+
+        assertFailedWith(
+                ArithmeticException.class, "/ by zero",
+                FutureUtils.joinWrap(() -> future0.map(i -> 2 / i))
+        );
+        assertSucceedWith(2, FutureUtils.joinWrap(() -> future1.map(i -> 2 / i)));
+        assertFailedWith(
+                NullPointerException.class,
+                FutureUtils.joinWrap(() -> ((Future<Integer>) null).map(i -> 2 / i))
+        );
+    }
+
+    @Test
+    void joinWrap_function() {
+        Function<String, Future<Integer>> stringToIntFuture = s -> FutureUtils.wrap(s, Integer::parseInt);
+        assertSucceedWith(1, FutureUtils.joinWrap("1", stringToIntFuture));
+        assertFailedWith(
+                NumberFormatException.class, "For input string: \"!\"",
+                FutureUtils.joinWrap("!", stringToIntFuture)
+        );
+        assertFailedWith(NumberFormatException.class, "null", FutureUtils.joinWrap(null, stringToIntFuture));
+    }
+
     private <T> void assertSucceedWith(T expected, Future<T> actual) {
         assertTrue(actual.succeeded());
         assertEquals(expected, actual.result());
@@ -181,6 +209,11 @@ class FutureUtilsTest {
     }
 
     @SuppressWarnings("SameParameterValue")
+    private <T, E> void assertFailedWith(Class<E> clazz, Future<T> actual) {
+        assertTrue(actual.failed());
+        assertTrue(clazz.isInstance(actual.cause()));
+    }
+
     private <T, E> void assertFailedWith(Class<E> clazz, String expectedMessage, Future<T> actual) {
         assertTrue(actual.failed());
         assertTrue(clazz.isInstance(actual.cause()));
