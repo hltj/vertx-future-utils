@@ -30,7 +30,7 @@ class FutureUtilsTest {
         CountDownLatch latch = new CountDownLatch(1);
         CompositeFuture.join(future0, future1).onComplete(future -> {
             assertSucceedWith(2, future0);
-            assertFailedWith("For input string: \"%\"", future1);
+            assertFailedWith(NumberFormatException.class, "For input string: \"%\"", future1);
             latch.countDown();
         });
 
@@ -157,8 +157,16 @@ class FutureUtilsTest {
         assertEquals(expected, actual.result());
     }
 
+    @SuppressWarnings("SameParameterValue")
     private <T> void assertFailedWith(String expectedMessage, Future<T> actual) {
         assertTrue(actual.failed());
+        assertEquals(expectedMessage, actual.cause().getMessage());
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private <T, E> void assertFailedWith(Class<E> clazz, String expectedMessage, Future<T> actual) {
+        assertTrue(actual.failed());
+        assertTrue(clazz.isInstance(actual.cause()));
         assertEquals(expectedMessage, actual.cause().getMessage());
     }
 }
