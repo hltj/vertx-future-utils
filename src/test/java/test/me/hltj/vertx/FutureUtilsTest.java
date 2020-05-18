@@ -22,10 +22,10 @@ class FutureUtilsTest {
     @SneakyThrows
     @Test
     void futurize() {
-        Future<Integer> future0 = FutureUtils.<Integer>futurize(x -> delayParseInt("1", x))
+        Future<Integer> future0 = FutureUtils.<Integer>futurize(handler -> delayParseInt("1", handler))
                 .map(i -> i + 1);
 
-        Future<Integer> future1 = FutureUtils.<Integer>futurize(x -> delayParseInt("%", x))
+        Future<Integer> future1 = FutureUtils.<Integer>futurize(handler -> delayParseInt("%", handler))
                 .map(i -> i + 1);
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -36,18 +36,6 @@ class FutureUtilsTest {
         });
 
         latch.await();
-    }
-
-    @SneakyThrows
-    void delayParseInt(String s, Handler<AsyncResult<Integer>> handler) {
-        Thread.sleep(1_000);
-
-        try {
-            int i = Integer.parseInt(s);
-            handler.handle(Future.succeededFuture(i));
-        } catch (NumberFormatException e) {
-            handler.handle(Future.failedFuture(e));
-        }
     }
 
     @Test
@@ -196,6 +184,12 @@ class FutureUtilsTest {
                 FutureUtils.joinWrap("!", stringToIntFuture)
         );
         assertFailedWith(NumberFormatException.class, "null", FutureUtils.joinWrap(null, stringToIntFuture));
+    }
+
+    @SneakyThrows
+    private void delayParseInt(String s, Handler<AsyncResult<Integer>> handler) {
+        Thread.sleep(1_000);
+        handler.handle(FutureUtils.wrap(s, Integer::parseInt));
     }
 
     private <T> void assertSucceedWith(T expected, Future<T> actual) {
