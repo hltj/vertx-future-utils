@@ -180,6 +180,7 @@ class FutureUtilsTest {
                 FutureUtils.joinWrap(() -> future0.map(i -> 2 / i))
         );
         assertSucceedWith(2, FutureUtils.joinWrap(() -> future1.map(i -> 2 / i)));
+        //noinspection ConstantConditions
         assertFailedWith(
                 NullPointerException.class,
                 FutureUtils.joinWrap(() -> ((Future<Integer>) null).map(i -> 2 / i))
