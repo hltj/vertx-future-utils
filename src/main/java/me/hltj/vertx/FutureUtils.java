@@ -1,3 +1,25 @@
+/*
+ * vertx-future-utils - Convenient Utilities for Vert.x Future
+ * https://github.com/hltj/vertx-future-utils
+ *
+ * Copyright (C) 2020  JiaYanwei  https://hltj.me
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
+ * if you need additional information or have any questions.
+ */
 package me.hltj.vertx;
 
 import io.vertx.core.AsyncResult;
@@ -11,12 +33,15 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Convenient Utils for Vert.x {@link Future}
+ * Convenient Utilities for Vert.x {@link Future}.
+ * <p>
+ *
+ * @author <a href="https://hltj.me">JiaYanwei</a>
  */
 public final class FutureUtils {
 
     /**
-     * convert a callback style Vert.x call to {@link Future} result style
+     * Convert a callback style Vert.x call to {@link Future} result style.
      *
      * @param consumer callback style Vert.x call
      * @param <T>      the type parameter of the {@code AsyncResult}
@@ -29,7 +54,7 @@ public final class FutureUtils {
     }
 
     /**
-     * if a {@link Future} succeed with null, map it with the default value
+     * If a {@link Future} succeed with null, map it with the default value.
      *
      * @param future the {@code Future}
      * @param v0     the default value
@@ -41,7 +66,7 @@ public final class FutureUtils {
     }
 
     /**
-     * if a {@link Future} succeed with null, map it with the default value
+     * If a {@link Future} succeed with null, map it with the default value.
      *
      * @param future   the {@code Future}
      * @param supplier a supplier to get the default value
@@ -53,8 +78,8 @@ public final class FutureUtils {
     }
 
     /**
-     * if a {@link Future} failed or succeed with null,
-     * replace it with a {@link Future} that succeed with the default value
+     * If a {@link Future} failed or succeed with null,
+     * replace it with a {@link Future} that succeed with the default value.
      *
      * @param future the {@code Future}
      * @param v0     the default value
@@ -66,8 +91,8 @@ public final class FutureUtils {
     }
 
     /**
-     * if a {@link Future} failed or succeed with null,
-     * replace it with a {@link Future} that succeed with the default value
+     * If a {@link Future} failed or succeed with null,
+     * replace it with a {@link Future} that succeed with the default value.
      *
      * @param future   the {@code Future}
      * @param function a function to get the default value
@@ -79,8 +104,8 @@ public final class FutureUtils {
     }
 
     /**
-     * if a {@link Future} failed or succeed with null,
-     * replace it with a {@link Future} that succeed with the default value
+     * If a {@link Future} failed or succeed with null,
+     * replace it with a {@link Future} that succeed with the default value.
      *
      * @param future   the {@code Future}
      * @param mapper   a function to get the default value on failure
@@ -93,7 +118,7 @@ public final class FutureUtils {
     }
 
     /**
-     * wrap a evaluation result within {@link Future}
+     * Wrap a evaluation result within {@link Future}.
      *
      * @param supplier the evaluation
      * @param <R>      the result type of the evaluation
@@ -108,7 +133,7 @@ public final class FutureUtils {
     }
 
     /**
-     * wrap a function application result within {@link Future}
+     * Wrap a function application result within {@link Future}.
      *
      * @param v        a value
      * @param function a function applied to the value
@@ -121,7 +146,7 @@ public final class FutureUtils {
     }
 
     /**
-     * wrap a evaluation result within {@link Future}, where the evaluation itself return a {@link Future}
+     * Wrap a evaluation result within {@link Future}, where the evaluation itself return a {@link Future}.
      *
      * @param supplier the evaluation
      * @param <R>      the type parameter for the result {@code Future}
@@ -136,7 +161,7 @@ public final class FutureUtils {
     }
 
     /**
-     * wrap a function application result within {@link Future}, where the function itself return a {@link Future}
+     * Wrap a function application result within {@link Future}, where the function itself return a {@link Future}.
      *
      * @param v        a value
      * @param function a function applied to the value
