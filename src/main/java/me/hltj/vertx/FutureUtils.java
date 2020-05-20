@@ -146,7 +146,8 @@ public final class FutureUtils {
     }
 
     /**
-     * Wrap a evaluation result within {@link Future}, where the evaluation itself return a {@link Future}.
+     * Wrap a evaluation result within {@link Future}, where the evaluation result itself is a {@link Future},
+     * the result will be join (also known as {@code flatten}) before return.
      *
      * @param supplier the evaluation
      * @param <R>      the type parameter for the result {@code Future}
@@ -161,7 +162,8 @@ public final class FutureUtils {
     }
 
     /**
-     * Wrap a function application result within {@link Future}, where the function itself return a {@link Future}.
+     * Wrap a {@code function} application result within {@link Future}, where the {@code function} itself return
+     * a {@link Future}, the result will be join (also known as {@code flatten}) before return.
      *
      * @param v        a value
      * @param function a function applied to the value
