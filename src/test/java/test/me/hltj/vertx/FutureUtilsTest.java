@@ -38,6 +38,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.me.hltj.vertx.SharedTestUtils.assertSucceedWith;
 
 class FutureUtilsTest {
 
@@ -191,7 +192,7 @@ class FutureUtilsTest {
         );
         assertSucceedWith(2, FutureUtils.joinWrap(() -> future1.map(i -> 2 / i)));
         //noinspection ConstantConditions
-        assertFailedWith(
+        SharedTestUtils.assertFailedWith(
                 NullPointerException.class,
                 FutureUtils.joinWrap(() -> ((Future<Integer>) null).map(i -> 2 / i))
         );
@@ -209,29 +210,18 @@ class FutureUtilsTest {
     }
 
     @SneakyThrows
-    private void delayParseInt(String s, Handler<AsyncResult<Integer>> handler) {
+    private static void delayParseInt(String s, Handler<AsyncResult<Integer>> handler) {
         Thread.sleep(1_000);
         handler.handle(FutureUtils.wrap(s, Integer::parseInt));
     }
 
-    private <T> void assertSucceedWith(T expected, Future<T> actual) {
-        assertTrue(actual.succeeded());
-        assertEquals(expected, actual.result());
-    }
-
     @SuppressWarnings("SameParameterValue")
-    private <T> void assertFailedWith(String expectedMessage, Future<T> actual) {
+    private static <T> void assertFailedWith(String expectedMessage, Future<T> actual) {
         assertTrue(actual.failed());
         assertEquals(expectedMessage, actual.cause().getMessage());
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private <T, E> void assertFailedWith(Class<E> clazz, Future<T> actual) {
-        assertTrue(actual.failed());
-        assertTrue(clazz.isInstance(actual.cause()));
-    }
-
-    private <T, E> void assertFailedWith(Class<E> clazz, String expectedMessage, Future<T> actual) {
+    private static <T, E> void assertFailedWith(Class<E> clazz, String expectedMessage, Future<T> actual) {
         assertTrue(actual.failed());
         assertTrue(clazz.isInstance(actual.cause()));
         assertEquals(expectedMessage, actual.cause().getMessage());

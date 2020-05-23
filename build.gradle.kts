@@ -11,6 +11,8 @@ repositories {
 
 dependencies {
     implementation(group = "io.vertx", name = "vertx-core", version = "3.9.0")
+    compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.12")
+    annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.6.2")
     testCompileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.12")
     testAnnotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
