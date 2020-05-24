@@ -30,6 +30,8 @@ import lombok.AllArgsConstructor;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static me.hltj.vertx.FutureUtils.joinWrap;
+
 /**
  * A {@link CompositeFuture} wrapper that provide some convenient operations as a complement.
  */
@@ -48,7 +50,7 @@ public class CompositeFutureWrapper {
      * Return the original {@link CompositeFuture}.
      */
     public CompositeFuture raw() {
-        throw new RuntimeException("unimplemented");
+        return composite;
     }
 
     /**
@@ -71,7 +73,7 @@ public class CompositeFutureWrapper {
      * @param consumer the side-effect code that takes the original {@code CompositeFuture} as parameter
      */
     public void use(Consumer<CompositeFuture> consumer) {
-        throw new RuntimeException("unimplemented");
+        consumer.accept(composite);
     }
 
     /**
@@ -96,7 +98,7 @@ public class CompositeFutureWrapper {
      * @return the result {@code Future}
      */
     public <R> Future<R> through(Function<CompositeFuture, R> function) {
-        throw new RuntimeException("unimplemented");
+        return joinThrough(function.andThen(Future::succeededFuture));
     }
 
     /**
@@ -122,6 +124,6 @@ public class CompositeFutureWrapper {
      * @return the result {@code Future}
      */
     public <R> Future<R> joinThrough(Function<CompositeFuture, Future<R>> function) {
-        throw new RuntimeException("unimplemented");
+        return composite.compose(_x -> joinWrap(composite, function), _t -> joinWrap(composite, function));
     }
 }
