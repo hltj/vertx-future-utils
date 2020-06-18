@@ -27,13 +27,12 @@ import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import lombok.SneakyThrows;
+import lombok.val;
 import me.hltj.vertx.FutureUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;
 
@@ -45,11 +44,8 @@ class FutureUtilsTest {
     @SneakyThrows
     @Test
     void futurize() {
-        Future<Integer> future0 = FutureUtils.<Integer>futurize(handler -> delayParseInt("1", handler))
-                .map(i -> i + 1);
-
-        Future<Integer> future1 = FutureUtils.<Integer>futurize(handler -> delayParseInt("%", handler))
-                .map(i -> i + 1);
+        val future0 = FutureUtils.<Integer>futurize(handler -> delayParseInt("1", handler)).map(i -> i + 1);
+        val future1 = FutureUtils.<Integer>futurize(handler -> delayParseInt("%", handler)).map(i -> i + 1);
 
         CountDownLatch latch = new CountDownLatch(1);
         CompositeFuture.join(future0, future1).onComplete(future -> {
@@ -70,7 +66,7 @@ class FutureUtilsTest {
 
     @Test
     void defaultWith_supplier() {
-        Set<Integer> numbers = new HashSet<>();
+        val numbers = new HashSet<Integer>();
 
         assertSucceedWith("value", FutureUtils.<String>defaultWith(Future.succeededFuture("value"), () -> {
             numbers.add(0);
@@ -100,8 +96,8 @@ class FutureUtilsTest {
 
     @Test
     void fallbackWith_function() {
-        List<Throwable> throwables = new ArrayList<>();
-        Set<Integer> numbers = new HashSet<>();
+        val throwables = new ArrayList<Throwable>();
+        val numbers = new HashSet<Integer>();
 
         assertSucceedWith("value", FutureUtils.<String>fallbackWith(Future.succeededFuture("value"), opt -> {
             opt.ifPresent(throwables::add);
@@ -130,8 +126,8 @@ class FutureUtilsTest {
 
     @Test
     void fallbackWith_mapper_supplier() {
-        List<Throwable> throwables = new ArrayList<>();
-        Set<Integer> numbers = new HashSet<>();
+        val throwables = new ArrayList<Throwable>();
+        val numbers = new HashSet<Integer>();
 
         assertSucceedWith("value", FutureUtils.fallbackWith(Future.succeededFuture("value"), t -> {
             throwables.add(t);
