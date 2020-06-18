@@ -178,7 +178,7 @@ class FutureUtilsTest {
     }
 
     @Test
-    void joinWrap() {
+    void joinWrap_flatWrap() {
         Future<Integer> future0 = FutureUtils.wrap("0", Integer::parseInt);
         Future<Integer> future1 = FutureUtils.wrap("1", Integer::parseInt);
 
@@ -186,23 +186,44 @@ class FutureUtilsTest {
                 ArithmeticException.class, "/ by zero",
                 FutureUtils.joinWrap(() -> future0.map(i -> 2 / i))
         );
+        assertFailedWith(
+                ArithmeticException.class, "/ by zero",
+                FutureUtils.flatWrap(() -> future0.map(i -> 2 / i))
+        );
+
         assertSucceedWith(2, FutureUtils.joinWrap(() -> future1.map(i -> 2 / i)));
+        assertSucceedWith(2, FutureUtils.flatWrap(() -> future1.map(i -> 2 / i)));
+
         //noinspection ConstantConditions
         SharedTestUtils.assertFailedWith(
                 NullPointerException.class,
                 FutureUtils.joinWrap(() -> ((Future<Integer>) null).map(i -> 2 / i))
         );
+        //noinspection ConstantConditions
+        SharedTestUtils.assertFailedWith(
+                NullPointerException.class,
+                FutureUtils.flatWrap(() -> ((Future<Integer>) null).map(i -> 2 / i))
+        );
     }
 
     @Test
-    void joinWrap_function() {
+    void joinWrap_flatWrap_function() {
         Function<String, Future<Integer>> stringToIntFuture = s -> FutureUtils.wrap(s, Integer::parseInt);
+
         assertSucceedWith(1, FutureUtils.joinWrap("1", stringToIntFuture));
+        assertSucceedWith(1, FutureUtils.flatWrap("1", stringToIntFuture));
+
         assertFailedWith(
                 NumberFormatException.class, "For input string: \"!\"",
                 FutureUtils.joinWrap("!", stringToIntFuture)
         );
+        assertFailedWith(
+                NumberFormatException.class, "For input string: \"!\"",
+                FutureUtils.flatWrap("!", stringToIntFuture)
+        );
+
         assertFailedWith(NumberFormatException.class, "null", FutureUtils.joinWrap(null, stringToIntFuture));
+        assertFailedWith(NumberFormatException.class, "null", FutureUtils.flatWrap(null, stringToIntFuture));
     }
 
     @SneakyThrows

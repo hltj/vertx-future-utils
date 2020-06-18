@@ -146,6 +146,13 @@ public final class FutureUtils {
     }
 
     /**
+     * Alias for {@link FutureUtils#joinWrap(Supplier)}.
+     */
+    public static <R> Future<R> flatWrap(Supplier<Future<R>> supplier) {
+        return joinWrap(supplier);
+    }
+
+    /**
      * Wrap a evaluation result within {@link Future}, where the evaluation result itself is a {@link Future},
      * the result will be join (also known as {@code flatten}) before return.
      *
@@ -159,6 +166,13 @@ public final class FutureUtils {
         } catch (Throwable t) {
             return Future.failedFuture(t);
         }
+    }
+
+    /**
+     * Alias for {@link FutureUtils#joinWrap(Object, Function)}.
+     */
+    public static <T, R> Future<R> flatWrap(T v, Function<T, Future<R>> function) {
+        return joinWrap(v, function);
     }
 
     /**
