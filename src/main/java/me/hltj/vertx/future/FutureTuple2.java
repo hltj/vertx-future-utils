@@ -34,6 +34,11 @@ import me.hltj.vertx.FutureUtils;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
+import static me.hltj.vertx.FutureUtils.defaultWith;
+import static me.hltj.vertx.FutureUtils.fallbackWith;
+import static me.hltj.vertx.future.InternalUtil.toFailureMapper;
+import static me.hltj.vertx.future.InternalUtil.toSupplier;
+
 /**
  * A tuple of two {@link Future}s.
  *
@@ -56,7 +61,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the mapped {@code Future}s
      */
     public FutureTuple2<T0, T1> mapEmpty() {
-        throw new RuntimeException("unimplemented");
+        return of(_0.mapEmpty(), _1.mapEmpty());
     }
 
     /**
@@ -69,7 +74,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the mapped {@code Future}s
      */
     public FutureTuple2<T0, T1> otherwise(T0 v0, T1 v1) {
-        throw new RuntimeException("unimplemented");
+        return of(_0.otherwise(v0), _1.otherwise(v1));
     }
 
     /**
@@ -84,7 +89,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the mapped {@code Future}s
      */
     public FutureTuple2<T0, T1> otherwise(Consumer<Throwable> onFailure, T0 v0, T1 v1) {
-        throw new RuntimeException("unimplemented");
+        return of(_0.otherwise(toFailureMapper(onFailure, v0)), _1.otherwise(toFailureMapper(onFailure, v1)));
     }
 
     /**
@@ -95,7 +100,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the mapped {@code Future}s
      */
     public FutureTuple2<T0, T1> otherwiseEmpty() {
-        throw new RuntimeException("unimplemented");
+        return of(_0.otherwiseEmpty(), _1.otherwiseEmpty());
     }
 
     /**
@@ -108,7 +113,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the mapped {@code Future}s
      */
     public FutureTuple2<T0, T1> defaults(T0 v0, T1 v1) {
-        throw new RuntimeException("unimplemented");
+        return of(defaultWith(_0, v0), defaultWith(_1, v1));
     }
 
     /**
@@ -124,7 +129,10 @@ public final class FutureTuple2<T0, T1> {
      * @return the mapped {@code Future}s
      */
     public FutureTuple2<T0, T1> defaults(Runnable onEmpty, T0 v0, T1 v1) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                FutureUtils.defaultWith(_0, toSupplier(onEmpty, v0)),
+                FutureUtils.defaultWith(_1, toSupplier(onEmpty, v1))
+        );
     }
 
     /**
@@ -137,7 +145,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the mapped {@code Future}s
      */
     public FutureTuple2<T0, T1> fallback(T0 v0, T1 v1) {
-        throw new RuntimeException("unimplemented");
+        return of(fallbackWith(_0, v0), fallbackWith(_1, v1));
     }
 
     /**
@@ -155,7 +163,10 @@ public final class FutureTuple2<T0, T1> {
      * @return the mapped {@code Future}s
      */
     public FutureTuple2<T0, T1> fallback(Consumer<Throwable> onFailure, Runnable onEmpty, T0 v0, T1 v1) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                fallbackWith(_0, toFailureMapper(onFailure, v0), toSupplier(onEmpty, v0)),
+                fallbackWith(_1, toFailureMapper(onFailure, v1), toSupplier(onEmpty, v1))
+        );
     }
 
     /**
@@ -164,7 +175,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the {@code CompositeFutureTuple2}
      */
     public CompositeFutureTuple2<T0, T1> all() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::all);
     }
 
     /**
@@ -173,7 +184,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the {@code CompositeFutureTuple2}
      */
     public CompositeFutureTuple2<T0, T1> any() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::any);
     }
 
     /**
@@ -182,7 +193,7 @@ public final class FutureTuple2<T0, T1> {
      * @return the {@code CompositeFutureTuple2}
      */
     public CompositeFutureTuple2<T0, T1> join() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::join);
     }
 
     /**
@@ -192,6 +203,6 @@ public final class FutureTuple2<T0, T1> {
      * @return the {@code CompositeFutureTuple2}
      */
     public CompositeFutureTuple2<T0, T1> compose(BiFunction<Future<T0>, Future<T1>, CompositeFuture> function2) {
-        throw new RuntimeException("unimplemented");
+        return CompositeFutureTuple2.of(this, function2.apply(_0, _1));
     }
 }

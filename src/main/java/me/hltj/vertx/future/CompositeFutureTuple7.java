@@ -29,6 +29,9 @@ import me.hltj.vertx.function.*;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static me.hltj.vertx.FutureUtils.joinWrap;
 
 /**
  * The composite {@link Future} tuple warps a {@link CompositeFuture} and a {@link FutureTuple7}.
@@ -70,14 +73,14 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
     public static <T0, T1, T2, T3, T4, T5, T6> CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> of(
             FutureTuple7<T0, T1, T2, T3, T4, T5, T6> tuple7, CompositeFuture compose
     ) {
-        throw new RuntimeException("unimplemented");
+        return new CompositeFutureTuple7<>(compose, tuple7);
     }
 
     /**
      * Return the original {@link FutureTuple7}.
      */
     public FutureTuple7<T0, T1, T2, T3, T4, T5, T6> tuple() {
-        throw new RuntimeException("unimplemented");
+        return tuple7;
     }
 
     /**
@@ -90,7 +93,10 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
             Consumer8<CompositeFuture, Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>,
                     Future<T6>> consumer8
     ) {
-        throw new RuntimeException("unimplemented");
+        consumer8.accept(
+                composite, tuple7.get_0(), tuple7.get_1(), tuple7.get_2(), tuple7.get_3(), tuple7.get_4(),
+                tuple7.get_5(), tuple7.get_6()
+        );
     }
 
     /**
@@ -102,7 +108,10 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
             Function8<CompositeFuture, Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>,
                     Future<T6>, R> function7
     ) {
-        throw new RuntimeException("unimplemented");
+        return function7.apply(
+                composite, tuple7.get_0(), tuple7.get_1(), tuple7.get_2(), tuple7.get_3(), tuple7.get_4(),
+                tuple7.get_5(), tuple7.get_6()
+        );
     }
 
     /**
@@ -111,7 +120,7 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
     public <R> Future<R> mapAnyway(
             Function7<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>, Future<T6>, R> function7
     ) {
-        throw new RuntimeException("unimplemented");
+        return through(function7);
     }
 
     /**
@@ -122,7 +131,7 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
     public <R> Future<R> through(
             Function7<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>, Future<T6>, R> function7
     ) {
-        throw new RuntimeException("unimplemented");
+        return joinThrough(function7.andThen(Future::succeededFuture));
     }
 
     /**
@@ -132,7 +141,7 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
             Function7<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>, Future<T6>,
                     Future<R>> function7
     ) {
-        throw new RuntimeException("unimplemented");
+        return joinThrough(function7);
     }
 
     /**
@@ -146,14 +155,18 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
             Function7<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>, Future<T6>,
                     Future<R>> function7
     ) {
-        throw new RuntimeException("unimplemented");
+        Supplier<Future<R>> supplier = () -> function7.apply(
+                tuple7.get_0(), tuple7.get_1(), tuple7.get_2(), tuple7.get_3(), tuple7.get_4(), tuple7.get_5(),
+                tuple7.get_6()
+        );
+        return composite.compose(_x -> joinWrap(supplier), _t -> joinWrap(supplier));
     }
 
     /**
      * Alias for {@link CompositeFutureTuple7#applift(Function7)}.
      */
     public <R> Future<R> mapTyped(Function7<T0, T1, T2, T3, T4, T5, T6, R> function7) {
-        throw new RuntimeException("unimplemented");
+        return applift(function7);
     }
 
     /**
@@ -163,14 +176,17 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
      * It likes {@link CompositeFutureTuple2#applift(BiFunction)} but with 7-arity.
      */
     public <R> Future<R> applift(Function7<T0, T1, T2, T3, T4, T5, T6, R> function7) {
-        throw new RuntimeException("unimplemented");
+        return composite.map(future -> function7.apply(
+                composite.resultAt(0), composite.resultAt(1), composite.resultAt(2), composite.resultAt(3),
+                composite.resultAt(4), composite.resultAt(5), composite.resultAt(6)
+        ));
     }
 
     /**
      * Alias for {@link CompositeFutureTuple7#joinApplift(Function7)}.
      */
     public <R> Future<R> flatMapTyped(Function7<T0, T1, T2, T3, T4, T5, T6, Future<R>> function7) {
-        throw new RuntimeException("unimplemented");
+        return joinApplift(function7);
     }
 
     /**
@@ -180,6 +196,9 @@ final public class CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> extends Com
      * It likes {@link CompositeFutureTuple2#joinApplift(BiFunction)} but with 7-arity.
      */
     public <R> Future<R> joinApplift(Function7<T0, T1, T2, T3, T4, T5, T6, Future<R>> function7) {
-        throw new RuntimeException("unimplemented");
+        return composite.flatMap(future -> function7.apply(
+                composite.resultAt(0), composite.resultAt(1), composite.resultAt(2), composite.resultAt(3),
+                composite.resultAt(4), composite.resultAt(5), composite.resultAt(6)
+        ));
     }
 }

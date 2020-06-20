@@ -29,10 +29,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import me.hltj.vertx.FutureUtils;
 import me.hltj.vertx.function.Function3;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+
+import static me.hltj.vertx.FutureUtils.defaultWith;
+import static me.hltj.vertx.FutureUtils.fallbackWith;
+import static me.hltj.vertx.future.InternalUtil.toFailureMapper;
+import static me.hltj.vertx.future.InternalUtil.toSupplier;
 
 /**
  * A tuple of 3 {@link Future}s.
@@ -56,7 +62,7 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#mapEmpty()} but with 3-arity.
      */
     public FutureTuple3<T0, T1, T2> mapEmpty() {
-        throw new RuntimeException("unimplemented");
+        return of(_0.mapEmpty(), _1.mapEmpty(), _2.mapEmpty());
     }
 
     /**
@@ -65,7 +71,7 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#otherwise(Object, Object)} (Object, Object)} but with 3-arity.
      */
     public FutureTuple3<T0, T1, T2> otherwise(T0 v0, T1 v1, T2 v2) {
-        throw new RuntimeException("unimplemented");
+        return of(_0.otherwise(v0), _1.otherwise(v1), _2.otherwise(v2));
     }
 
     /**
@@ -74,7 +80,11 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#otherwise(Consumer, Object, Object)} but with 3-arity.
      */
     public FutureTuple3<T0, T1, T2> otherwise(Consumer<Throwable> onFailure, T0 v0, T1 v1, T2 v2) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                _0.otherwise(toFailureMapper(onFailure, v0)),
+                _1.otherwise(toFailureMapper(onFailure, v1)),
+                _2.otherwise(toFailureMapper(onFailure, v2))
+        );
     }
 
     /**
@@ -83,7 +93,7 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#otherwiseEmpty()} but with 3-arity.
      */
     public FutureTuple3<T0, T1, T2> otherwiseEmpty() {
-        throw new RuntimeException("unimplemented");
+        return of(_0.otherwiseEmpty(), _1.otherwiseEmpty(), _2.otherwiseEmpty());
     }
 
     /**
@@ -92,7 +102,7 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#defaults(Object, Object)} but with 3-arity.
      */
     public FutureTuple3<T0, T1, T2> defaults(T0 v0, T1 v1, T2 v2) {
-        throw new RuntimeException("unimplemented");
+        return of(defaultWith(_0, v0), defaultWith(_1, v1), defaultWith(_2, v2));
     }
 
     /**
@@ -101,7 +111,11 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#defaults(Runnable, Object, Object)} but with 3-arity.
      */
     public FutureTuple3<T0, T1, T2> defaults(Runnable onEmpty, T0 v0, T1 v1, T2 v2) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                FutureUtils.defaultWith(_0, toSupplier(onEmpty, v0)),
+                FutureUtils.defaultWith(_1, toSupplier(onEmpty, v1)),
+                FutureUtils.defaultWith(_2, toSupplier(onEmpty, v2))
+        );
     }
 
     /**
@@ -110,7 +124,7 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#fallback(Object, Object)} but with 3-arity.
      */
     public FutureTuple3<T0, T1, T2> fallback(T0 v0, T1 v1, T2 v2) {
-        throw new RuntimeException("unimplemented");
+        return of(fallbackWith(_0, v0), fallbackWith(_1, v1), fallbackWith(_2, v2));
     }
 
     /**
@@ -120,7 +134,11 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#fallback(Consumer, Runnable, Object, Object)} but with 3-arity.
      */
     public FutureTuple3<T0, T1, T2> fallback(Consumer<Throwable> onFailure, Runnable onEmpty, T0 v0, T1 v1, T2 v2) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                fallbackWith(_0, toFailureMapper(onFailure, v0), toSupplier(onEmpty, v0)),
+                fallbackWith(_1, toFailureMapper(onFailure, v1), toSupplier(onEmpty, v1)),
+                fallbackWith(_2, toFailureMapper(onFailure, v2), toSupplier(onEmpty, v2))
+        );
     }
 
     /**
@@ -130,7 +148,7 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#all()} but with 3-arity.
      */
     public CompositeFutureTuple3<T0, T1, T2> all() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::all);
     }
 
     /**
@@ -140,7 +158,7 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#any()} but with 3-arity.
      */
     public CompositeFutureTuple3<T0, T1, T2> any() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::any);
     }
 
     /**
@@ -150,7 +168,7 @@ public final class FutureTuple3<T0, T1, T2> {
      * It likes {@link FutureTuple2#join()} but with 3-arity.
      */
     public CompositeFutureTuple3<T0, T1, T2> join() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::join);
     }
 
     /**
@@ -161,6 +179,6 @@ public final class FutureTuple3<T0, T1, T2> {
     public CompositeFutureTuple3<T0, T1, T2> compose(
             Function3<Future<T0>, Future<T1>, Future<T2>, CompositeFuture> function3
     ) {
-        throw new RuntimeException("unimplemented");
+        return CompositeFutureTuple3.of(this, function3.apply(_0, _1, _2));
     }
 }

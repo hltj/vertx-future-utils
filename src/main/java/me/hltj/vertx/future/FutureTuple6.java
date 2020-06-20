@@ -29,10 +29,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import me.hltj.vertx.FutureUtils;
 import me.hltj.vertx.function.Function6;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+
+import static me.hltj.vertx.FutureUtils.defaultWith;
+import static me.hltj.vertx.FutureUtils.fallbackWith;
+import static me.hltj.vertx.future.InternalUtil.toFailureMapper;
+import static me.hltj.vertx.future.InternalUtil.toSupplier;
 
 /**
  * A tuple of 6 {@link Future}s.
@@ -62,7 +68,7 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#mapEmpty()} but with 6-arity.
      */
     public FutureTuple6<T0, T1, T2, T3, T4, T5> mapEmpty() {
-        throw new RuntimeException("unimplemented");
+        return of(_0.mapEmpty(), _1.mapEmpty(), _2.mapEmpty(), _3.mapEmpty(), _4.mapEmpty(), _5.mapEmpty());
     }
 
     /**
@@ -71,7 +77,10 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#otherwise(Object, Object)} (Object, Object)} but with 6-arity.
      */
     public FutureTuple6<T0, T1, T2, T3, T4, T5> otherwise(T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                _0.otherwise(v0), _1.otherwise(v1), _2.otherwise(v2), _3.otherwise(v3), _4.otherwise(v4),
+                _5.otherwise(v5)
+        );
     }
 
     /**
@@ -82,7 +91,14 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
     public FutureTuple6<T0, T1, T2, T3, T4, T5> otherwise(
             Consumer<Throwable> onFailure, T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5
     ) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                _0.otherwise(toFailureMapper(onFailure, v0)),
+                _1.otherwise(toFailureMapper(onFailure, v1)),
+                _2.otherwise(toFailureMapper(onFailure, v2)),
+                _3.otherwise(toFailureMapper(onFailure, v3)),
+                _4.otherwise(toFailureMapper(onFailure, v4)),
+                _5.otherwise(toFailureMapper(onFailure, v5))
+        );
     }
 
     /**
@@ -91,7 +107,10 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#otherwiseEmpty()} but with 6-arity.
      */
     public FutureTuple6<T0, T1, T2, T3, T4, T5> otherwiseEmpty() {
-        throw new RuntimeException("unimplemented");
+        return of(
+                _0.otherwiseEmpty(), _1.otherwiseEmpty(), _2.otherwiseEmpty(), _3.otherwiseEmpty(), _4.otherwiseEmpty(),
+                _5.otherwiseEmpty()
+        );
     }
 
     /**
@@ -100,7 +119,10 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#defaults(Object, Object)} but with 6-arity.
      */
     public FutureTuple6<T0, T1, T2, T3, T4, T5> defaults(T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                defaultWith(_0, v0), defaultWith(_1, v1), defaultWith(_2, v2), defaultWith(_3, v3), defaultWith(_4, v4),
+                defaultWith(_5, v5)
+        );
     }
 
     /**
@@ -109,7 +131,14 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#defaults(Runnable, Object, Object)} but with 6-arity.
      */
     public FutureTuple6<T0, T1, T2, T3, T4, T5> defaults(Runnable onEmpty, T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                FutureUtils.defaultWith(_0, toSupplier(onEmpty, v0)),
+                FutureUtils.defaultWith(_1, toSupplier(onEmpty, v1)),
+                FutureUtils.defaultWith(_2, toSupplier(onEmpty, v2)),
+                FutureUtils.defaultWith(_3, toSupplier(onEmpty, v3)),
+                FutureUtils.defaultWith(_4, toSupplier(onEmpty, v4)),
+                FutureUtils.defaultWith(_5, toSupplier(onEmpty, v5))
+        );
     }
 
     /**
@@ -118,7 +147,10 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#fallback(Object, Object)} but with 6-arity.
      */
     public FutureTuple6<T0, T1, T2, T3, T4, T5> fallback(T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                fallbackWith(_0, v0), fallbackWith(_1, v1), fallbackWith(_2, v2), fallbackWith(_3, v3),
+                fallbackWith(_4, v4), fallbackWith(_5, v5)
+        );
     }
 
     /**
@@ -130,7 +162,14 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
     public FutureTuple6<T0, T1, T2, T3, T4, T5> fallback(
             Consumer<Throwable> onFailure, Runnable onEmpty, T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5
     ) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                fallbackWith(_0, toFailureMapper(onFailure, v0), toSupplier(onEmpty, v0)),
+                fallbackWith(_1, toFailureMapper(onFailure, v1), toSupplier(onEmpty, v1)),
+                fallbackWith(_2, toFailureMapper(onFailure, v2), toSupplier(onEmpty, v2)),
+                fallbackWith(_3, toFailureMapper(onFailure, v3), toSupplier(onEmpty, v3)),
+                fallbackWith(_4, toFailureMapper(onFailure, v4), toSupplier(onEmpty, v4)),
+                fallbackWith(_5, toFailureMapper(onFailure, v5), toSupplier(onEmpty, v5))
+        );
     }
 
     /**
@@ -140,7 +179,7 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#all()} but with 6-arity.
      */
     public CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> all() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::all);
     }
 
     /**
@@ -150,7 +189,7 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#any()} but with 6-arity.
      */
     public CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> any() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::any);
     }
 
     /**
@@ -160,7 +199,7 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
      * It likes {@link FutureTuple2#join()} but with 6-arity.
      */
     public CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> join() {
-        throw new RuntimeException("unimplemented");
+        return compose(CompositeFuture::join);
     }
 
     /**
@@ -171,6 +210,6 @@ public final class FutureTuple6<T0, T1, T2, T3, T4, T5> {
     public CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> compose(
             Function6<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>, CompositeFuture> function6
     ) {
-        throw new RuntimeException("unimplemented");
+        return CompositeFutureTuple6.of(this, function6.apply(_0, _1, _2, _3, _4, _5));
     }
 }

@@ -32,6 +32,9 @@ import me.hltj.vertx.function.Function4;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static me.hltj.vertx.FutureUtils.joinWrap;
 
 /**
  * The composite {@link Future} tuple warps a {@link CompositeFuture} and a {@link FutureTuple3}.
@@ -65,14 +68,14 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
     public static <T0, T1, T2> CompositeFutureTuple3<T0, T1, T2> of(
             FutureTuple3<T0, T1, T2> tuple3, CompositeFuture compose
     ) {
-        throw new RuntimeException("unimplemented");
+        return new CompositeFutureTuple3<>(compose, tuple3);
     }
 
     /**
      * Return the original {@link FutureTuple3}.
      */
     public FutureTuple3<T0, T1, T2> tuple() {
-        throw new RuntimeException("unimplemented");
+        return tuple3;
     }
 
     /**
@@ -82,7 +85,7 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
      * It likes {@link CompositeFutureTuple2#use(Consumer3)} but with 3-arity.
      */
     public void use(Consumer4<CompositeFuture, Future<T0>, Future<T1>, Future<T2>> consumer4) {
-        throw new RuntimeException("unimplemented");
+        consumer4.accept(composite, tuple3.get_0(), tuple3.get_1(), tuple3.get_2());
     }
 
     /**
@@ -91,14 +94,14 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
      * It likes {@link CompositeFutureTuple2#with(Function3)} but with 3-arity.
      */
     public <R> R with(Function4<CompositeFuture, Future<T0>, Future<T1>, Future<T2>, R> function4) {
-        throw new RuntimeException("unimplemented");
+        return function4.apply(composite, tuple3.get_0(), tuple3.get_1(), tuple3.get_2());
     }
 
     /**
      * Alias for {@link #through(Function3)}.
      */
     public <R> Future<R> mapAnyway(Function3<Future<T0>, Future<T1>, Future<T2>, R> function3) {
-        throw new RuntimeException("unimplemented");
+        return through(function3);
     }
 
     /**
@@ -107,14 +110,14 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
      * It likes {@link CompositeFutureTuple2#through(BiFunction)} but with 3-arity.
      */
     public <R> Future<R> through(Function3<Future<T0>, Future<T1>, Future<T2>, R> function3) {
-        throw new RuntimeException("unimplemented");
+        return joinThrough(function3.andThen(Future::succeededFuture));
     }
 
     /**
      * Alias for {@link #joinThrough(Function3)}.
      */
     public <R> Future<R> flatMapAnyway(Function3<Future<T0>, Future<T1>, Future<T2>, Future<R>> function3) {
-        throw new RuntimeException("unimplemented");
+        return joinThrough(function3);
     }
 
     /**
@@ -125,14 +128,15 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
      * It likes {@link CompositeFutureTuple2#joinThrough(BiFunction)} but with 3-arity.
      */
     public <R> Future<R> joinThrough(Function3<Future<T0>, Future<T1>, Future<T2>, Future<R>> function3) {
-        throw new RuntimeException("unimplemented");
+        Supplier<Future<R>> supplier = () -> function3.apply(tuple3.get_0(), tuple3.get_1(), tuple3.get_2());
+        return composite.compose(_x -> joinWrap(supplier), _t -> joinWrap(supplier));
     }
 
     /**
      * Alias for {@link CompositeFutureTuple3#applift(Function3)}.
      */
     public <R> Future<R> mapTyped(Function3<T0, T1, T2, R> function3) {
-        throw new RuntimeException("unimplemented");
+        return applift(function3);
     }
 
     /**
@@ -142,14 +146,16 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
      * It likes {@link CompositeFutureTuple2#applift(BiFunction)} but with 3-arity.
      */
     public <R> Future<R> applift(Function3<T0, T1, T2, R> function3) {
-        throw new RuntimeException("unimplemented");
+        return composite.map(future -> function3.apply(
+                composite.resultAt(0), composite.resultAt(1), composite.resultAt(2)
+        ));
     }
 
     /**
      * Alias for {@link CompositeFutureTuple3#joinApplift(Function3)}.
      */
     public <R> Future<R> flatMapTyped(Function3<T0, T1, T2, Future<R>> function3) {
-        throw new RuntimeException("unimplemented");
+        return joinApplift(function3);
     }
 
     /**
@@ -159,6 +165,8 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
      * It likes {@link CompositeFutureTuple2#joinApplift(BiFunction)} but with 3-arity.
      */
     public <R> Future<R> joinApplift(Function3<T0, T1, T2, Future<R>> function3) {
-        throw new RuntimeException("unimplemented");
+        return composite.flatMap(future -> function3.apply(
+                composite.resultAt(0), composite.resultAt(1), composite.resultAt(2)
+        ));
     }
 }

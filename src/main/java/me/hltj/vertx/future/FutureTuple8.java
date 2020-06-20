@@ -29,11 +29,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import me.hltj.vertx.FutureUtils;
 import me.hltj.vertx.function.Function8;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+
+import static me.hltj.vertx.FutureUtils.defaultWith;
+import static me.hltj.vertx.FutureUtils.fallbackWith;
+import static me.hltj.vertx.future.InternalUtil.toFailureMapper;
+import static me.hltj.vertx.future.InternalUtil.toSupplier;
 
 /**
  * A tuple of 8 {@link Future}s.
@@ -67,7 +74,10 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
      * It likes {@link FutureTuple2#mapEmpty()} but with 8-arity.
      */
     public FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> mapEmpty() {
-        throw new RuntimeException("unimplemented");
+        return of(
+                _0.mapEmpty(), _1.mapEmpty(), _2.mapEmpty(), _3.mapEmpty(), _4.mapEmpty(), _5.mapEmpty(), _6.mapEmpty(),
+                _7.mapEmpty()
+        );
     }
 
     /**
@@ -78,7 +88,10 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
     public FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> otherwise(
             T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7
     ) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                _0.otherwise(v0), _1.otherwise(v1), _2.otherwise(v2), _3.otherwise(v3), _4.otherwise(v4),
+                _5.otherwise(v5), _6.otherwise(v6), _7.otherwise(v7)
+        );
     }
 
     /**
@@ -89,7 +102,16 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
     public FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> otherwise(
             Consumer<Throwable> onFailure, T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7
     ) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                _0.otherwise(toFailureMapper(onFailure, v0)),
+                _1.otherwise(toFailureMapper(onFailure, v1)),
+                _2.otherwise(toFailureMapper(onFailure, v2)),
+                _3.otherwise(toFailureMapper(onFailure, v3)),
+                _4.otherwise(toFailureMapper(onFailure, v4)),
+                _5.otherwise(toFailureMapper(onFailure, v5)),
+                _6.otherwise(toFailureMapper(onFailure, v6)),
+                _7.otherwise(toFailureMapper(onFailure, v7))
+        );
     }
 
     /**
@@ -98,7 +120,10 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
      * It likes {@link FutureTuple2#otherwiseEmpty()} but with 8-arity.
      */
     public FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> otherwiseEmpty() {
-        throw new RuntimeException("unimplemented");
+        return of(
+                _0.otherwiseEmpty(), _1.otherwiseEmpty(), _2.otherwiseEmpty(), _3.otherwiseEmpty(), _4.otherwiseEmpty(),
+                _5.otherwiseEmpty(), _6.otherwiseEmpty(), _7.otherwiseEmpty()
+        );
     }
 
     /**
@@ -109,7 +134,10 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
     public FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> defaults(
             T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7
     ) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                defaultWith(_0, v0), defaultWith(_1, v1), defaultWith(_2, v2), defaultWith(_3, v3), defaultWith(_4, v4),
+                defaultWith(_5, v5), defaultWith(_6, v6), defaultWith(_7, v7)
+        );
     }
 
     /**
@@ -120,7 +148,16 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
     public FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> defaults(
             Runnable onEmpty, T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7
     ) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                FutureUtils.defaultWith(_0, toSupplier(onEmpty, v0)),
+                FutureUtils.defaultWith(_1, toSupplier(onEmpty, v1)),
+                FutureUtils.defaultWith(_2, toSupplier(onEmpty, v2)),
+                FutureUtils.defaultWith(_3, toSupplier(onEmpty, v3)),
+                FutureUtils.defaultWith(_4, toSupplier(onEmpty, v4)),
+                FutureUtils.defaultWith(_5, toSupplier(onEmpty, v5)),
+                FutureUtils.defaultWith(_6, toSupplier(onEmpty, v6)),
+                FutureUtils.defaultWith(_7, toSupplier(onEmpty, v7))
+        );
     }
 
     /**
@@ -131,7 +168,10 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
     public FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> fallback(
             T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7
     ) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                fallbackWith(_0, v0), fallbackWith(_1, v1), fallbackWith(_2, v2), fallbackWith(_3, v3),
+                fallbackWith(_4, v4), fallbackWith(_5, v5), fallbackWith(_6, v6), fallbackWith(_7, v7)
+        );
     }
 
     /**
@@ -143,7 +183,16 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
     public FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> fallback(
             Consumer<Throwable> onFailure, Runnable onEmpty, T0 v0, T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7
     ) {
-        throw new RuntimeException("unimplemented");
+        return of(
+                fallbackWith(_0, toFailureMapper(onFailure, v0), toSupplier(onEmpty, v0)),
+                fallbackWith(_1, toFailureMapper(onFailure, v1), toSupplier(onEmpty, v1)),
+                fallbackWith(_2, toFailureMapper(onFailure, v2), toSupplier(onEmpty, v2)),
+                fallbackWith(_3, toFailureMapper(onFailure, v3), toSupplier(onEmpty, v3)),
+                fallbackWith(_4, toFailureMapper(onFailure, v4), toSupplier(onEmpty, v4)),
+                fallbackWith(_5, toFailureMapper(onFailure, v5), toSupplier(onEmpty, v5)),
+                fallbackWith(_6, toFailureMapper(onFailure, v6), toSupplier(onEmpty, v6)),
+                fallbackWith(_7, toFailureMapper(onFailure, v7), toSupplier(onEmpty, v7))
+        );
     }
 
     /**
@@ -152,7 +201,9 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
      * It likes {@link FutureTuple2#all()} but with 8-arity.
      */
     public CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> all() {
-        throw new RuntimeException("unimplemented");
+        return compose((v0, v1, v2, v3, v4, v5, v6, v7) ->
+                CompositeFuture.all(Arrays.asList(v0, v1, v2, v3, v4, v5, v6, v7))
+        );
     }
 
     /**
@@ -161,7 +212,9 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
      * It likes {@link FutureTuple2#any()} but with 8-arity.
      */
     public CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> any() {
-        throw new RuntimeException("unimplemented");
+        return compose((v0, v1, v2, v3, v4, v5, v6, v7) ->
+                CompositeFuture.any(Arrays.asList(v0, v1, v2, v3, v4, v5, v6, v7))
+        );
     }
 
     /**
@@ -170,7 +223,9 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
      * It likes {@link FutureTuple2#join()} but with 8-arity.
      */
     public CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> join() {
-        throw new RuntimeException("unimplemented");
+        return compose((v0, v1, v2, v3, v4, v5, v6, v7) ->
+                CompositeFuture.join(Arrays.asList(v0, v1, v2, v3, v4, v5, v6, v7))
+        );
     }
 
     /**
@@ -182,6 +237,6 @@ public final class FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> {
             Function8<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>, Future<T6>, Future<T7>,
                     CompositeFuture> function8
     ) {
-        throw new RuntimeException("unimplemented");
+        return CompositeFutureTuple8.of(this, function8.apply(_0, _1, _2, _3, _4, _5, _6, _7));
     }
 }
