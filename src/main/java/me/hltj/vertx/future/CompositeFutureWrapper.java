@@ -37,7 +37,7 @@ import static me.hltj.vertx.FutureUtils.joinWrap;
  */
 @AllArgsConstructor
 public class CompositeFutureWrapper {
-    private final CompositeFuture composite;
+    protected final CompositeFuture composite;
 
     /**
      * Create a {@link CompositeFutureWrapper} based on a {@link CompositeFuture}.

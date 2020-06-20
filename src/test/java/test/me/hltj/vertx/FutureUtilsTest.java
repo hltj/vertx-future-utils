@@ -22,10 +22,7 @@
  */
 package test.me.hltj.vertx;
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
 import lombok.SneakyThrows;
 import lombok.val;
 import me.hltj.vertx.FutureUtils;
@@ -61,7 +58,7 @@ class FutureUtilsTest {
     void defaultWith() {
         assertSucceedWith("value", FutureUtils.defaultWith(Future.succeededFuture("value"), "default"));
         assertSucceedWith("default", FutureUtils.defaultWith(Future.succeededFuture(), "default"));
-        assertFailedWith("error", FutureUtils.defaultWith(Future.failedFuture("error"), "default"));
+        SharedTestUtils.assertFailedWith("error", FutureUtils.defaultWith(Future.failedFuture("error"), "default"));
     }
 
     @Test
@@ -80,7 +77,7 @@ class FutureUtilsTest {
         }));
         assertTrue(numbers.contains(1));
 
-        assertFailedWith("error", FutureUtils.<String>defaultWith(Future.failedFuture("error"), () -> {
+        SharedTestUtils.assertFailedWith("error", FutureUtils.<String>defaultWith(Future.failedFuture("error"), () -> {
             numbers.add(2);
             return "default";
         }));
@@ -232,15 +229,934 @@ class FutureUtilsTest {
         handler.handle(FutureUtils.wrap(s, Integer::parseInt));
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private static <T> void assertFailedWith(String expectedMessage, Future<T> actual) {
-        assertTrue(actual.failed());
-        assertEquals(expectedMessage, actual.cause().getMessage());
-    }
-
     private static <T, E> void assertFailedWith(Class<E> clazz, String expectedMessage, Future<T> actual) {
         assertTrue(actual.failed());
         assertTrue(clazz.isInstance(actual.cause()));
         assertEquals(expectedMessage, actual.cause().getMessage());
+    }
+
+    @Test
+    void tuple2() {
+        Future<String> future0 = Future.succeededFuture();
+        Future<Integer> future1 = Promise.<Integer>promise().future();
+
+        val tuple = FutureUtils.tuple(future0, future1);
+        assertSame(future0, tuple.get_0());
+        assertSame(future1, tuple.get_1());
+    }
+
+    @Test
+    void tuple3() {
+        Future<String> future0 = Future.succeededFuture();
+        Future<Integer> future1 = Promise.<Integer>promise().future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+
+        val tuple = FutureUtils.tuple(future0, future1, future2);
+        assertSame(future0, tuple.get_0());
+        assertSame(future1, tuple.get_1());
+        assertSame(future2, tuple.get_2());
+    }
+
+    @Test
+    void tuple4() {
+        Future<String> future0 = Future.succeededFuture();
+        Future<Integer> future1 = Promise.<Integer>promise().future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+
+        val tuple = FutureUtils.tuple(future0, future1, future2, future3);
+        assertSame(future0, tuple.get_0());
+        assertSame(future1, tuple.get_1());
+        assertSame(future2, tuple.get_2());
+        assertSame(future3, tuple.get_3());
+    }
+
+    @Test
+    void tuple5() {
+        Future<String> future0 = Future.succeededFuture();
+        Future<Integer> future1 = Promise.<Integer>promise().future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+
+        val tuple = FutureUtils.tuple(future0, future1, future2, future3, future4);
+        assertSame(future0, tuple.get_0());
+        assertSame(future1, tuple.get_1());
+        assertSame(future2, tuple.get_2());
+        assertSame(future3, tuple.get_3());
+        assertSame(future4, tuple.get_4());
+    }
+
+    @Test
+    void tuple6() {
+        Future<String> future0 = Future.succeededFuture();
+        Future<Integer> future1 = Promise.<Integer>promise().future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+
+        val tuple = FutureUtils.tuple(future0, future1, future2, future3, future4, future5);
+        assertSame(future0, tuple.get_0());
+        assertSame(future1, tuple.get_1());
+        assertSame(future2, tuple.get_2());
+        assertSame(future3, tuple.get_3());
+        assertSame(future4, tuple.get_4());
+        assertSame(future5, tuple.get_5());
+    }
+
+    @Test
+    void tuple7() {
+        Future<String> future0 = Future.succeededFuture();
+        Future<Integer> future1 = Promise.<Integer>promise().future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+
+        val tuple = FutureUtils.tuple(future0, future1, future2, future3, future4, future5, future6);
+        assertSame(future0, tuple.get_0());
+        assertSame(future1, tuple.get_1());
+        assertSame(future2, tuple.get_2());
+        assertSame(future3, tuple.get_3());
+        assertSame(future4, tuple.get_4());
+        assertSame(future5, tuple.get_5());
+        assertSame(future6, tuple.get_6());
+    }
+
+    @Test
+    void tuple8() {
+        Future<String> future0 = Future.succeededFuture();
+        Future<Integer> future1 = Promise.<Integer>promise().future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+        Future<Short> future7 = Future.succeededFuture((short) 1);
+
+        val tuple = FutureUtils.tuple(future0, future1, future2, future3, future4, future5, future6, future7);
+        assertSame(future0, tuple.get_0());
+        assertSame(future1, tuple.get_1());
+        assertSame(future2, tuple.get_2());
+        assertSame(future3, tuple.get_3());
+        assertSame(future4, tuple.get_4());
+        assertSame(future5, tuple.get_5());
+        assertSame(future6, tuple.get_6());
+        assertSame(future7, tuple.get_7());
+    }
+
+    @Test
+    void tuple9() {
+        Future<String> future0 = Future.succeededFuture();
+        Future<Integer> future1 = Promise.<Integer>promise().future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+        Future<Short> future7 = Future.succeededFuture((short) 1);
+        Future<Integer> future8 = Future.succeededFuture(1);
+
+        val tuple = FutureUtils.tuple(future0, future1, future2, future3, future4, future5, future6, future7, future8);
+        assertSame(future0, tuple.get_0());
+        assertSame(future1, tuple.get_1());
+        assertSame(future2, tuple.get_2());
+        assertSame(future3, tuple.get_3());
+        assertSame(future4, tuple.get_4());
+        assertSame(future5, tuple.get_5());
+        assertSame(future6, tuple.get_6());
+        assertSame(future7, tuple.get_7());
+        assertSame(future8, tuple.get_8());
+    }
+
+    @Test
+    void all2() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+
+        val compositeA = FutureUtils.all(future0, future1);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.all(Future.<Double>failedFuture("fail"), future1);
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+    }
+
+    @Test
+    void all3() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+
+        val compositeA = FutureUtils.all(future0, future1, future2);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.all(Future.<Double>failedFuture("fail"), future1, future2);
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+    }
+
+    @Test
+    void all4() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+
+        val compositeA = FutureUtils.all(future0, future1, future2, future3);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.all(Future.<Double>failedFuture("fail"), future1, future2, future3);
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+    }
+
+    @Test
+    void all5() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+
+        val compositeA = FutureUtils.all(future0, future1, future2, future3, future4);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.all(Future.<Double>failedFuture("fail"), future1, future2, future3, future4);
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+    }
+
+    @Test
+    void all6() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+
+        val compositeA = FutureUtils.all(future0, future1, future2, future3, future4, future5);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+        assertSame(future5, compositeA.tuple().get_5());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.all(
+                Future.<Double>failedFuture("fail"), future1, future2, future3, future4, future5
+        );
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+    }
+
+    @Test
+    void all7() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+
+        val compositeA = FutureUtils.all(future0, future1, future2, future3, future4, future5, future6);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+        assertSame(future5, compositeA.tuple().get_5());
+        assertSame(future6, compositeA.tuple().get_6());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.all(
+                Future.<Double>failedFuture("fail"), future1, future2, future3, future4, future5, future6
+        );
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+    }
+
+    @Test
+    void all8() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+        Future<Short> future7 = Future.succeededFuture((short) 1);
+
+        val compositeA = FutureUtils.all(future0, future1, future2, future3, future4, future5, future6, future7);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+        assertSame(future5, compositeA.tuple().get_5());
+        assertSame(future6, compositeA.tuple().get_6());
+        assertSame(future7, compositeA.tuple().get_7());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.all(
+                Future.<Double>failedFuture("fail"), future1, future2, future3, future4, future5, future6, future7
+        );
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+    }
+
+    @Test
+    void all9() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+        Future<Short> future7 = Future.succeededFuture((short) 1);
+        Future<Integer> future8 = Future.succeededFuture(1);
+
+        val compositeA = FutureUtils.all(
+                future0, future1, future2, future3, future4, future5, future6, future7, future8
+        );
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+        assertSame(future5, compositeA.tuple().get_5());
+        assertSame(future6, compositeA.tuple().get_6());
+        assertSame(future7, compositeA.tuple().get_7());
+        assertSame(future8, compositeA.tuple().get_8());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.all(
+                Future.<Double>failedFuture("fail"), future1, future2, future3, future4, future5, future6, future7,
+                future8
+        );
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+    }
+
+    @Test
+    void any2() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+
+        val compositeA = FutureUtils.any(future0, future1);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+
+        val compositeB = FutureUtils.any(Future.<Double>failedFuture("fail0"), future1);
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.fail("fail1");
+        SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
+
+        val compositeC = FutureUtils.any(future0, Future.<Double>failedFuture("failC1"));
+        assertSucceedWith(compositeC.raw(), compositeC.raw());
+
+        val compositeD = FutureUtils.any(Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"));
+        SharedTestUtils.assertFailedWith("failD1", compositeD.raw());
+    }
+
+    @Test
+    void any3() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> failedFuture2 = Future.failedFuture("fail2");
+
+        val compositeA = FutureUtils.any(future0, future1, failedFuture2);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(failedFuture2, compositeA.tuple().get_2());
+
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+
+        val compositeB = FutureUtils.any(Future.<Double>failedFuture("fail0"), future1, failedFuture2);
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.fail("fail1");
+        SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
+
+        val compositeC = FutureUtils.any(future0, Future.<Double>failedFuture("failC1"), failedFuture2);
+        assertSucceedWith(compositeC.raw(), compositeC.raw());
+
+        val compositeD = FutureUtils.any(
+                Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2
+        );
+        SharedTestUtils.assertFailedWith("fail2", compositeD.raw());
+    }
+
+    @Test
+    void any4() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> failedFuture2 = Future.failedFuture("fail2");
+        Future<Double> failedFuture3 = Future.failedFuture("fail3");
+
+        val compositeA = FutureUtils.any(future0, future1, failedFuture2, failedFuture3);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(failedFuture2, compositeA.tuple().get_2());
+        assertSame(failedFuture3, compositeA.tuple().get_3());
+
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+
+        val compositeB = FutureUtils.any(Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3);
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.fail("fail1");
+        SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
+
+        val compositeC = FutureUtils.any(future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3);
+        assertSucceedWith(compositeC.raw(), compositeC.raw());
+
+        val compositeD = FutureUtils.any(
+                Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3
+        );
+        SharedTestUtils.assertFailedWith("fail3", compositeD.raw());
+    }
+
+    @Test
+    void any5() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> failedFuture2 = Future.failedFuture("fail2");
+        Future<Double> failedFuture3 = Future.failedFuture("fail3");
+        Future<Character> failedFuture4 = Future.failedFuture("fail4");
+
+        val compositeA = FutureUtils.any(future0, future1, failedFuture2, failedFuture3, failedFuture4);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(failedFuture2, compositeA.tuple().get_2());
+        assertSame(failedFuture3, compositeA.tuple().get_3());
+        assertSame(failedFuture4, compositeA.tuple().get_4());
+
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+
+        val compositeB = FutureUtils.any(
+                Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.fail("fail1");
+        SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
+
+        val compositeC = FutureUtils.any(
+                future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4
+        );
+        assertSucceedWith(compositeC.raw(), compositeC.raw());
+
+        val compositeD = FutureUtils.any(
+                Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
+                failedFuture4
+        );
+        SharedTestUtils.assertFailedWith("fail4", compositeD.raw());
+    }
+
+    @Test
+    void any6() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> failedFuture2 = Future.failedFuture("fail2");
+        Future<Double> failedFuture3 = Future.failedFuture("fail3");
+        Future<Character> failedFuture4 = Future.failedFuture("fail4");
+        Future<Byte> failedFuture5 = Future.failedFuture("fail5");
+
+        val compositeA = FutureUtils.any(future0, future1, failedFuture2, failedFuture3, failedFuture4, failedFuture5);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(failedFuture2, compositeA.tuple().get_2());
+        assertSame(failedFuture3, compositeA.tuple().get_3());
+        assertSame(failedFuture4, compositeA.tuple().get_4());
+        assertSame(failedFuture5, compositeA.tuple().get_5());
+
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+
+        val compositeB = FutureUtils.any(
+                Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4,
+                failedFuture5
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.fail("fail1");
+        SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
+
+        val compositeC = FutureUtils.any(
+                future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4,
+                failedFuture5
+        );
+        assertSucceedWith(compositeC.raw(), compositeC.raw());
+
+        val compositeD = FutureUtils.any(
+                Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
+                failedFuture4, failedFuture5
+        );
+        SharedTestUtils.assertFailedWith("fail5", compositeD.raw());
+    }
+
+    @Test
+    void any7() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> failedFuture2 = Future.failedFuture("fail2");
+        Future<Double> failedFuture3 = Future.failedFuture("fail3");
+        Future<Character> failedFuture4 = Future.failedFuture("fail4");
+        Future<Byte> failedFuture5 = Future.failedFuture("fail5");
+        Future<Float> failedFuture6 = Future.failedFuture("fail6");
+
+        val compositeA = FutureUtils.any(
+                future0, future1, failedFuture2, failedFuture3, failedFuture4, failedFuture5, failedFuture6
+        );
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(failedFuture2, compositeA.tuple().get_2());
+        assertSame(failedFuture3, compositeA.tuple().get_3());
+        assertSame(failedFuture4, compositeA.tuple().get_4());
+        assertSame(failedFuture5, compositeA.tuple().get_5());
+        assertSame(failedFuture6, compositeA.tuple().get_6());
+
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+
+        val compositeB = FutureUtils.any(
+                Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4,
+                failedFuture5, failedFuture6
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.fail("fail1");
+        SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
+
+        val compositeC = FutureUtils.any(
+                future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4,
+                failedFuture5, failedFuture6
+        );
+        assertSucceedWith(compositeC.raw(), compositeC.raw());
+
+        val compositeD = FutureUtils.any(
+                Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
+                failedFuture4, failedFuture5, failedFuture6
+        );
+        SharedTestUtils.assertFailedWith("fail6", compositeD.raw());
+    }
+
+    @Test
+    void any8() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> failedFuture2 = Future.failedFuture("fail2");
+        Future<Double> failedFuture3 = Future.failedFuture("fail3");
+        Future<Character> failedFuture4 = Future.failedFuture("fail4");
+        Future<Byte> failedFuture5 = Future.failedFuture("fail5");
+        Future<Float> failedFuture6 = Future.failedFuture("fail6");
+        Future<Short> failedFuture7 = Future.failedFuture("fail7");
+
+        val compositeA = FutureUtils.any(
+                future0, future1, failedFuture2, failedFuture3, failedFuture4, failedFuture5, failedFuture6,
+                failedFuture7
+        );
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(failedFuture2, compositeA.tuple().get_2());
+        assertSame(failedFuture3, compositeA.tuple().get_3());
+        assertSame(failedFuture4, compositeA.tuple().get_4());
+        assertSame(failedFuture5, compositeA.tuple().get_5());
+        assertSame(failedFuture6, compositeA.tuple().get_6());
+        assertSame(failedFuture7, compositeA.tuple().get_7());
+
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+
+        val compositeB = FutureUtils.any(
+                Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4,
+                failedFuture5, failedFuture6, failedFuture7
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.fail("fail1");
+        SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
+
+        val compositeC = FutureUtils.any(
+                future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4,
+                failedFuture5, failedFuture6, failedFuture7
+        );
+        assertSucceedWith(compositeC.raw(), compositeC.raw());
+
+        val compositeD = FutureUtils.any(
+                Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
+                failedFuture4, failedFuture5, failedFuture6, failedFuture7
+        );
+        SharedTestUtils.assertFailedWith("fail7", compositeD.raw());
+    }
+
+    @Test
+    void any9() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> failedFuture2 = Future.failedFuture("fail2");
+        Future<Double> failedFuture3 = Future.failedFuture("fail3");
+        Future<Character> failedFuture4 = Future.failedFuture("fail4");
+        Future<Byte> failedFuture5 = Future.failedFuture("fail5");
+        Future<Float> failedFuture6 = Future.failedFuture("fail6");
+        Future<Short> failedFuture7 = Future.failedFuture("fail7");
+        Future<Integer> failedFuture8 = Future.failedFuture("fail8");
+
+        val compositeA = FutureUtils.any(
+                future0, future1, failedFuture2, failedFuture3, failedFuture4, failedFuture5, failedFuture6,
+                failedFuture7, failedFuture8
+        );
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(failedFuture2, compositeA.tuple().get_2());
+        assertSame(failedFuture3, compositeA.tuple().get_3());
+        assertSame(failedFuture4, compositeA.tuple().get_4());
+        assertSame(failedFuture5, compositeA.tuple().get_5());
+        assertSame(failedFuture6, compositeA.tuple().get_6());
+        assertSame(failedFuture7, compositeA.tuple().get_7());
+        assertSame(failedFuture8, compositeA.tuple().get_8());
+
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+
+        val compositeB = FutureUtils.any(
+                Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4,
+                failedFuture5, failedFuture6, failedFuture7, failedFuture8
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.fail("fail1");
+        SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
+
+        val compositeC = FutureUtils.any(
+                future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4,
+                failedFuture5, failedFuture6, failedFuture7, failedFuture8
+        );
+        assertSucceedWith(compositeC.raw(), compositeC.raw());
+
+        val compositeD = FutureUtils.any(
+                Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
+                failedFuture4, failedFuture5, failedFuture6, failedFuture7, failedFuture8
+        );
+        SharedTestUtils.assertFailedWith("fail8", compositeD.raw());
+    }
+
+    @Test
+    void join2() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+
+        val compositeA = FutureUtils.join(future0, future1);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.join(Future.<Double>failedFuture("fail"), future1);
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+    }
+
+    @Test
+    void join3() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+
+        val compositeA = FutureUtils.join(future0, future1, future2);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.join(Future.<Double>failedFuture("fail"), future1, future2);
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+    }
+
+    @Test
+    void join4() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+
+        val compositeA = FutureUtils.join(future0, future1, future2, future3);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.join(Future.<Double>failedFuture("fail"), future1, future2, future3);
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+    }
+
+    @Test
+    void join5() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+
+        val compositeA = FutureUtils.join(future0, future1, future2, future3, future4);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.join(Future.<Double>failedFuture("fail"), future1, future2, future3, future4);
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+    }
+
+    @Test
+    void join6() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+
+        val compositeA = FutureUtils.join(future0, future1, future2, future3, future4, future5);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+        assertSame(future5, compositeA.tuple().get_5());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.join(
+                Future.<Double>failedFuture("fail"), future1, future2, future3, future4, future5
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+    }
+
+    @Test
+    void join7() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+
+        val compositeA = FutureUtils.join(future0, future1, future2, future3, future4, future5, future6);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+        assertSame(future5, compositeA.tuple().get_5());
+        assertSame(future6, compositeA.tuple().get_6());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.join(
+                Future.<Double>failedFuture("fail"), future1, future2, future3, future4, future5, future6
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+    }
+
+    @Test
+    void join8() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+        Future<Short> future7 = Future.succeededFuture((short) 1);
+
+        val compositeA = FutureUtils.join(future0, future1, future2, future3, future4, future5, future6, future7);
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+        assertSame(future5, compositeA.tuple().get_5());
+        assertSame(future6, compositeA.tuple().get_6());
+        assertSame(future7, compositeA.tuple().get_7());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.join(
+                Future.<Double>failedFuture("fail"), future1, future2, future3, future4, future5, future6, future7
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
+    }
+
+    @Test
+    void join9() {
+        Future<String> future0 = Future.succeededFuture();
+        Promise<Integer> promise1 = Promise.promise();
+        Future<Integer> future1 = promise1.future();
+        Future<Boolean> future2 = Future.succeededFuture(true);
+        Future<Double> future3 = Future.succeededFuture(1.0);
+        Future<Character> future4 = Future.succeededFuture('a');
+        Future<Byte> future5 = Future.succeededFuture((byte) 1);
+        Future<Float> future6 = Future.succeededFuture(1f);
+        Future<Short> future7 = Future.succeededFuture((short) 1);
+        Future<Integer> future8 = Future.succeededFuture(1);
+
+        val compositeA = FutureUtils.join(
+                future0, future1, future2, future3, future4, future5, future6, future7, future8
+        );
+        assertSame(future0, compositeA.tuple().get_0());
+        assertSame(future1, compositeA.tuple().get_1());
+        assertSame(future2, compositeA.tuple().get_2());
+        assertSame(future3, compositeA.tuple().get_3());
+        assertSame(future4, compositeA.tuple().get_4());
+        assertSame(future5, compositeA.tuple().get_5());
+        assertSame(future6, compositeA.tuple().get_6());
+        assertSame(future7, compositeA.tuple().get_7());
+        assertSame(future8, compositeA.tuple().get_8());
+
+        assertFalse(compositeA.raw().succeeded());
+        assertFalse(compositeA.raw().failed());
+
+        val compositeB = FutureUtils.join(
+                Future.<Double>failedFuture("fail"), future1, future2, future3, future4, future5, future6, future7,
+                future8
+        );
+        assertFalse(compositeB.raw().succeeded());
+        assertFalse(compositeB.raw().failed());
+
+        promise1.complete(1);
+        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 }

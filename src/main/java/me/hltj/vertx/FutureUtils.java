@@ -22,11 +22,10 @@
  */
 package me.hltj.vertx;
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Promise;
+import io.vertx.core.*;
+import me.hltj.vertx.future.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -188,5 +187,310 @@ public final class FutureUtils {
      */
     public static <T, R> Future<R> joinWrap(T v, Function<T, Future<R>> function) {
         return joinWrap(() -> function.apply(v));
+    }
+
+    /**
+     * Create a future tuple with two {@link Future}s.
+     */
+    public static <T0, T1> FutureTuple2<T0, T1> tuple(Future<T0> future0, Future<T1> future1) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a future tuple with 3 {@link Future}s.
+     */
+    public static <T0, T1, T2> FutureTuple3<T0, T1, T2> tuple(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a future tuple with 4 {@link Future}s.
+     */
+    public static <T0, T1, T2, T3> FutureTuple4<T0, T1, T2, T3> tuple(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a future tuple with 5 {@link Future}s.
+     */
+    public static <T0, T1, T2, T3, T4> FutureTuple5<T0, T1, T2, T3, T4> tuple(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a future tuple with 6 {@link Future}s.
+     */
+    public static <T0, T1, T2, T3, T4, T5> FutureTuple6<T0, T1, T2, T3, T4, T5> tuple(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a future tuple with 7 {@link Future}s.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6> FutureTuple7<T0, T1, T2, T3, T4, T5, T6> tuple(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a future tuple with 8 {@link Future}s.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6, T7> FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> tuple(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6, Future<T7> future7
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a future tuple with 9 {@link Future}s.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6, T7, T8> FutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> tuple(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6, Future<T7> future7, Future<T8> future8
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with two {@link Future}s & {@link CompositeFuture#all(Future, Future)}.
+     */
+    public static <T0, T1> CompositeFutureTuple2<T0, T1> all(Future<T0> future0, Future<T1> future1) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 3 {@link Future}s & {@link CompositeFuture#all(Future, Future, Future)}.
+     */
+    public static <T0, T1, T2> CompositeFutureTuple3<T0, T1, T2> all(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 4 {@link Future}s
+     * & {@link CompositeFuture#all(Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3> CompositeFutureTuple4<T0, T1, T2, T3> all(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 5 {@link Future}s
+     * & {@link CompositeFuture#all(Future, Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3, T4> CompositeFutureTuple5<T0, T1, T2, T3, T4> all(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 6 {@link Future}s
+     * & {@link CompositeFuture#all(Future, Future, Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5> CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> all(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 7 {@link Future}s & {@link CompositeFuture#all(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6> CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> all(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 8 {@link Future}s & {@link CompositeFuture#all(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6, T7> CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> all(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6, Future<T7> future7
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 9 {@link Future}s & {@link CompositeFuture#all(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6, T7, T8> CompositeFutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> all(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6, Future<T7> future7, Future<T8> future8
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with two {@link Future}s {@link CompositeFuture#any(Future, Future)}.
+     */
+    public static <T0, T1> CompositeFutureTuple2<T0, T1> any(Future<T0> future0, Future<T1> future1) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 3 {@link Future}s & {@link CompositeFuture#any(Future, Future, Future)}.
+     */
+    public static <T0, T1, T2> CompositeFutureTuple3<T0, T1, T2> any(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 4 {@link Future}s
+     * & {@link CompositeFuture#any(Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3> CompositeFutureTuple4<T0, T1, T2, T3> any(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 5 {@link Future}s
+     * & {@link CompositeFuture#any(Future, Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3, T4> CompositeFutureTuple5<T0, T1, T2, T3, T4> any(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 6 {@link Future}s
+     * & {@link CompositeFuture#any(Future, Future, Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5> CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> any(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 7 {@link Future}s & {@link CompositeFuture#any(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6> CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> any(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 8 {@link Future}s & {@link CompositeFuture#any(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6, T7> CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> any(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6, Future<T7> future7
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 9 {@link Future}s & {@link CompositeFuture#any(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6, T7, T8> CompositeFutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> any(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6, Future<T7> future7, Future<T8> future8
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with two {@link Future}s & {@link CompositeFuture#join(Future, Future)}.
+     */
+    public static <T0, T1> CompositeFutureTuple2<T0, T1> join(Future<T0> future0, Future<T1> future1) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 3 {@link Future}s & {@link CompositeFuture#join(Future, Future, Future)}.
+     */
+    public static <T0, T1, T2> CompositeFutureTuple3<T0, T1, T2> join(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 4 {@link Future}s
+     * & {@link CompositeFuture#join(Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3> CompositeFutureTuple4<T0, T1, T2, T3> join(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 5 {@link Future}s
+     * & {@link CompositeFuture#join(Future, Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3, T4> CompositeFutureTuple5<T0, T1, T2, T3, T4> join(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 6 {@link Future}s
+     * & {@link CompositeFuture#join(Future, Future, Future, Future, Future, Future)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5> CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> join(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 7 {@link Future}s & {@link CompositeFuture#join(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6> CompositeFutureTuple7<T0, T1, T2, T3, T4, T5, T6> join(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 8 {@link Future}s & {@link CompositeFuture#join(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6, T7> CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> join(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6, Future<T7> future7
+    ) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * Create a composite future tuple with 9 {@link Future}s & {@link CompositeFuture#join(List)}.
+     */
+    public static <T0, T1, T2, T3, T4, T5, T6, T7, T8> CompositeFutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> join(
+            Future<T0> future0, Future<T1> future1, Future<T2> future2, Future<T3> future3, Future<T4> future4,
+            Future<T5> future5, Future<T6> future6, Future<T7> future7, Future<T8> future8
+    ) {
+        throw new RuntimeException("unimplemented");
     }
 }

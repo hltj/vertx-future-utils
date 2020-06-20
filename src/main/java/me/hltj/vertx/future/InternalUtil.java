@@ -20,26 +20,24 @@
  * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
  * if you need additional information or have any questions.
  */
-package test.me.hltj.vertx;
+package me.hltj.vertx.future;
 
-import io.vertx.core.Future;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public class SharedTestUtils {
-    public static <T> void assertSucceedWith(T expected, Future<T> actual) {
-        assertTrue(actual.succeeded());
-        assertEquals(expected, actual.result());
+class InternalUtil {
+    static <T> Supplier<T> toSupplier(Runnable onEmpty, T v0) {
+        return () -> {
+            onEmpty.run();
+            return v0;
+        };
     }
 
-    public static <T, E> void assertFailedWith(Class<E> clazz, Future<T> actual) {
-        assertTrue(actual.failed());
-        assertTrue(clazz.isInstance(actual.cause()));
-    }
-
-    public static <T> void assertFailedWith(String expectedMessage, Future<T> actual) {
-        assertTrue(actual.failed());
-        assertEquals(expectedMessage, actual.cause().getMessage());
+    static <T> Function<Throwable, T> toFailureMapper(Consumer<Throwable> onFailure, T v0) {
+        return t -> {
+            onFailure.accept(t);
+            return v0;
+        };
     }
 }
