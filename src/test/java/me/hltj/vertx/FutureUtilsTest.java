@@ -20,12 +20,11 @@
  * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
  * if you need additional information or have any questions.
  */
-package test.me.hltj.vertx;
+package me.hltj.vertx;
 
 import io.vertx.core.*;
 import lombok.SneakyThrows;
 import lombok.val;
-import me.hltj.vertx.FutureUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.me.hltj.vertx.SharedTestUtils.assertSucceedWith;
 
 class FutureUtilsTest {
 
@@ -46,7 +44,7 @@ class FutureUtilsTest {
 
         CountDownLatch latch = new CountDownLatch(1);
         CompositeFuture.join(future0, future1).onComplete(future -> {
-            assertSucceedWith(2, future0);
+            SharedTestUtils.assertSucceedWith(2, future0);
             assertFailedWith(NumberFormatException.class, "For input string: \"%\"", future1);
             latch.countDown();
         });
@@ -56,8 +54,8 @@ class FutureUtilsTest {
 
     @Test
     void defaultWith() {
-        assertSucceedWith("value", FutureUtils.defaultWith(Future.succeededFuture("value"), "default"));
-        assertSucceedWith("default", FutureUtils.defaultWith(Future.succeededFuture(), "default"));
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.defaultWith(Future.succeededFuture("value"), "default"));
+        SharedTestUtils.assertSucceedWith("default", FutureUtils.defaultWith(Future.succeededFuture(), "default"));
         SharedTestUtils.assertFailedWith("error", FutureUtils.defaultWith(Future.failedFuture("error"), "default"));
     }
 
@@ -65,13 +63,13 @@ class FutureUtilsTest {
     void defaultWith_supplier() {
         val numbers = new HashSet<Integer>();
 
-        assertSucceedWith("value", FutureUtils.<String>defaultWith(Future.succeededFuture("value"), () -> {
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.<String>defaultWith(Future.succeededFuture("value"), () -> {
             numbers.add(0);
             return "default";
         }));
         assertFalse(numbers.contains(0));
 
-        assertSucceedWith("default", FutureUtils.<String>defaultWith(Future.succeededFuture(), () -> {
+        SharedTestUtils.assertSucceedWith("default", FutureUtils.<String>defaultWith(Future.succeededFuture(), () -> {
             numbers.add(1);
             return "default";
         }));
@@ -86,9 +84,9 @@ class FutureUtilsTest {
 
     @Test
     void fallbackWith() {
-        assertSucceedWith("value", FutureUtils.fallbackWith(Future.succeededFuture("value"), "fallback"));
-        assertSucceedWith("fallback", FutureUtils.fallbackWith(Future.succeededFuture(), "fallback"));
-        assertSucceedWith("fallback", FutureUtils.fallbackWith(Future.failedFuture("error"), "fallback"));
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.fallbackWith(Future.succeededFuture("value"), "fallback"));
+        SharedTestUtils.assertSucceedWith("fallback", FutureUtils.fallbackWith(Future.succeededFuture(), "fallback"));
+        SharedTestUtils.assertSucceedWith("fallback", FutureUtils.fallbackWith(Future.failedFuture("error"), "fallback"));
     }
 
     @Test
@@ -96,7 +94,7 @@ class FutureUtilsTest {
         val throwables = new ArrayList<Throwable>();
         val numbers = new HashSet<Integer>();
 
-        assertSucceedWith("value", FutureUtils.<String>fallbackWith(Future.succeededFuture("value"), opt -> {
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.<String>fallbackWith(Future.succeededFuture("value"), opt -> {
             opt.ifPresent(throwables::add);
             numbers.add(0);
             return "fallback";
@@ -104,7 +102,7 @@ class FutureUtilsTest {
         assertTrue(throwables.isEmpty());
         assertFalse(numbers.contains(0));
 
-        assertSucceedWith("fallback", FutureUtils.<String>fallbackWith(Future.succeededFuture(), opt -> {
+        SharedTestUtils.assertSucceedWith("fallback", FutureUtils.<String>fallbackWith(Future.succeededFuture(), opt -> {
             opt.ifPresent(throwables::add);
             numbers.add(1);
             return "fallback";
@@ -112,7 +110,7 @@ class FutureUtilsTest {
         assertTrue(throwables.isEmpty());
         assertTrue(numbers.contains(1));
 
-        assertSucceedWith("fallback", FutureUtils.<String>fallbackWith(Future.failedFuture("error"), opt -> {
+        SharedTestUtils.assertSucceedWith("fallback", FutureUtils.<String>fallbackWith(Future.failedFuture("error"), opt -> {
             opt.ifPresent(throwables::add);
             numbers.add(2);
             return "fallback";
@@ -126,7 +124,7 @@ class FutureUtilsTest {
         val throwables = new ArrayList<Throwable>();
         val numbers = new HashSet<Integer>();
 
-        assertSucceedWith("value", FutureUtils.fallbackWith(Future.succeededFuture("value"), t -> {
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.fallbackWith(Future.succeededFuture("value"), t -> {
             throwables.add(t);
             return "otherwise";
         }, () -> {
@@ -136,7 +134,7 @@ class FutureUtilsTest {
         assertTrue(throwables.isEmpty());
         assertFalse(numbers.contains(0));
 
-        assertSucceedWith("default", FutureUtils.fallbackWith(Future.succeededFuture(), t -> {
+        SharedTestUtils.assertSucceedWith("default", FutureUtils.fallbackWith(Future.succeededFuture(), t -> {
             throwables.add(t);
             return "otherwise";
         }, () -> {
@@ -146,7 +144,7 @@ class FutureUtilsTest {
         assertTrue(throwables.isEmpty());
         assertTrue(numbers.contains(1));
 
-        assertSucceedWith("otherwise", FutureUtils.fallbackWith(Future.failedFuture("error"), t -> {
+        SharedTestUtils.assertSucceedWith("otherwise", FutureUtils.fallbackWith(Future.failedFuture("error"), t -> {
             throwables.add(t);
             return "otherwise";
         }, () -> {
@@ -159,7 +157,7 @@ class FutureUtilsTest {
 
     @Test
     void wrap() {
-        assertSucceedWith(1, FutureUtils.wrap(() -> Integer.parseInt("1")));
+        SharedTestUtils.assertSucceedWith(1, FutureUtils.wrap(() -> Integer.parseInt("1")));
         assertFailedWith(NumberFormatException.class, "For input string: \"@\"",
                 FutureUtils.wrap(() -> Integer.parseInt("@"))
         );
@@ -167,7 +165,7 @@ class FutureUtilsTest {
 
     @Test
     void wrap_function() {
-        assertSucceedWith(1, FutureUtils.wrap("1", Integer::parseInt));
+        SharedTestUtils.assertSucceedWith(1, FutureUtils.wrap("1", Integer::parseInt));
         assertFailedWith(
                 NumberFormatException.class, "For input string: \"@\"",
                 FutureUtils.wrap("@", Integer::parseInt)
@@ -188,8 +186,8 @@ class FutureUtilsTest {
                 FutureUtils.flatWrap(() -> future0.map(i -> 2 / i))
         );
 
-        assertSucceedWith(2, FutureUtils.joinWrap(() -> future1.map(i -> 2 / i)));
-        assertSucceedWith(2, FutureUtils.flatWrap(() -> future1.map(i -> 2 / i)));
+        SharedTestUtils.assertSucceedWith(2, FutureUtils.joinWrap(() -> future1.map(i -> 2 / i)));
+        SharedTestUtils.assertSucceedWith(2, FutureUtils.flatWrap(() -> future1.map(i -> 2 / i)));
 
         //noinspection ConstantConditions
         SharedTestUtils.assertFailedWith(
@@ -207,8 +205,8 @@ class FutureUtilsTest {
     void joinWrap_flatWrap_function() {
         Function<String, Future<Integer>> stringToIntFuture = s -> FutureUtils.wrap(s, Integer::parseInt);
 
-        assertSucceedWith(1, FutureUtils.joinWrap("1", stringToIntFuture));
-        assertSucceedWith(1, FutureUtils.flatWrap("1", stringToIntFuture));
+        SharedTestUtils.assertSucceedWith(1, FutureUtils.joinWrap("1", stringToIntFuture));
+        SharedTestUtils.assertSucceedWith(1, FutureUtils.flatWrap("1", stringToIntFuture));
 
         assertFailedWith(
                 NumberFormatException.class, "For input string: \"!\"",
@@ -388,7 +386,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
     }
 
     @Test
@@ -410,7 +408,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
     }
 
     @Test
@@ -434,7 +432,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
     }
 
     @Test
@@ -460,7 +458,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
     }
 
     @Test
@@ -490,7 +488,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
     }
 
     @Test
@@ -522,7 +520,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
     }
 
     @Test
@@ -556,7 +554,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
     }
 
     @Test
@@ -595,7 +593,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
     }
 
     @Test
@@ -608,7 +606,7 @@ class FutureUtilsTest {
         assertSame(future0, compositeA.tuple().get_0());
         assertSame(future1, compositeA.tuple().get_1());
 
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
 
         val compositeB = FutureUtils.any(Future.<Double>failedFuture("fail0"), future1);
         assertFalse(compositeB.raw().succeeded());
@@ -618,7 +616,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
 
         val compositeC = FutureUtils.any(future0, Future.<Double>failedFuture("failC1"));
-        assertSucceedWith(compositeC.raw(), compositeC.raw());
+        SharedTestUtils.assertSucceedWith(compositeC.raw(), compositeC.raw());
 
         val compositeD = FutureUtils.any(Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"));
         SharedTestUtils.assertFailedWith("failD1", compositeD.raw());
@@ -636,7 +634,7 @@ class FutureUtilsTest {
         assertSame(future1, compositeA.tuple().get_1());
         assertSame(failedFuture2, compositeA.tuple().get_2());
 
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
 
         val compositeB = FutureUtils.any(Future.<Double>failedFuture("fail0"), future1, failedFuture2);
         assertFalse(compositeB.raw().succeeded());
@@ -646,7 +644,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
 
         val compositeC = FutureUtils.any(future0, Future.<Double>failedFuture("failC1"), failedFuture2);
-        assertSucceedWith(compositeC.raw(), compositeC.raw());
+        SharedTestUtils.assertSucceedWith(compositeC.raw(), compositeC.raw());
 
         val compositeD = FutureUtils.any(
                 Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2
@@ -668,7 +666,7 @@ class FutureUtilsTest {
         assertSame(failedFuture2, compositeA.tuple().get_2());
         assertSame(failedFuture3, compositeA.tuple().get_3());
 
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
 
         val compositeB = FutureUtils.any(Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3);
         assertFalse(compositeB.raw().succeeded());
@@ -678,7 +676,7 @@ class FutureUtilsTest {
         SharedTestUtils.assertFailedWith("fail1", compositeB.raw());
 
         val compositeC = FutureUtils.any(future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3);
-        assertSucceedWith(compositeC.raw(), compositeC.raw());
+        SharedTestUtils.assertSucceedWith(compositeC.raw(), compositeC.raw());
 
         val compositeD = FutureUtils.any(
                 Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3
@@ -702,7 +700,7 @@ class FutureUtilsTest {
         assertSame(failedFuture3, compositeA.tuple().get_3());
         assertSame(failedFuture4, compositeA.tuple().get_4());
 
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
 
         val compositeB = FutureUtils.any(
                 Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4
@@ -716,7 +714,7 @@ class FutureUtilsTest {
         val compositeC = FutureUtils.any(
                 future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4
         );
-        assertSucceedWith(compositeC.raw(), compositeC.raw());
+        SharedTestUtils.assertSucceedWith(compositeC.raw(), compositeC.raw());
 
         val compositeD = FutureUtils.any(
                 Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
@@ -743,7 +741,7 @@ class FutureUtilsTest {
         assertSame(failedFuture4, compositeA.tuple().get_4());
         assertSame(failedFuture5, compositeA.tuple().get_5());
 
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
 
         val compositeB = FutureUtils.any(
                 Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4,
@@ -759,7 +757,7 @@ class FutureUtilsTest {
                 future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4,
                 failedFuture5
         );
-        assertSucceedWith(compositeC.raw(), compositeC.raw());
+        SharedTestUtils.assertSucceedWith(compositeC.raw(), compositeC.raw());
 
         val compositeD = FutureUtils.any(
                 Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
@@ -790,7 +788,7 @@ class FutureUtilsTest {
         assertSame(failedFuture5, compositeA.tuple().get_5());
         assertSame(failedFuture6, compositeA.tuple().get_6());
 
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
 
         val compositeB = FutureUtils.any(
                 Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4,
@@ -806,7 +804,7 @@ class FutureUtilsTest {
                 future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4,
                 failedFuture5, failedFuture6
         );
-        assertSucceedWith(compositeC.raw(), compositeC.raw());
+        SharedTestUtils.assertSucceedWith(compositeC.raw(), compositeC.raw());
 
         val compositeD = FutureUtils.any(
                 Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
@@ -840,7 +838,7 @@ class FutureUtilsTest {
         assertSame(failedFuture6, compositeA.tuple().get_6());
         assertSame(failedFuture7, compositeA.tuple().get_7());
 
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
 
         val compositeB = FutureUtils.any(
                 Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4,
@@ -856,7 +854,7 @@ class FutureUtilsTest {
                 future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4,
                 failedFuture5, failedFuture6, failedFuture7
         );
-        assertSucceedWith(compositeC.raw(), compositeC.raw());
+        SharedTestUtils.assertSucceedWith(compositeC.raw(), compositeC.raw());
 
         val compositeD = FutureUtils.any(
                 Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
@@ -892,7 +890,7 @@ class FutureUtilsTest {
         assertSame(failedFuture7, compositeA.tuple().get_7());
         assertSame(failedFuture8, compositeA.tuple().get_8());
 
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
 
         val compositeB = FutureUtils.any(
                 Future.<Double>failedFuture("fail0"), future1, failedFuture2, failedFuture3, failedFuture4,
@@ -908,7 +906,7 @@ class FutureUtilsTest {
                 future0, Future.<Double>failedFuture("failC1"), failedFuture2, failedFuture3, failedFuture4,
                 failedFuture5, failedFuture6, failedFuture7, failedFuture8
         );
-        assertSucceedWith(compositeC.raw(), compositeC.raw());
+        SharedTestUtils.assertSucceedWith(compositeC.raw(), compositeC.raw());
 
         val compositeD = FutureUtils.any(
                 Future.failedFuture("failD0"), Future.<Double>failedFuture("failD1"), failedFuture2, failedFuture3,
@@ -935,7 +933,7 @@ class FutureUtilsTest {
         assertFalse(compositeB.raw().failed());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 
@@ -959,7 +957,7 @@ class FutureUtilsTest {
         assertFalse(compositeB.raw().failed());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 
@@ -985,7 +983,7 @@ class FutureUtilsTest {
         assertFalse(compositeB.raw().failed());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 
@@ -1013,7 +1011,7 @@ class FutureUtilsTest {
         assertFalse(compositeB.raw().failed());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 
@@ -1045,7 +1043,7 @@ class FutureUtilsTest {
         assertFalse(compositeB.raw().failed());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 
@@ -1079,7 +1077,7 @@ class FutureUtilsTest {
         assertFalse(compositeB.raw().failed());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 
@@ -1115,7 +1113,7 @@ class FutureUtilsTest {
         assertFalse(compositeB.raw().failed());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 
@@ -1156,7 +1154,7 @@ class FutureUtilsTest {
         assertFalse(compositeB.raw().failed());
 
         promise1.complete(1);
-        assertSucceedWith(compositeA.raw(), compositeA.raw());
+        SharedTestUtils.assertSucceedWith(compositeA.raw(), compositeA.raw());
         SharedTestUtils.assertFailedWith("fail", compositeB.raw());
     }
 }

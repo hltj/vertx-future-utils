@@ -20,7 +20,7 @@
  * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
  * if you need additional information or have any questions.
  */
-package test.me.hltj.vertx.future;
+package me.hltj.vertx.future;
 
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -30,9 +30,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static me.hltj.vertx.FutureUtils.*;
+import static me.hltj.vertx.SharedTestUtils.assertFailedWith;
+import static me.hltj.vertx.SharedTestUtils.assertSucceedWith;
 import static org.junit.jupiter.api.Assertions.*;
-import static test.me.hltj.vertx.SharedTestUtils.assertFailedWith;
-import static test.me.hltj.vertx.SharedTestUtils.assertSucceedWith;
 
 class CompositeFutureTuple9Test {
 

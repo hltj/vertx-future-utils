@@ -20,7 +20,7 @@
  * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
  * if you need additional information or have any questions.
  */
-package test.me.hltj.vertx;
+package me.hltj.vertx;
 
 import io.vertx.core.Future;
 

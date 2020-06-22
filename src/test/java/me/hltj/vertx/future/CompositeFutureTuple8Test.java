@@ -20,21 +20,20 @@
  * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
  * if you need additional information or have any questions.
  */
-package test.me.hltj.vertx.future;
+package me.hltj.vertx.future;
 
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import lombok.val;
+import me.hltj.vertx.SharedTestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 import static me.hltj.vertx.FutureUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static test.me.hltj.vertx.SharedTestUtils.assertFailedWith;
-import static test.me.hltj.vertx.SharedTestUtils.assertSucceedWith;
 
-class CompositeFutureTuple7Test {
+class CompositeFutureTuple8Test {
 
     @Test
     void basic() {
@@ -45,8 +44,9 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture();
         Future<Byte> future5 = Future.succeededFuture();
         Future<Float> future6 = Future.succeededFuture();
+        Future<Short> future7 = Future.succeededFuture();
 
-        val tuple = tuple(future0, future1, future2, future3, future4, future5, future6);
+        val tuple = tuple(future0, future1, future2, future3, future4, future5, future6, future7);
         val composite = tuple.join();
         assertSame(tuple, composite.tuple());
 
@@ -61,6 +61,7 @@ class CompositeFutureTuple7Test {
         assertTrue(raw.succeeded(4));
         assertTrue(raw.succeeded(5));
         assertTrue(raw.succeeded(6));
+        assertTrue(raw.succeeded(7));
     }
 
     @Test
@@ -72,23 +73,25 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture();
         Future<Byte> future5 = Future.succeededFuture();
         Future<Float> future6 = Future.succeededFuture();
+        Future<Short> future7 = Future.succeededFuture();
 
         val successStatuses = new ArrayList<Boolean>();
         val resultStrings = new ArrayList<String>();
-        join(promise0.future(), future1, future2, future3, future4, future5, future6)
-                .use((composite, fut0, fut1, fut2, fut3, fut4, fut5, fut6) -> composite.onFailure(_t -> {
+        join(promise0.future(), future1, future2, future3, future4, future5, future6, future7)
+                .use((composite, fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) -> composite.onFailure(_t -> {
                     for (int i = 0; i < composite.size(); i++) {
                         successStatuses.add(composite.succeeded(i));
                         resultStrings.add("" + composite.resultAt(i));
                     }
 
-                    assertSucceedWith(1.0, fut0);
-                    assertFailedWith("error", fut1);
-                    assertSucceedWith(null, fut2);
-                    assertSucceedWith(null, fut3);
-                    assertSucceedWith(null, fut4);
-                    assertSucceedWith(null, fut5);
-                    assertSucceedWith(null, fut6);
+                    SharedTestUtils.assertSucceedWith(1.0, fut0);
+                    SharedTestUtils.assertFailedWith("error", fut1);
+                    SharedTestUtils.assertSucceedWith(null, fut2);
+                    SharedTestUtils.assertSucceedWith(null, fut3);
+                    SharedTestUtils.assertSucceedWith(null, fut4);
+                    SharedTestUtils.assertSucceedWith(null, fut5);
+                    SharedTestUtils.assertSucceedWith(null, fut6);
+                    SharedTestUtils.assertSucceedWith(null, fut7);
                 }));
 
         promise0.complete(1.0);
@@ -113,6 +116,9 @@ class CompositeFutureTuple7Test {
 
         assertEquals(true, successStatuses.get(6));
         assertEquals("null", resultStrings.get(6));
+
+        assertEquals(true, successStatuses.get(7));
+        assertEquals("null", resultStrings.get(7));
     }
 
     @Test
@@ -124,23 +130,28 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('a');
         Future<Byte> future5 = Future.succeededFuture((byte) 1);
         Future<Float> future6 = Future.succeededFuture(1f);
+        Future<Short> future7 = Future.succeededFuture((short) 1);
 
-        Future<String> resultFuture = join(promise0.future(), future1, future2, future3, future4, future5, future6)
-                .with((composite, fut0, fut1, fut2, fut3, fut4, fut5, fut6) -> composite.map(_t -> {
-                    assertSucceedWith(1.0, fut0);
-                    assertSucceedWith(null, fut1);
-                    assertSucceedWith(true, fut2);
-                    assertSucceedWith(2.0, fut3);
-                    assertSucceedWith('a', fut4);
-                    assertSucceedWith((byte) 1, fut5);
-                    assertSucceedWith(1f, fut6);
-                    return String.format("(%s, %s, %s, %s, %s, %s, %s)", fut0, fut1, fut2, fut3, fut4, fut5, fut6);
-                }));
+        Future<String> resultFuture = join(
+                promise0.future(), future1, future2, future3, future4, future5, future6, future7
+        ).with((composite, fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) -> composite.map(_t -> {
+            SharedTestUtils.assertSucceedWith(1.0, fut0);
+            SharedTestUtils.assertSucceedWith(null, fut1);
+            SharedTestUtils.assertSucceedWith(true, fut2);
+            SharedTestUtils.assertSucceedWith(2.0, fut3);
+            SharedTestUtils.assertSucceedWith('a', fut4);
+            SharedTestUtils.assertSucceedWith((byte) 1, fut5);
+            SharedTestUtils.assertSucceedWith(1f, fut6);
+            SharedTestUtils.assertSucceedWith((short) 1, fut7);
+            return String.format(
+                    "(%s, %s, %s, %s, %s, %s, %s, %s)", fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7
+            );
+        }));
 
         promise0.complete(1.0);
         assertEquals(
                 "(Future{result=1.0}, Future{result=null}, Future{result=true}, Future{result=2.0}" +
-                        ", Future{result=a}, Future{result=1}, Future{result=1.0})",
+                        ", Future{result=a}, Future{result=1}, Future{result=1.0}, Future{result=1})",
                 resultFuture.result()
         );
     }
@@ -154,33 +165,38 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('\0');
         Future<Byte> future5 = Future.succeededFuture((byte) 0);
         Future<Float> future6 = Future.succeededFuture(0f);
-        val composite = join(promise0.future(), promise1.future(), future2, future3, future4, future5, future6);
-
-        Future<Double> sumFutureA = composite.through((fut0, fut1, fut2, fut3, fut4, fut5, fut6) ->
-                fallbackWith(fut0, 0.0).result() +
-                        fallbackWith(fut1, 0).result() +
-                        fallbackWith(fut2, 0L).result() +
-                        fallbackWith(fut3, 0.0).result() +
-                        fallbackWith(fut4, '\0').result() +
-                        fallbackWith(fut5, (byte) 0).result() +
-                        fallbackWith(fut6, 0f).result()
+        Future<Short> future7 = Future.succeededFuture((short) 0);
+        val composite = join(
+                promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7
         );
 
-        Future<Double> sumFutureB = composite.mapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6) ->
+        Future<Double> sumFutureA = composite.through((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
                 fallbackWith(fut0, 0.0).result() +
                         fallbackWith(fut1, 0).result() +
                         fallbackWith(fut2, 0L).result() +
                         fallbackWith(fut3, 0.0).result() +
                         fallbackWith(fut4, '\0').result() +
                         fallbackWith(fut5, (byte) 0).result() +
-                        fallbackWith(fut6, 0f).result()
+                        fallbackWith(fut6, 0f).result() +
+                        fallbackWith(fut7, (short) 0).result()
+        );
+
+        Future<Double> sumFutureB = composite.mapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
+                fallbackWith(fut0, 0.0).result() +
+                        fallbackWith(fut1, 0).result() +
+                        fallbackWith(fut2, 0L).result() +
+                        fallbackWith(fut3, 0.0).result() +
+                        fallbackWith(fut4, '\0').result() +
+                        fallbackWith(fut5, (byte) 0).result() +
+                        fallbackWith(fut6, 0f).result() +
+                        fallbackWith(fut7, (short) 0).result()
         );
 
         promise0.fail("error");
         promise1.complete(9);
 
-        assertSucceedWith(9.0, sumFutureA);
-        assertSucceedWith(9.0, sumFutureB);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureA);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureB);
     }
 
     @Test
@@ -192,23 +208,26 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('\0');
         Future<Byte> future5 = Future.succeededFuture((byte) 0);
         Future<Float> future6 = Future.succeededFuture(0f);
-        val composite = join(promise0.future(), promise1.future(), future2, future3, future4, future5, future6);
-
-        Future<Double> sumFutureA = composite.through((fut0, fut1, fut2, fut3, fut4, fut5, fut6) ->
-                fut0.result() + fut1.result() + fut2.result() + fut3.result() + fut4.result() + fut5.result() +
-                        fut6.result()
+        Future<Short> future7 = Future.succeededFuture((short) 0);
+        val composite = join(
+                promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7
         );
 
-        Future<Double> sumFutureB = composite.mapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6) ->
+        Future<Double> sumFutureA = composite.through((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
                 fut0.result() + fut1.result() + fut2.result() + fut3.result() + fut4.result() + fut5.result() +
-                        fut6.result()
+                        fut6.result() + fut7.result()
+        );
+
+        Future<Double> sumFutureB = composite.mapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
+                fut0.result() + fut1.result() + fut2.result() + fut3.result() + fut4.result() + fut5.result() +
+                        fut6.result() + fut7.result()
         );
 
         promise0.complete();
         promise1.complete(9);
 
-        assertFailedWith(NullPointerException.class, sumFutureA);
-        assertFailedWith(NullPointerException.class, sumFutureB);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureA);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureB);
     }
 
     @Test
@@ -220,33 +239,40 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('\0');
         Future<Byte> future5 = Future.succeededFuture((byte) 0);
         Future<Float> future6 = Future.succeededFuture(0f);
-        val composite = join(promise0.future(), promise1.future(), future2, future3, future4, future5, future6);
+        Future<Short> future7 = Future.succeededFuture((short) 0);
+        val composite = join(
+                promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7
+        );
 
-        Future<Double> sumFutureA = composite.joinThrough((fut0, fut1, fut2, fut3, fut4, fut5, fut6) -> wrap(() ->
-                fallbackWith(fut0, 0.0).result() +
+        Future<Double> sumFutureA = composite.joinThrough((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
+                wrap(() -> fallbackWith(fut0, 0.0).result() +
                         fallbackWith(fut1, 0).result() +
                         fallbackWith(fut2, 0L).result() +
                         fallbackWith(fut3, 0.0).result() +
                         fallbackWith(fut4, '\0').result() +
                         fallbackWith(fut5, (byte) 0).result() +
-                        fallbackWith(fut6, 0f).result()
-        ));
+                        fallbackWith(fut6, 0f).result() +
+                        fallbackWith(fut7, (short) 0).result()
+                )
+        );
 
-        Future<Double> sumFutureB = composite.flatMapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6) -> wrap(() ->
-                fallbackWith(fut0, 0.0).result() +
+        Future<Double> sumFutureB = composite.flatMapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
+                wrap(() -> fallbackWith(fut0, 0.0).result() +
                         fallbackWith(fut1, 0).result() +
                         fallbackWith(fut2, 0L).result() +
                         fallbackWith(fut3, 0.0).result() +
                         fallbackWith(fut4, '\0').result() +
                         fallbackWith(fut5, (byte) 0).result() +
-                        fallbackWith(fut6, 0f).result()
-        ));
+                        fallbackWith(fut6, 0f).result() +
+                        fallbackWith(fut7, (short) 0).result()
+                )
+        );
 
         promise0.fail("error");
         promise1.complete(9);
 
-        assertSucceedWith(9.0, sumFutureA);
-        assertSucceedWith(9.0, sumFutureB);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureA);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureB);
     }
 
     @Test
@@ -258,9 +284,12 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('\0');
         Future<Byte> future5 = Future.succeededFuture((byte) 0);
         Future<Float> future6 = Future.succeededFuture(0f);
-        val composite = join(promise0.future(), promise1.future(), future2, future3, future4, future5, future6);
+        Future<Short> future7 = Future.succeededFuture((short) 0);
+        val composite = join(
+                promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7
+        );
 
-        Future<Double> sumFutureA = composite.joinThrough((fut0, fut1, fut2, fut3, fut4, fut5, fut6) ->
+        Future<Double> sumFutureA = composite.joinThrough((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
                 wrap(null, (Double init) -> init +
                         fallbackWith(fut0, 0.0).result() +
                         fallbackWith(fut1, 0).result() +
@@ -268,11 +297,12 @@ class CompositeFutureTuple7Test {
                         fallbackWith(fut3, 0.0).result() +
                         fallbackWith(fut4, '\0').result() +
                         fallbackWith(fut5, (byte) 0).result() +
-                        fallbackWith(fut6, 0f).result()
+                        fallbackWith(fut6, 0f).result() +
+                        fallbackWith(fut7, (short) 0).result()
                 )
         );
 
-        Future<Double> sumFutureB = composite.flatMapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6) ->
+        Future<Double> sumFutureB = composite.flatMapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
                 wrap(null, (Double init) -> init +
                         fallbackWith(fut0, 0.0).result() +
                         fallbackWith(fut1, 0).result() +
@@ -280,12 +310,13 @@ class CompositeFutureTuple7Test {
                         fallbackWith(fut3, 0.0).result() +
                         fallbackWith(fut4, '\0').result() +
                         fallbackWith(fut5, (byte) 0).result() +
-                        fallbackWith(fut6, 0f).result()
+                        fallbackWith(fut6, 0f).result() +
+                        fallbackWith(fut7, (short) 0).result()
                 )
         );
 
         @SuppressWarnings("ConstantConditions")
-        Future<Double> sumFutureC = composite.joinThrough((fut0, fut1, fut2, fut3, fut4, fut5, fut6) ->
+        Future<Double> sumFutureC = composite.joinThrough((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
                 ((Future<Integer>) null).map(
                         fallbackWith(fut0, 0.0).result() +
                                 fallbackWith(fut1, 0).result() +
@@ -293,12 +324,13 @@ class CompositeFutureTuple7Test {
                                 fallbackWith(fut3, 0.0).result() +
                                 fallbackWith(fut4, '\0').result() +
                                 fallbackWith(fut5, (byte) 0).result() +
-                                fallbackWith(fut6, 0f).result()
+                                fallbackWith(fut6, 0f).result() +
+                                fallbackWith(fut7, (short) 0).result()
                 )
         );
 
         @SuppressWarnings("ConstantConditions")
-        Future<Double> sumFutureD = composite.flatMapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6) ->
+        Future<Double> sumFutureD = composite.flatMapAnyway((fut0, fut1, fut2, fut3, fut4, fut5, fut6, fut7) ->
                 ((Future<Integer>) null).map(
                         fallbackWith(fut0, 0.0).result() +
                                 fallbackWith(fut1, 0).result() +
@@ -306,17 +338,18 @@ class CompositeFutureTuple7Test {
                                 fallbackWith(fut3, 0.0).result() +
                                 fallbackWith(fut4, '\0').result() +
                                 fallbackWith(fut5, (byte) 0).result() +
-                                fallbackWith(fut6, 0f).result()
+                                fallbackWith(fut6, 0f).result() +
+                                fallbackWith(fut7, (short) 0).result()
                 )
         );
 
         promise0.fail("error");
         promise1.complete(9);
 
-        assertFailedWith(NullPointerException.class, sumFutureA);
-        assertFailedWith(NullPointerException.class, sumFutureB);
-        assertFailedWith(NullPointerException.class, sumFutureC);
-        assertFailedWith(NullPointerException.class, sumFutureD);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureA);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureB);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureC);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureD);
     }
 
     @Test
@@ -328,19 +361,21 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('\0');
         Future<Byte> future5 = Future.succeededFuture((byte) 0);
         Future<Float> future6 = Future.succeededFuture(0f);
-        val composite = tuple(promise0.future(), promise1.future(), future2, future3, future4, future5, future6)
-                .fallback(0.0, 0, 0L, 0.0, '\0', (byte) 0, 0f).all();
+        Future<Short> future7 = Future.succeededFuture((short) 0);
+        val composite = tuple(
+                promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7
+        ).fallback(0.0, 0, 0L, 0.0, '\0', (byte) 0, 0f, (short) 0).all();
 
         Future<Double> sumFutureA = composite
-                .applift((d0, i1, l2, d3, c4, b5, f6) -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6);
+                .applift((d0, i1, l2, d3, c4, b5, f6, s7) -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6 + s7);
         Future<Double> sumFutureB = composite
-                .mapTyped((d0, i1, l2, d3, c4, b5, f6) -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6);
+                .mapTyped((d0, i1, l2, d3, c4, b5, f6, s7) -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6 + s7);
 
         promise0.fail("error");
         promise1.complete(9);
 
-        assertSucceedWith(9.0, sumFutureA);
-        assertSucceedWith(9.0, sumFutureB);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureA);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureB);
     }
 
     @Test
@@ -352,18 +387,19 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('\0');
         Future<Byte> future5 = Future.succeededFuture((byte) 0);
         Future<Float> future6 = Future.succeededFuture(0f);
-        val composite = join(promise0.future(), promise1.future(), future2, future3, future4, future5, future6);
+        Future<Short> future7 = Future.succeededFuture((short) 0);
+        val composite = join(promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7);
 
         Future<Double> sumFutureA = composite
-                .applift((d0, i1, l2, d3, c4, b5, f6) -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6);
+                .applift((d0, i1, l2, d3, c4, b5, f6, s7) -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6 + s7);
         Future<Double> sumFutureB = composite
-                .mapTyped((d0, i1, l2, d3, c4, b5, f6) -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6);
+                .mapTyped((d0, i1, l2, d3, c4, b5, f6, s7) -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6 + s7);
 
         promise0.fail("error");
         promise1.complete(9);
 
-        assertFailedWith("error", sumFutureA);
-        assertFailedWith("error", sumFutureB);
+        SharedTestUtils.assertFailedWith("error", sumFutureA);
+        SharedTestUtils.assertFailedWith("error", sumFutureB);
     }
 
     @Test
@@ -375,19 +411,23 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('\0');
         Future<Byte> future5 = Future.succeededFuture((byte) 0);
         Future<Float> future6 = Future.succeededFuture(0f);
-        val composite = tuple(promise0.future(), promise1.future(), future2, future3, future4, future5, future6)
-                .fallback(0.0, 0, 0L, 0.0, '\0', (byte) 0, 0f).all();
+        Future<Short> future7 = Future.succeededFuture((short) 0);
+        val composite = tuple(
+                promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7
+        ).fallback(0.0, 0, 0L, 0.0, '\0', (byte) 0, 0f, (short) 0).all();
 
-        Future<Double> sumFutureA = composite
-                .joinApplift((d0, i1, l2, d3, c4, b5, f6) -> wrap(() -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6));
-        Future<Double> sumFutureB = composite
-                .flatMapTyped((d0, i1, l2, d3, c4, b5, f6) -> wrap(() -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6));
+        Future<Double> sumFutureA = composite.joinApplift((d0, i1, l2, d3, c4, b5, f6, s7) -> wrap(() ->
+                d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6 + s7
+        ));
+        Future<Double> sumFutureB = composite.flatMapTyped((d0, i1, l2, d3, c4, b5, f6, s7) -> wrap(() ->
+                d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6 + s7
+        ));
 
         promise0.fail("error");
         promise1.complete(9);
 
-        assertSucceedWith(9.0, sumFutureA);
-        assertSucceedWith(9.0, sumFutureB);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureA);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureB);
     }
 
     @Test
@@ -399,29 +439,33 @@ class CompositeFutureTuple7Test {
         Future<Character> future4 = Future.succeededFuture('\0');
         Future<Byte> future5 = Future.succeededFuture((byte) 0);
         Future<Float> future6 = Future.succeededFuture(0f);
-        val compositeA = join(promise0.future(), promise1.future(), future2, future3, future4, future5, future6);
-        val compositeC = tuple(promise0.future(), promise1.future(), future2, future3, future4, future5, future6)
-                .otherwise(0.0, 0, 0L, 0.0, '\0', (byte) 0, 0f).all();
+        Future<Short> future7 = Future.succeededFuture((short) 0);
+        val compositeA = join(
+                promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7
+        );
+        val compositeC = tuple(
+                promise0.future(), promise1.future(), future2, future3, future4, future5, future6, future7
+        ).otherwise(0.0, 0, 0L, 0.0, '\0', (byte) 0, 0f, (short) 0).all();
 
         Future<Double> sumFutureA = compositeA
-                .joinApplift((d0, i1, l2, d3, c4, b5, f6) -> wrap(() -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6));
+                .joinApplift((d0, i1, l2, d3, c4, b5, f6, s7) -> wrap(() -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6 + s7));
         Future<Double> sumFutureB = compositeA
-                .flatMapTyped((d0, i1, l2, d3, c4, b5, f6) -> wrap(() -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6));
+                .flatMapTyped((d0, i1, l2, d3, c4, b5, f6, s7) -> wrap(() -> d0 + 1.0 * i1 + l2 + d3 + c4 + b5 + f6 + s7));
         @SuppressWarnings("ConstantConditions")
-        Future<Double> sumFutureC = compositeC.joinApplift((d0, i1, l2, d3, c4, b5, f6) ->
-                ((Future<Integer>) null).map(d0 + i1 + l2 + d3 + c4 + b5 + f6)
+        Future<Double> sumFutureC = compositeC.joinApplift((d0, i1, l2, d3, c4, b5, f6, s7) ->
+                ((Future<Integer>) null).map(d0 + i1 + l2 + d3 + c4 + b5 + f6 + s7)
         );
         @SuppressWarnings("ConstantConditions")
-        Future<Double> sumFutureD = compositeC.flatMapTyped((d0, i1, l2, d3, c4, b5, f6) ->
-                ((Future<Integer>) null).map(d0 + i1 + l2 + d3 + c4 + b5 + f6)
+        Future<Double> sumFutureD = compositeC.flatMapTyped((d0, i1, l2, d3, c4, b5, f6, s7) ->
+                ((Future<Integer>) null).map(d0 + i1 + l2 + d3 + c4 + b5 + f6 + s7)
         );
 
         promise0.fail("error");
         promise1.complete(9);
 
-        assertFailedWith("error", sumFutureA);
-        assertFailedWith("error", sumFutureB);
-        assertFailedWith(NullPointerException.class, sumFutureC);
-        assertFailedWith(NullPointerException.class, sumFutureD);
+        SharedTestUtils.assertFailedWith("error", sumFutureA);
+        SharedTestUtils.assertFailedWith("error", sumFutureB);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureC);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureD);
     }
 }

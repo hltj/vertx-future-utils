@@ -20,20 +20,18 @@
  * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
  * if you need additional information or have any questions.
  */
-package test.me.hltj.vertx.future;
+package me.hltj.vertx.future;
 
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import lombok.val;
-import me.hltj.vertx.future.FutureTuple7;
+import me.hltj.vertx.SharedTestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.me.hltj.vertx.SharedTestUtils.assertFailedWith;
-import static test.me.hltj.vertx.SharedTestUtils.assertSucceedWith;
 
 class FutureTuple7Test {
 
@@ -81,24 +79,24 @@ class FutureTuple7Test {
         Future<Float> failedFuture6 = Future.failedFuture("fail6");
 
         val tupleA = FutureTuple7.of(future0, future1, future2, future3, future4, future5, future6).mapEmpty();
-        assertSucceedWith(null, tupleA.get_0());
-        assertSucceedWith(null, tupleA.get_1());
-        assertSucceedWith(null, tupleA.get_2());
-        assertSucceedWith(null, tupleA.get_3());
-        assertSucceedWith(null, tupleA.get_4());
-        assertSucceedWith(null, tupleA.get_5());
-        assertSucceedWith(null, tupleA.get_6());
+        SharedTestUtils.assertSucceedWith(null, tupleA.get_0());
+        SharedTestUtils.assertSucceedWith(null, tupleA.get_1());
+        SharedTestUtils.assertSucceedWith(null, tupleA.get_2());
+        SharedTestUtils.assertSucceedWith(null, tupleA.get_3());
+        SharedTestUtils.assertSucceedWith(null, tupleA.get_4());
+        SharedTestUtils.assertSucceedWith(null, tupleA.get_5());
+        SharedTestUtils.assertSucceedWith(null, tupleA.get_6());
 
         val tupleB = FutureTuple7.of(
                 failedFuture0, failedFuture1, failedFuture2, failedFuture3, failedFuture4, failedFuture5, failedFuture6
         ).mapEmpty();
-        assertFailedWith("fail0", tupleB.get_0());
-        assertFailedWith("fail1", tupleB.get_1());
-        assertFailedWith("fail2", tupleB.get_2());
-        assertFailedWith("fail3", tupleB.get_3());
-        assertFailedWith("fail4", tupleB.get_4());
-        assertFailedWith("fail5", tupleB.get_5());
-        assertFailedWith("fail6", tupleB.get_6());
+        SharedTestUtils.assertFailedWith("fail0", tupleB.get_0());
+        SharedTestUtils.assertFailedWith("fail1", tupleB.get_1());
+        SharedTestUtils.assertFailedWith("fail2", tupleB.get_2());
+        SharedTestUtils.assertFailedWith("fail3", tupleB.get_3());
+        SharedTestUtils.assertFailedWith("fail4", tupleB.get_4());
+        SharedTestUtils.assertFailedWith("fail5", tupleB.get_5());
+        SharedTestUtils.assertFailedWith("fail6", tupleB.get_6());
     }
 
     @Test
@@ -126,24 +124,24 @@ class FutureTuple7Test {
 
         val tupleA = FutureTuple7.of(future0, future1, future2, future3, future4, future5, future6)
                 .otherwise(0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(1, tupleA.get_0());
-        assertSucceedWith("hello", tupleA.get_1());
-        assertSucceedWith(true, tupleA.get_2());
-        assertSucceedWith(1.0, tupleA.get_3());
-        assertSucceedWith('a', tupleA.get_4());
-        assertSucceedWith((byte) 1, tupleA.get_5());
-        assertSucceedWith(1f, tupleA.get_6());
+        SharedTestUtils.assertSucceedWith(1, tupleA.get_0());
+        SharedTestUtils.assertSucceedWith("hello", tupleA.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleA.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleA.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleA.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleA.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleA.get_6());
 
         val tupleB = FutureTuple7.of(
                 failedFuture0, failedFuture1, failedFuture2, failedFuture3, failedFuture4, failedFuture5, failedFuture6
         ).otherwise(0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(0, tupleB.get_0());
-        assertSucceedWith("default", tupleB.get_1());
-        assertSucceedWith(false, tupleB.get_2());
-        assertSucceedWith(0.0, tupleB.get_3());
-        assertSucceedWith('\0', tupleB.get_4());
-        assertSucceedWith((byte) 0, tupleB.get_5());
-        assertSucceedWith(0f, tupleB.get_6());
+        SharedTestUtils.assertSucceedWith(0, tupleB.get_0());
+        SharedTestUtils.assertSucceedWith("default", tupleB.get_1());
+        SharedTestUtils.assertSucceedWith(false, tupleB.get_2());
+        SharedTestUtils.assertSucceedWith(0.0, tupleB.get_3());
+        SharedTestUtils.assertSucceedWith('\0', tupleB.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 0, tupleB.get_5());
+        SharedTestUtils.assertSucceedWith(0f, tupleB.get_6());
     }
 
     @Test
@@ -173,26 +171,26 @@ class FutureTuple7Test {
         val tupleA = FutureTuple7.of(
                 future0, future1, future2, future3, future4, future5, future6
         ).otherwise(throwablesA::add, 0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(1, tupleA.get_0());
-        assertSucceedWith("hello", tupleA.get_1());
-        assertSucceedWith(true, tupleA.get_2());
-        assertSucceedWith(1.0, tupleA.get_3());
-        assertSucceedWith('a', tupleA.get_4());
-        assertSucceedWith((byte) 1, tupleA.get_5());
-        assertSucceedWith(1f, tupleA.get_6());
+        SharedTestUtils.assertSucceedWith(1, tupleA.get_0());
+        SharedTestUtils.assertSucceedWith("hello", tupleA.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleA.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleA.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleA.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleA.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleA.get_6());
         assertTrue(throwablesA.isEmpty());
 
         val throwablesB = new ArrayList<Throwable>();
         val tupleB = FutureTuple7.of(
                 failedFuture0, failedFuture1, failedFuture2, failedFuture3, failedFuture4, failedFuture5, failedFuture6
         ).otherwise(throwablesB::add, 0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(0, tupleB.get_0());
-        assertSucceedWith("default", tupleB.get_1());
-        assertSucceedWith(false, tupleB.get_2());
-        assertSucceedWith(0.0, tupleB.get_3());
-        assertSucceedWith('\0', tupleB.get_4());
-        assertSucceedWith((byte) 0, tupleB.get_5());
-        assertSucceedWith(0f, tupleB.get_6());
+        SharedTestUtils.assertSucceedWith(0, tupleB.get_0());
+        SharedTestUtils.assertSucceedWith("default", tupleB.get_1());
+        SharedTestUtils.assertSucceedWith(false, tupleB.get_2());
+        SharedTestUtils.assertSucceedWith(0.0, tupleB.get_3());
+        SharedTestUtils.assertSucceedWith('\0', tupleB.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 0, tupleB.get_5());
+        SharedTestUtils.assertSucceedWith(0f, tupleB.get_6());
         assertEquals(7, throwablesB.size());
         assertEquals("fail0", throwablesB.get(0).getMessage());
         assertEquals("fail1", throwablesB.get(1).getMessage());
@@ -227,24 +225,24 @@ class FutureTuple7Test {
         Future<Float> failedFuture6 = Future.failedFuture("fail6");
 
         val tupleA = FutureTuple7.of(future0, future1, future2, future3, future4, future5, future6).otherwiseEmpty();
-        assertSucceedWith(1, tupleA.get_0());
-        assertSucceedWith("hello", tupleA.get_1());
-        assertSucceedWith(true, tupleA.get_2());
-        assertSucceedWith(1.0, tupleA.get_3());
-        assertSucceedWith('a', tupleA.get_4());
-        assertSucceedWith((byte) 1, tupleA.get_5());
-        assertSucceedWith(1f, tupleA.get_6());
+        SharedTestUtils.assertSucceedWith(1, tupleA.get_0());
+        SharedTestUtils.assertSucceedWith("hello", tupleA.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleA.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleA.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleA.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleA.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleA.get_6());
 
         val tupleB = FutureTuple7.of(
                 failedFuture0, failedFuture1, failedFuture2, failedFuture3, failedFuture4, failedFuture5, failedFuture6
         ).otherwiseEmpty();
-        assertSucceedWith(null, tupleB.get_0());
-        assertSucceedWith(null, tupleB.get_1());
-        assertSucceedWith(null, tupleB.get_2());
-        assertSucceedWith(null, tupleB.get_3());
-        assertSucceedWith(null, tupleB.get_4());
-        assertSucceedWith(null, tupleB.get_5());
-        assertSucceedWith(null, tupleB.get_6());
+        SharedTestUtils.assertSucceedWith(null, tupleB.get_0());
+        SharedTestUtils.assertSucceedWith(null, tupleB.get_1());
+        SharedTestUtils.assertSucceedWith(null, tupleB.get_2());
+        SharedTestUtils.assertSucceedWith(null, tupleB.get_3());
+        SharedTestUtils.assertSucceedWith(null, tupleB.get_4());
+        SharedTestUtils.assertSucceedWith(null, tupleB.get_5());
+        SharedTestUtils.assertSucceedWith(null, tupleB.get_6());
     }
 
     @Test
@@ -272,24 +270,24 @@ class FutureTuple7Test {
 
         val tupleA = FutureTuple7.of(future0, future1, future2, future3, future4, future5, future6)
                 .defaults(0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(1, tupleA.get_0());
-        assertSucceedWith("hello", tupleA.get_1());
-        assertSucceedWith(true, tupleA.get_2());
-        assertSucceedWith(1.0, tupleA.get_3());
-        assertSucceedWith('a', tupleA.get_4());
-        assertSucceedWith((byte) 1, tupleA.get_5());
-        assertSucceedWith(1f, tupleA.get_6());
+        SharedTestUtils.assertSucceedWith(1, tupleA.get_0());
+        SharedTestUtils.assertSucceedWith("hello", tupleA.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleA.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleA.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleA.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleA.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleA.get_6());
 
         val tupleB = FutureTuple7.of(
                 emptyFuture0, emptyFuture1, emptyFuture2, emptyFuture3, emptyFuture4, emptyFuture5, emptyFuture6
         ).defaults(0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(0, tupleB.get_0());
-        assertSucceedWith("default", tupleB.get_1());
-        assertSucceedWith(false, tupleB.get_2());
-        assertSucceedWith(0.0, tupleB.get_3());
-        assertSucceedWith('\0', tupleB.get_4());
-        assertSucceedWith((byte) 0, tupleB.get_5());
-        assertSucceedWith(0f, tupleB.get_6());
+        SharedTestUtils.assertSucceedWith(0, tupleB.get_0());
+        SharedTestUtils.assertSucceedWith("default", tupleB.get_1());
+        SharedTestUtils.assertSucceedWith(false, tupleB.get_2());
+        SharedTestUtils.assertSucceedWith(0.0, tupleB.get_3());
+        SharedTestUtils.assertSucceedWith('\0', tupleB.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 0, tupleB.get_5());
+        SharedTestUtils.assertSucceedWith(0f, tupleB.get_6());
     }
 
     @Test
@@ -318,26 +316,26 @@ class FutureTuple7Test {
         val nullCountA = new AtomicInteger();
         val tupleA = FutureTuple7.of(future0, future1, future2, future3, future4, future5, future6)
                 .defaults(nullCountA::incrementAndGet, 0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(1, tupleA.get_0());
-        assertSucceedWith("hello", tupleA.get_1());
-        assertSucceedWith(true, tupleA.get_2());
-        assertSucceedWith(1.0, tupleA.get_3());
-        assertSucceedWith('a', tupleA.get_4());
-        assertSucceedWith((byte) 1, tupleA.get_5());
-        assertSucceedWith(1f, tupleA.get_6());
+        SharedTestUtils.assertSucceedWith(1, tupleA.get_0());
+        SharedTestUtils.assertSucceedWith("hello", tupleA.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleA.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleA.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleA.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleA.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleA.get_6());
         assertEquals(0, nullCountA.get());
 
         val nullCountB = new AtomicInteger();
         val tupleB = FutureTuple7.of(
                 emptyFuture0, emptyFuture1, emptyFuture2, emptyFuture3, emptyFuture4, emptyFuture5, emptyFuture6
         ).defaults(nullCountB::incrementAndGet, 0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(0, tupleB.get_0());
-        assertSucceedWith("default", tupleB.get_1());
-        assertSucceedWith(false, tupleB.get_2());
-        assertSucceedWith(0.0, tupleB.get_3());
-        assertSucceedWith('\0', tupleB.get_4());
-        assertSucceedWith((byte) 0, tupleB.get_5());
-        assertSucceedWith(0f, tupleB.get_6());
+        SharedTestUtils.assertSucceedWith(0, tupleB.get_0());
+        SharedTestUtils.assertSucceedWith("default", tupleB.get_1());
+        SharedTestUtils.assertSucceedWith(false, tupleB.get_2());
+        SharedTestUtils.assertSucceedWith(0.0, tupleB.get_3());
+        SharedTestUtils.assertSucceedWith('\0', tupleB.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 0, tupleB.get_5());
+        SharedTestUtils.assertSucceedWith(0f, tupleB.get_6());
         assertEquals(7, nullCountB.get());
     }
 
@@ -361,23 +359,23 @@ class FutureTuple7Test {
 
         val tupleA = FutureTuple7.of(future0, future1, future2, future3, future4, future5, future6)
                 .fallback(0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(1, tupleA.get_0());
-        assertSucceedWith("hello", tupleA.get_1());
-        assertSucceedWith(true, tupleA.get_2());
-        assertSucceedWith(1.0, tupleA.get_3());
-        assertSucceedWith('a', tupleA.get_4());
-        assertSucceedWith((byte) 1, tupleA.get_5());
-        assertSucceedWith(1f, tupleA.get_6());
+        SharedTestUtils.assertSucceedWith(1, tupleA.get_0());
+        SharedTestUtils.assertSucceedWith("hello", tupleA.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleA.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleA.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleA.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleA.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleA.get_6());
 
         val tupleB = FutureTuple7.of(failedFuture0, emptyFuture1, future2, future3, future4, future5, future6)
                 .fallback(0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(0, tupleB.get_0());
-        assertSucceedWith("default", tupleB.get_1());
-        assertSucceedWith(true, tupleB.get_2());
-        assertSucceedWith(1.0, tupleB.get_3());
-        assertSucceedWith('a', tupleB.get_4());
-        assertSucceedWith((byte) 1, tupleB.get_5());
-        assertSucceedWith(1f, tupleB.get_6());
+        SharedTestUtils.assertSucceedWith(0, tupleB.get_0());
+        SharedTestUtils.assertSucceedWith("default", tupleB.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleB.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleB.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleB.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleB.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleB.get_6());
     }
 
     @Test
@@ -402,13 +400,13 @@ class FutureTuple7Test {
         val throwablesA = new ArrayList<Throwable>();
         val tupleA = FutureTuple7.of(future0, future1, future2, future3, future4, future5, future6)
                 .fallback(throwablesA::add, nullCountA::incrementAndGet, 0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(1, tupleA.get_0());
-        assertSucceedWith("hello", tupleA.get_1());
-        assertSucceedWith(true, tupleA.get_2());
-        assertSucceedWith(1.0, tupleA.get_3());
-        assertSucceedWith('a', tupleA.get_4());
-        assertSucceedWith((byte) 1, tupleA.get_5());
-        assertSucceedWith(1f, tupleA.get_6());
+        SharedTestUtils.assertSucceedWith(1, tupleA.get_0());
+        SharedTestUtils.assertSucceedWith("hello", tupleA.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleA.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleA.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleA.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleA.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleA.get_6());
         assertEquals(0, nullCountA.get());
         assertTrue(throwablesA.isEmpty());
 
@@ -416,13 +414,13 @@ class FutureTuple7Test {
         val throwablesB = new ArrayList<Throwable>();
         val tupleB = FutureTuple7.of(failedFuture0, emptyFuture1, future2, future3, future4, future5, future6)
                 .fallback(throwablesB::add, nullCountB::incrementAndGet, 0, "default", false, 0.0, '\0', (byte) 0, 0f);
-        assertSucceedWith(0, tupleB.get_0());
-        assertSucceedWith("default", tupleB.get_1());
-        assertSucceedWith(true, tupleB.get_2());
-        assertSucceedWith(1.0, tupleB.get_3());
-        assertSucceedWith('a', tupleB.get_4());
-        assertSucceedWith((byte) 1, tupleB.get_5());
-        assertSucceedWith(1f, tupleB.get_6());
+        SharedTestUtils.assertSucceedWith(0, tupleB.get_0());
+        SharedTestUtils.assertSucceedWith("default", tupleB.get_1());
+        SharedTestUtils.assertSucceedWith(true, tupleB.get_2());
+        SharedTestUtils.assertSucceedWith(1.0, tupleB.get_3());
+        SharedTestUtils.assertSucceedWith('a', tupleB.get_4());
+        SharedTestUtils.assertSucceedWith((byte) 1, tupleB.get_5());
+        SharedTestUtils.assertSucceedWith(1f, tupleB.get_6());
         assertEquals(1, nullCountB.get());
         assertEquals(1, throwablesB.size());
         assertEquals("fail0", throwablesB.get(0).getMessage());

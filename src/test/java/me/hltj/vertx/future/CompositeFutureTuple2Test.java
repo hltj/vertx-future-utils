@@ -20,19 +20,18 @@
  * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
  * if you need additional information or have any questions.
  */
-package test.me.hltj.vertx.future;
+package me.hltj.vertx.future;
 
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import lombok.val;
+import me.hltj.vertx.SharedTestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 import static me.hltj.vertx.FutureUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static test.me.hltj.vertx.SharedTestUtils.assertFailedWith;
-import static test.me.hltj.vertx.SharedTestUtils.assertSucceedWith;
 
 class CompositeFutureTuple2Test {
 
@@ -66,8 +65,8 @@ class CompositeFutureTuple2Test {
                 resultStrings.add("" + composite.resultAt(i));
             }
 
-            assertSucceedWith(1.0, fut0);
-            assertFailedWith("error", fut1);
+            SharedTestUtils.assertSucceedWith(1.0, fut0);
+            SharedTestUtils.assertFailedWith("error", fut1);
         }));
 
         promise0.complete(1.0);
@@ -86,8 +85,8 @@ class CompositeFutureTuple2Test {
 
         Future<String> resultFuture = join(promise0.future(), future1).with((composite, fut0, fut1) ->
                 composite.map(_t -> {
-                    assertSucceedWith(1.0, fut0);
-                    assertSucceedWith(null, fut1);
+                    SharedTestUtils.assertSucceedWith(1.0, fut0);
+                    SharedTestUtils.assertSucceedWith(null, fut1);
                     return String.format("(%s, %s)", fut0, fut1);
                 })
         );
@@ -113,8 +112,8 @@ class CompositeFutureTuple2Test {
         promise0.fail("error");
         promise1.complete(9);
 
-        assertSucceedWith(9.0, sumFutureA);
-        assertSucceedWith(9.0, sumFutureB);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureA);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureB);
     }
 
     @Test
@@ -134,8 +133,8 @@ class CompositeFutureTuple2Test {
         promise0.complete();
         promise1.complete(9);
 
-        assertFailedWith(NullPointerException.class, sumFutureA);
-        assertFailedWith(NullPointerException.class, sumFutureB);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureA);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureB);
     }
 
     @Test
@@ -155,8 +154,8 @@ class CompositeFutureTuple2Test {
         promise0.fail("error");
         promise1.complete(9);
 
-        assertSucceedWith(9.0, sumFutureA);
-        assertSucceedWith(9.0, sumFutureB);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureA);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureB);
     }
 
     @Test
@@ -186,10 +185,10 @@ class CompositeFutureTuple2Test {
         promise0.fail("error");
         promise1.complete(9);
 
-        assertFailedWith(NullPointerException.class, sumFutureA);
-        assertFailedWith(NullPointerException.class, sumFutureB);
-        assertFailedWith(NullPointerException.class, sumFutureC);
-        assertFailedWith(NullPointerException.class, sumFutureD);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureA);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureB);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureC);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureD);
     }
 
     @Test
@@ -204,8 +203,8 @@ class CompositeFutureTuple2Test {
         promise0.fail("error");
         promise1.complete(9);
 
-        assertSucceedWith(9.0, sumFutureA);
-        assertSucceedWith(9.0, sumFutureB);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureA);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureB);
     }
 
     @Test
@@ -219,8 +218,8 @@ class CompositeFutureTuple2Test {
         promise0.fail("error");
         promise1.complete(9);
 
-        assertFailedWith("error", sumFutureA);
-        assertFailedWith("error", sumFutureB);
+        SharedTestUtils.assertFailedWith("error", sumFutureA);
+        SharedTestUtils.assertFailedWith("error", sumFutureB);
     }
 
     @Test
@@ -235,8 +234,8 @@ class CompositeFutureTuple2Test {
         promise0.fail("error");
         promise1.complete(9);
 
-        assertSucceedWith(9.0, sumFutureA);
-        assertSucceedWith(9.0, sumFutureB);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureA);
+        SharedTestUtils.assertSucceedWith(9.0, sumFutureB);
     }
 
     @Test
@@ -256,9 +255,9 @@ class CompositeFutureTuple2Test {
         promise0.fail("error");
         promise1.complete(9);
 
-        assertFailedWith("error", sumFutureA);
-        assertFailedWith("error", sumFutureB);
-        assertFailedWith(NullPointerException.class, sumFutureC);
-        assertFailedWith(NullPointerException.class, sumFutureD);
+        SharedTestUtils.assertFailedWith("error", sumFutureA);
+        SharedTestUtils.assertFailedWith("error", sumFutureB);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureC);
+        SharedTestUtils.assertFailedWith(NullPointerException.class, sumFutureD);
     }
 }
