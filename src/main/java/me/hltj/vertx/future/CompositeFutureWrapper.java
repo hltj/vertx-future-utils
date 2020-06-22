@@ -62,12 +62,14 @@ public class CompositeFutureWrapper {
      * <pre>
      *     Future&lt;Double&gt; future0 = Future.succeededFuture(1.0);
      *     Future&lt;Integer&gt; future1 = Future.failedFuture("error");
-     *     CompositeFutureExt.of(CompositeFuture.join(future0, future1)).use(composite -> composite.onFailure(_t -> {
-     *         for (int i = 0; i < composite.size(); i++) {
-     *             System.out.println("Future " + i + " " + (composite.succeeded(i) ? "succeed" : "failed"));
-     *             System.out.println("Future " + i + "result: " + composite.resultAt(i));
-     *         }
-     *     }));
+     *     CompositeFutureExt.of(CompositeFuture.join(future0, future1)).use(composite -&gt;
+     *         composite.onFailure(_t -&gt; {
+     *             for (int i = 0; i &lt; composite.size(); i++) {
+     *                 System.out.println("Future " + i + " " + (composite.succeeded(i) ? "succeed" : "failed"));
+     *                 System.out.println("Future " + i + "result: " + composite.resultAt(i));
+     *             }
+     *         })
+     *     );
      * </pre>
      *
      * @param consumer the side-effect code that takes the original {@code CompositeFuture} as parameter
