@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "me.hltj"
-version = "3.9.0-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -18,7 +18,7 @@ dependencies {
     testAnnotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
 }
 
-configure<JavaPluginConvention> {
+java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
