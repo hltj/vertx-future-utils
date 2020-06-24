@@ -62,7 +62,7 @@ public class CompositeFutureWrapper {
      * <pre>
      *     Future&lt;Double&gt; future0 = Future.succeededFuture(1.0);
      *     Future&lt;Integer&gt; future1 = Future.failedFuture("error");
-     *     CompositeFutureExt.of(CompositeFuture.join(future0, future1)).use(composite -&gt;
+     *     CompositeFutureWrapper.of(CompositeFuture.join(future0, future1)).use(composite -&gt;
      *         composite.onFailure(_t -&gt; {
      *             for (int i = 0; i &lt; composite.size(); i++) {
      *                 System.out.println("Future " + i + " " + (composite.succeeded(i) ? "succeed" : "failed"));
