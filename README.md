@@ -87,7 +87,7 @@ Future<Integer> futureA = wrap("1", Integer::parseInt); // Succeed with 1
 Future<Integer> futureB = wrap("@", Integer::parseInt); // Failed with a NumberFormatException
 ```
 
-If the evaluation result itself is a `Future`, use `joinWrap()`(or it's alias `flatWrap()`) to flatten the nested result `Future`:
+If the evaluation result itself is a `Future`, use `joinWrap()`(or it's alias `flatWrap()`) to flatten the nested result `Future`s:
 
 ``` java
 Future<Integer> future0 = wrap("0", Integer::parseInt);
@@ -150,7 +150,7 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 );
 ```
 
-If the mapper itself returns a `Future`, we can use `CompositeFutureWrapper#joinThrough()` or it's alias `flatMapAnyway` to flatten the nested result `Future`:
+If the mapper itself returns a `Future`, we can use `CompositeFutureWrapper#joinThrough()` or it's alias `flatMapAnyway` to flatten the nested result `Future`s:
 
 ``` java
 Future<Double> sumFuture = CompositeFutureWrapper.of(

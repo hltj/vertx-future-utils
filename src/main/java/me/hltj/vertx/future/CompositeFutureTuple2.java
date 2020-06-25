@@ -200,7 +200,7 @@ final public class CompositeFutureTuple2<T0, T1> extends CompositeFutureWrapper 
      * a {@link Future}, where the function itself return a {@link Future}.
      * <p>
      * It likes lifting the function and then applying it to the original {@code Future}s, and joining (also known
-     * as {@code flatten}ing) the nested result {@code Future} before return, this is also the origin of the name.
+     * as {@code flatten}ing) the nested result {@code Future}s before return, this is also the origin of the name.
      * <p>
      * When the composite future fails, the failure will be propagated to the returned future and the function will not
      * be called.
