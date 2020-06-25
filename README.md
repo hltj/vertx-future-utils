@@ -7,6 +7,8 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
  - [Default Value on Empty](#default-value-on-empty)
  - [Fallback Values on Failure/Empty](#fallback-values-on-failureempty)
  - [Wrapping Evaluation Result](#wrapping-evaluation-result)
+ - [Access Original `CompositeFuture` on Failure](#access-original-compositefuture-on-failure)
+ - [Mapping `CompositeFuture` on Failure](#mapping-compositefuture-on-failure)
  
 ### Futurization
 Convert a callback style Vert.x call to `Future` result style:
@@ -99,3 +101,61 @@ Function<String, Future<Integer>> stringToIntFuture = s -> FutureUtils.wrap(s, I
 Future<Integer> futureC = joinWrap("1", stringToIntFuture); // Succeed with 1
 Future<Integer> futureD = joinWrap("@", stringToIntFuture); // Failed with a NumberFormatException
 ```
+
+### Access Original `CompositeFuture` on Failure
+When a [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) failed, we cannot access the original `CompositeFuture` directly inside the lambda argument of [`onComplete()`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onComplete-io.vertx.core.Handler-) or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-).
+A work round is introducing a local variable, e.g:
+
+``` java
+CompositeFuture composite = CompositeFuture.join(
+        Future.succeededFuture(1), Future.<Double>failedFuture("fail"), Future.succeededFuture("hello")
+);
+composite.onFailure(t -> {
+    System.out.println("The CompositeFuture failed, where these base Futures succeed:");
+    for (int i = 0; i < composite.size(); i++) {
+        if (composite.succeeded(i)) {
+            System.out.println(("Future-" + i));
+        }
+    }
+});
+```
+
+But this is not fluent and cause an extra variable introduced, especially we repeat to do this again and again.
+In this case, we can use `CompositeFutureWrapper#use()` instead:
+
+``` java
+CompositeFutureWrapper.of(CompositeFuture.join(
+        Future.succeededFuture(1), Future.<Double>failedFuture("fail"), Future.succeededFuture("hello")
+)).use(composite -> composite.onFailure(t -> {
+    System.out.println("The CompositeFuture failed, where these base Futures succeed:");
+    for (int i = 0; i < composite.size(); i++) {
+        if (composite.succeeded(i)) {
+            System.out.println(("Future-" + i));
+        }
+    }
+}));
+```
+
+While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful `CompositeFutureTuple[2-9]` instead.
+
+### Mapping `CompositeFuture` on Failure
+When a `CompositeFuture` failed, the `map()`/`flatMap()` method won't be invoked.
+If we still want to map the partial succeed results, we can use `CompositeFutureWrapper#through()` or it's alias `mapAnyway`:
+
+``` java
+Future<Double> sumFuture = CompositeFutureWrapper.of(
+        CompositeFuture.join(Future.succeededFuture(1.0), Future.<Integer>failedFuture("error"))
+).through(composite -> (composite.succeeded(0) ? composite.<Double>resultAt(0) : 0.0) +
+        (composite.succeeded(1) ? composite.<Integer>resultAt(1) : 0)
+);
+```
+
+If the mapper itself returns a `Future`, we can use `CompositeFutureWrapper#joinThrough()` or it's alias `flatMapAnyway` to flatten the nested result `Future`:
+
+``` java
+Future<Double> sumFuture = CompositeFutureWrapper.of(
+        CompositeFuture.join(Future.succeededFuture(1.0), Future.<Integer>failedFuture("error"))
+).joinThrough(composite -> wrap(() -> composite.<Double>resultAt(0) + composite.<Integer>resultAt(1)));
+```
+
+While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful `CompositeFutureTuple[2-9]` instead.
