@@ -7,7 +7,7 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
  - [Default Value on Empty](#default-value-on-empty)
  - [Fallback Values on Failure/Empty](#fallback-values-on-failureempty)
  - [Wrapping Evaluation Result](#wrapping-evaluation-result)
- - [Access Original `CompositeFuture` on Failure](#access-original-compositefuture-on-failure)
+ - [Access `CompositeFuture` Itself on Failure](#access-compositefuture-itself-on-failure)
  - [Mapping `CompositeFuture` on Failure](#mapping-compositefuture-on-failure)
  - [Keep Generic Type of the Original `Future`s of `CompositeFuture`](#keep-generic-type-of-the-original-futures-of-compositefuture)
  
@@ -88,7 +88,8 @@ Future<Integer> futureA = wrap("1", Integer::parseInt); // Succeed with 1
 Future<Integer> futureB = wrap("@", Integer::parseInt); // Failed with a NumberFormatException
 ```
 
-If the evaluation result itself is a `Future`, use `joinWrap()`(or its alias `flatWrap()`) to flatten the nested result `Future`s:
+If the evaluation result itself is a `Future`, use `joinWrap()`(or its alias `flatWrap()`)
+to flatten the nested result `Future`s:
 
 ``` java
 Future<Integer> future0 = wrap("0", Integer::parseInt);
@@ -103,8 +104,11 @@ Future<Integer> futureC = joinWrap("1", stringToIntFuture); // Succeed with 1
 Future<Integer> futureD = joinWrap("@", stringToIntFuture); // Failed with a NumberFormatException
 ```
 
-### Access Original `CompositeFuture` on Failure
-When a [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) failed, we cannot access the original `CompositeFuture` directly inside the lambda argument of [`onComplete()`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onComplete-io.vertx.core.Handler-) or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-).
+### Access `CompositeFuture` Itself on Failure
+When a [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) failed,
+we cannot access the `CompositeFuture` itself directly inside the lambda argument of
+[`onComplete()`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onComplete-io.vertx.core.Handler-)
+or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-).
 A work round is introducing a local variable, e.g:
 
 ``` java
@@ -137,11 +141,13 @@ CompositeFutureWrapper.of(CompositeFuture.join(
 }));
 ```
 
-While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful `CompositeFutureTuple[2-9]` instead.
+While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful
+`CompositeFutureTuple[2-9]` instead.
 
 ### Mapping `CompositeFuture` on Failure
-When a `CompositeFuture` failed, the `map()`/`flatMap()` method won't be invoked.
-If we still want to map the partial succeed results, we can use `CompositeFutureWrapper#through()` or its alias `mapAnyway`:
+When a `CompositeFuture` failed, its `map()`/`flatMap()` method won't be invoked.
+If we still want to map the partial succeed results, we can use `CompositeFutureWrapper#through()` (or its alias
+`mapAnyway()`):
 
 ``` java
 Future<Double> sumFuture = CompositeFutureWrapper.of(
@@ -151,7 +157,8 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 );
 ```
 
-If the mapper itself returns a `Future`, we can use `CompositeFutureWrapper#joinThrough()` or its alias `flatMapAnyway` to flatten the nested result `Future`s:
+If the mapper itself returns a `Future`, we can use `CompositeFutureWrapper#joinThrough()` (or its alias
+`flatMapAnyway()`) to flatten the nested result `Future`s:
 
 ``` java
 Future<Double> sumFuture = CompositeFutureWrapper.of(
@@ -159,10 +166,12 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 ).joinThrough(composite -> wrap(() -> composite.<Double>resultAt(0) + composite.<Integer>resultAt(1)));
 ```
 
-While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful `CompositeFutureTuple[2-9]` instead.
+While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful
+`CompositeFutureTuple[2-9]` instead.
 
 ### Keep Generic Type of the Original `Future`s of `CompositeFuture`
-In a `CompositeFuture`, all the original `Future`s are type erased. We have to specify type parameters for the results frequently. e.g.:
+In a `CompositeFuture`, all the original `Future`s are type erased.
+We have to specify type parameters for the results frequently. e.g.:
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -172,8 +181,9 @@ Future<Double> productFuture = CompositeFuture.all(future0, future1).map(
 );
 ```
 
-The result `productFuture` is 'succeed with 7.0'? Unfortunately, NO. It is 'failed with a ClassCastException', because the type parameters are misspecified. They are `(Integer, Double`), not `(Double, Integer)`!
-We can use `CompositeFutureTuple2#applift()` or its alias `mapTyped()` to avoid this error-prone case:
+The result `productFuture` is 'succeed with 7.0'? Unfortunately, NO. It is 'failed with a ClassCastException',
+because the type parameters are misspecified. They are `(Integer, Double`), not `(Double, Integer)`!
+We can use `CompositeFutureTuple2#applift()` (or its alias `mapTyped()`) to avoid this error-prone case:
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -181,10 +191,12 @@ Future<Double> future1 = Future.succeededFuture(3.5);
 Future<Double> productFuture = FutureUtils.all(future0, future1).applift((i, d) -> i * d);
 ```
 
-We needn't specify the type parameters manually inside the lambda argument of `applift()` anymore, because the `CompositeFutureTuple2` has already kept them.
+We needn't specify the type parameters manually inside the lambda argument of `applift()` anymore,
+because the `CompositeFutureTuple2` has already kept them.
 Moreover, the code is significantly simplified with the boilerplate code reduced.
 
-If the lambda result itself is a `Future`, we can use `CompositeFutureTuple2#joinApplift()` or its alias `CompositeFutureTuple2#flatMapTyped()` to flatten the nested result `Future`s, e.g:
+If the lambda result itself is a `Future`, we can use `CompositeFutureTuple2#joinApplift()` (or its alias
+`flatMapTyped()`) to flatten the nested result `Future`s, e.g:
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -192,4 +204,5 @@ Future<Double> future1 = Future.failedFuture("error");
 Future<Double> productFuture = FutureUtils.all(future0, future1).joinApplift((i, d) -> wrap(() -> i * d));
 ```
 
-There are also `any()` and `join()` factory methods, and `CompositeFutureTuple3` to `CompositeFutureTuple9` for 3-9 arities.
+There are also `any()` and `join()` factory methods, and `CompositeFutureTuple3` to `CompositeFutureTuple9`
+for 3-9 arities.
