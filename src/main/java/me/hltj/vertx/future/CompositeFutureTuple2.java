@@ -83,7 +83,7 @@ final public class CompositeFutureTuple2<T0, T1> extends CompositeFutureWrapper 
      *     Future&lt;Integer&gt; future1 = Future.failedFuture("error");
      *     FutureUtils.join(future0, future1).use((composite, fut0, fut1) -&gt;
      *             composite.onComplete(_ar -&gt;
-     *                     System.out.println(String.format("results: (%s, %s)", fut0, fut1))
+     *                     System.out.println(String.format("original futures: (%s, %s)", fut0, fut1))
      *             )
      *     );
      * </pre>
@@ -109,7 +109,7 @@ final public class CompositeFutureTuple2<T0, T1> extends CompositeFutureWrapper 
      *             .otherwiseEmpty()
      *             .join()
      *             .with((composite, fut0, fut1) -&gt;
-     *                     composite.map(_x -&gt; String.format("results: (%s, %s)", fut0, fut1))
+     *                     composite.map(_x -&gt; String.format("original futures: (%s, %s)", fut0, fut1))
      *             );
      * </pre>
      *
