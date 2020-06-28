@@ -10,6 +10,9 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
  - [Access `CompositeFuture` Itself on Failure](#access-compositefuture-itself-on-failure)
  - [Mapping `CompositeFuture` on Failure](#mapping-compositefuture-on-failure)
  - [Keep Generic Type of the Original `Future`s of `CompositeFuture`](#keep-generic-type-of-the-original-futures-of-compositefuture)
+ - [Mapping the Original `Future`s of a `CompositeFuture` on Failure](#mapping-the-original-futures-of-a-compositefuture-on-failure)
+ - [Access `CompositeFuture` and the Original `Future`s on Failure](#access-compositefuture-and-the-original-futures-on-failure)
+ - [Setting Default/Fallback Values before Composition](#setting-defaultfallback-values-before-composition)
  
 ### Futurization
 Convert a callback style Vert.x call to `Future` result style:
@@ -141,7 +144,7 @@ CompositeFutureWrapper.of(CompositeFuture.join(
 }));
 ```
 
-While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful
+While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful subclasses
 `CompositeFutureTuple[2-9]` instead.
 
 ### Mapping `CompositeFuture` on Failure
@@ -166,7 +169,7 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 ).joinThrough(composite -> wrap(() -> composite.<Double>resultAt(0) + composite.<Integer>resultAt(1)));
 ```
 
-While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful
+While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful subclasses
 `CompositeFutureTuple[2-9]` instead.
 
 ### Keep Generic Type of the Original `Future`s of `CompositeFuture`
@@ -206,3 +209,71 @@ Future<Double> productFuture = FutureUtils.all(future0, future1).joinApplift((i,
 
 There are also `any()` and `join()` factory methods, and `CompositeFutureTuple3` to `CompositeFutureTuple9`
 for 3-9 arities.
+
+### Mapping the Original `Future`s of a `CompositeFuture` on Failure
+In `CompositeFutureTuple[2-9]`, there are additional overload `through()` & `joinThrough()` (or their alias
+`mapAnyway` & `flatMapAnyway`) methods, they provide the original `Future`s as parameters to invoke the lambda argument,
+e.g. :
+
+``` java
+Future<Double> sumFuture = FutureUtils.join(
+        CompositeFuture.join(Future.succeededFuture(1.0), Future.<Integer>failedFuture("error"))
+).through((fut0, fut1) -> fallbackWith(fut0, 0.0).result() + fallbackWith(fut1, 0).result());
+``` 
+
+### Access `CompositeFuture` and the Original `Future`s on Failure
+In `CompositeFutureTuple[2-9]`, there is an additional overload `use()` method, it provides the `CompositeFuture` itself
+as well as the original `Future`s as parameters to invoke the lambda argument, e.g.:
+
+``` java
+Future<Double> future0 = Future.succeededFuture(1.0);
+Future<Integer> future1 = Future.failedFuture("error");
+FutureUtils.join(future0, future1).use((composite, fut0, fut1) -> composite.onComplete(_ar -> {
+        String status = composite.succeeded() ? "succeeded" : "failed";
+        System.out.println(String.format("composite future %s, original futures: (%s, %s)", status, fut0, fut1))
+}));
+```
+
+Moreover, there is a new method `with()` that likes `use()` but return a value, e.g.:
+
+``` java
+Future<Double> future0 = Future.succeededFuture(1.0);
+Future<Integer> future1 = Future.failedFuture("error");
+Future<String> stringFuture = join(future0, future1).with((composite, fut0, fut1) -> composite.compose(
+        _x -> Future.succeededFuture(String.format("succeeded: (%s, %s)", fut0, fut1)),
+        _t -> Future.succeededFuture(String.format("failed: (%s, %s)", fut0, fut1))
+));
+```
+
+### Setting Default/Fallback Values before Composition
+We can set default values for each original `Future`s before composition to avoid `null` check, e.g.:
+
+``` java
+Future<Integer> future0 = defaultWith(futureA, 1);
+Future<Integer> future1 = defaultWith(futureB, 1);
+Future<Double> future2 = defaultWith(futureC, 1.0);
+Future<Double> productFuture = FutureUtils.all(future0, future1, future2)
+        .applift((i1, i2, d) -> i1 * i2 * d);
+```
+
+In fact, it's unnecessary to introduce so many temporary variables, we can use `FutureTuple3#defaults()` to simplify it:
+
+``` java
+Future<Double> productFuture = tuple(futureA, futureB, futureC)
+        .defaults(1, 1, 1.0)
+        .join()
+        .applift((i1, i2, d) -> i1 * i2 * d);
+```
+
+the factory method `tuple()` creates a `FutureTuple3` object, and then invoke its `defaults()`
+method to set default values, then invoke its `join()` method to get a `CompositeFutureTuple3` object.
+
+Another useful method of `FutureTuple[2-9]` is `fallback`, just likes `defaults()`, we can use it to set the fallback
+values at once:
+
+``` java
+Future<Double> productFuture = tuple(futureA, futureB, futureC)
+        .fallback(1, 1, 1.0)
+        .all()
+        .applift((i1, i2, d) -> i1 * i2 * d);
+```
