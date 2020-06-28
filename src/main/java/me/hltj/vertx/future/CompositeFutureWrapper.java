@@ -86,7 +86,7 @@ public class CompositeFutureWrapper {
     }
 
     /**
-     * Map a {@code function} to the original {@link CompositeFuture} on complete no matter whether succeed or failed.
+     * Map a {@code function} to the original {@link CompositeFuture} on complete no matter whether succeeded or failed.
      * <p>
      * It likes a {@code Future} returned through {@link CompositeFuture#onComplete(Handler)}, this is also the origin
      * of the name.
@@ -111,7 +111,7 @@ public class CompositeFutureWrapper {
     }
 
     /**
-     * Map a {@code function} to the original {@link CompositeFuture} on complete no matter whether succeed or failed,
+     * Map a {@code function} to the original {@link CompositeFuture} on complete no matter whether succeeded or failed,
      * the {@code function} itself return {@code Future}, the result will be join (also known as {@code flatten})
      * before return.
      * <p>

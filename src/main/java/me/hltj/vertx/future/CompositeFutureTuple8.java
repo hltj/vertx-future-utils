@@ -127,7 +127,7 @@ final public class CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends
     }
 
     /**
-     * Map a function that takes the original 8 {@link Future}s on complete no matter whether succeed or failed.
+     * Map a function that takes the original 8 {@link Future}s on complete no matter whether succeeded or failed.
      * <p>
      * It likes {@link CompositeFutureTuple2#through(BiFunction)} but with 8-arity.
      */
@@ -149,7 +149,7 @@ final public class CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends
     }
 
     /**
-     * Map a function that takes the original 8 {@link Future}s on complete no matter whether succeed or failed,
+     * Map a function that takes the original 8 {@link Future}s on complete no matter whether succeeded or failed,
      * and join (also known as {@code flatten}) the result before return.
      *
      * <p>

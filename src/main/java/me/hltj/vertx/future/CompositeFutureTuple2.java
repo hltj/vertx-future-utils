@@ -129,7 +129,7 @@ final public class CompositeFutureTuple2<T0, T1> extends CompositeFutureWrapper 
     }
 
     /**
-     * Map a function that takes the original two {@link Future}s on complete no matter whether succeed or failed.
+     * Map a function that takes the original two {@link Future}s on complete no matter whether succeeded or failed.
      *
      * @param function2 the function to map on complete
      * @param <R>       the result type of the {@code function2}
@@ -147,7 +147,7 @@ final public class CompositeFutureTuple2<T0, T1> extends CompositeFutureWrapper 
     }
 
     /**
-     * Map a function that takes the original two {@link Future}s on complete no matter whether succeed or failed,
+     * Map a function that takes the original two {@link Future}s on complete no matter whether succeeded or failed,
      * and join (also known as {@code flatten}) the result before return.
      *
      * @param function2 the function to map on complete

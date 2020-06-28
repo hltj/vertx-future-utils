@@ -122,7 +122,7 @@ final public class CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> extends Composi
     }
 
     /**
-     * Map a function that takes the original 6 {@link Future}s on complete no matter whether succeed or failed.
+     * Map a function that takes the original 6 {@link Future}s on complete no matter whether succeeded or failed.
      * <p>
      * It likes {@link CompositeFutureTuple2#through(BiFunction)} but with 6-arity.
      */
@@ -142,7 +142,7 @@ final public class CompositeFutureTuple6<T0, T1, T2, T3, T4, T5> extends Composi
     }
 
     /**
-     * Map a function that takes the original 6 {@link Future}s on complete no matter whether succeed or failed,
+     * Map a function that takes the original 6 {@link Future}s on complete no matter whether succeeded or failed,
      * and join (also known as {@code flatten}) the result before return.
      *
      * <p>

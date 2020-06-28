@@ -105,7 +105,7 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
     }
 
     /**
-     * Map a function that takes the original 3 {@link Future}s on complete no matter whether succeed or failed.
+     * Map a function that takes the original 3 {@link Future}s on complete no matter whether succeeded or failed.
      * <p>
      * It likes {@link CompositeFutureTuple2#through(BiFunction)} but with 3-arity.
      */
@@ -121,7 +121,7 @@ final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrap
     }
 
     /**
-     * Map a function that takes the original 3 {@link Future}s on complete no matter whether succeed or failed,
+     * Map a function that takes the original 3 {@link Future}s on complete no matter whether succeeded or failed,
      * and join (also known as {@code flatten}) the result before return.
      *
      * <p>
