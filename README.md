@@ -302,7 +302,9 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
 ```
 
 There are other similar methods in `FutureTuple[2-9]`: `mapEmpty()`, `otherwise()`, `otherwiseEmpty()`
-and overload methods for `otherwise`, `defaults()`, `fallback()` with effect. e.g.:
+and overload methods for `otherwise`, `defaults()`, `fallback()` with effect,
+see the [Java doc](https://javadoc.io/doc/me.hltj/vertx-future-utils/latest/me/hltj/vertx/future/FutureTuple2.html#method.summary).
+e.g.:
 
 ``` java
 Future<String> productFutureA = tuple(futureA, futureB, futureC)
