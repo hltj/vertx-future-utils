@@ -7,14 +7,16 @@ plugins {
 }
 
 group = "me.hltj"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
 }
 
+val vertxVersion = "3.9.1"
+
 dependencies {
-    implementation(group = "io.vertx", name = "vertx-core", version = "3.9.1")
+    implementation(group = "io.vertx", name = "vertx-core", version = vertxVersion)
     compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.12")
     annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.6.2")
@@ -30,7 +32,15 @@ java {
 }
 
 tasks.withType<Javadoc> {
-    (options as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
+    with(options as StandardJavadocDocletOptions) {
+        locale = "en_US"
+        encoding = "UTF-8"
+        links = listOf(
+            "https://docs.oracle.com/javase/8/docs/api/",
+            "https://javadoc.io/doc/io.vertx/vertx-core/$vertxVersion/"
+        )
+        addStringOption("Xdoclint:none", "-quiet")
+    }
 }
 
 tasks.withType<Test> {
