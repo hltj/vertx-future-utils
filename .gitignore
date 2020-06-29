@@ -5,3 +5,4 @@
 /out
 /src/main/generated/
 /src/test/generated_tests/
+/gradle.properties
