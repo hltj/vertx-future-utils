@@ -277,3 +277,22 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
         .all()
         .applift((i1, i2, d) -> i1 * i2 * d);
 ```
+
+There are other similar methods in `FutureTuple[2-9]`: `mapEmpty()`, `otherwise()`, `otherwiseEmpty()`
+and overload methods for `otherwise`, `defaults()`, `fallback()` with effect. e.g.:
+
+``` java
+Future<String> productFutureA = tuple(futureA, futureB, futureC)
+        .otherwiseEmpty()
+        .any()
+        .applift((i1, i2, d) -> String.format("results: (%d, %d, %f)", i1, i2, d));
+
+Future<Double> productFutureB = tuple(futureA, futureB, futureC)
+        .fallback(
+                t -> log.error("fallback on failure", t),
+                () -> log.warn("fallback on empty"),
+                1, 1, 1.0
+        )
+        .all()
+        .applift((i1, i2, d) -> i1 * i2 * d);
+```
