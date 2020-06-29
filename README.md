@@ -1,6 +1,29 @@
 # vertx-future-utils
 Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vertx/core/Future.html).
 
+## Install
+### Maven
+
+``` xml
+<dependency>
+  <groupId>me.hltj</groupId>
+  <artifactId>vertx-future-utils</artifactId>
+  <version>1.0.1</version>
+</dependency>
+```
+
+### Gradle Kotlin DSL
+
+``` kotlin
+implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.0.1")
+```
+
+### Gradle Groovy DSL
+
+``` groovy
+implementation 'me.hltj:vertx-future-utils:1.0.1'
+```
+
 ## Usage Example
 
  - [Futurization](#futurization)
