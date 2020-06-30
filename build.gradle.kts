@@ -31,14 +31,18 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+val javaApiDocUrl = JavaVersion.current().run {
+    if (isJava11Compatible)
+        "https://docs.oracle.com/en/java/javase/$majorVersion/docs/api/"
+    else
+        "https://docs.oracle.com/javase/8/docs/api/"
+}
+
 tasks.withType<Javadoc> {
     with(options as StandardJavadocDocletOptions) {
         locale = "en_US"
         encoding = "UTF-8"
-        links = listOf(
-            "https://docs.oracle.com/javase/8/docs/api/",
-            "https://javadoc.io/doc/io.vertx/vertx-core/$vertxVersion/"
-        )
+        links = listOf(javaApiDocUrl, "https://javadoc.io/doc/io.vertx/vertx-core/$vertxVersion/")
         addStringOption("Xdoclint:none", "-quiet")
     }
 }
@@ -46,7 +50,6 @@ tasks.withType<Javadoc> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
 
 publishing {
     publications {

@@ -1,0 +1,84 @@
+language: java
+
+matrix:
+  include:
+    - name: Ubuntu 18.04 OpenJDK 14
+      dist: bionic
+      jdk:
+        - openjdk14
+
+    - name: Ubuntu 18.04 OpenJDK 11
+      dist: bionic
+      jdk:
+        - openjdk11
+
+    - name: Ubuntu 18.04 OpenJDK 8
+      dist: bionic
+      jdk:
+        - openjdk8
+
+    - name: macOS 10.15.4 OpenJDK 14
+      os: osx
+      osx_image: xcode11.6
+
+    - name: macOS 10.13 OpenJDK 11
+      os: osx
+      osx_image: xcode10.1
+
+    - name: macOS 10.13 JDK 8
+      os: osx
+      osx_image: xcode9.3
+
+    - name: Windows 18.09 OpenJDK 14
+      os: windows
+      language: bash
+      env:
+        - JAVAVER=14
+
+    - name: Windows 18.09 Zulu OpenJDK 11
+      os: windows
+      language: bash
+      env:
+        - JAVAVER=11
+
+    - name: Windows 18.09 Zulu OpenJDK 8
+      os: windows
+      language: bash
+      env:
+        - JAVAVER=8
+
+before_install:
+  - |
+    if [ "$TRAVIS_OS_NAME" == "windows" ]
+    then
+      if ((JAVAVER == 14))
+      then
+        choco install openjdk --version=14.0.1 -y
+        export JAVA_HOME=${JAVA_HOME:-/c/Program Files/OpenJDK/jdk-14.0.1}
+      else
+        choco install zulu$JAVAVER -y
+        export JAVA_HOME=${JAVA_HOME:-/c/Program Files/Zulu/zulu-$JAVAVER}
+      fi
+      export PATH=$JAVA_HOME/bin:$PATH
+    fi
+
+script:
+  - ./gradlew build
+  - ./gradlew --stop
+
+after_script:
+  - git reset --hard HEAD
+
+before_cache:
+  - |
+    rm -f $HOME/.gradle/caches/journal-1/file-access.bin
+    rm -f $HOME/.gradle/caches/*/fileHashes/fileHashes.bin
+    rm -f $HOME/.gradle/caches/*/workerMain/gradle-worker.jar
+    rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+    find $HOME/.gradle/caches/ -name '*.lock' | xargs rm -f
+    find $HOME/.gradle/caches/ -name 'cache.properties' | xargs rm -f
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
