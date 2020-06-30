@@ -1,6 +1,28 @@
 # vertx-future-utils
 Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vertx/core/Future.html).
 
+[![Build Status](https://img.shields.io/travis/hltj/vertx-future-utils)](https://travis-ci.org/hltj/vertx-future-utils)
+[![Maven Central](https://img.shields.io/maven-central/v/me.hltj/vertx-future-utils)](https://search.maven.org/search?q=g:me.hltj%20AND%20a:vertx-future-utils)
+[![javadoc](https://javadoc.io/badge2/me.hltj/vertx-future-utils/javadoc.svg)](https://javadoc.io/doc/me.hltj/vertx-future-utils)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![HitCount](http://hits.dwyl.io/hltj/vertx-future-utils.svg)](https://github.com/hltj/vertx-future-utils)
+
+- [Install](#install)
+  - [Maven](#maven)
+  - [Gradle Kotlin DSL](#gradle-kotlin-dsl)
+  - [Gradle Groovy DSL](#gradle-groovy-dsl)
+- [Usage Example](#usage-example)
+  - [Futurization](#futurization)
+  - [Default Value on Empty](#default-value-on-empty)
+  - [Fallback Values on Failure/Empty](#fallback-values-on-failureempty)
+  - [Wrapping Evaluation Result](#wrapping-evaluation-result)
+  - [Access `CompositeFuture` Itself on Failure](#access-compositefuture-itself-on-failure)
+  - [Mapping `CompositeFuture` on Failure](#mapping-compositefuture-on-failure)
+  - [Keep Generic Type of the Original `Future`s of `CompositeFuture`](#keep-generic-type-of-the-original-futures-of-compositefuture)
+  - [Mapping the Original `Future`s of a `CompositeFuture` on Failure](#mapping-the-original-futures-of-a-compositefuture-on-failure)
+  - [Access `CompositeFuture` and the Original `Future`s on Failure](#access-compositefuture-and-the-original-futures-on-failure)
+  - [Setting Default/Fallback Values before Composition](#setting-defaultfallback-values-before-composition)
+
 ## Install
 ### Maven
 
@@ -24,19 +46,7 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.0.1"
 implementation 'me.hltj:vertx-future-utils:1.0.1'
 ```
 
-## Usage Example
-
- - [Futurization](#futurization)
- - [Default Value on Empty](#default-value-on-empty)
- - [Fallback Values on Failure/Empty](#fallback-values-on-failureempty)
- - [Wrapping Evaluation Result](#wrapping-evaluation-result)
- - [Access `CompositeFuture` Itself on Failure](#access-compositefuture-itself-on-failure)
- - [Mapping `CompositeFuture` on Failure](#mapping-compositefuture-on-failure)
- - [Keep Generic Type of the Original `Future`s of `CompositeFuture`](#keep-generic-type-of-the-original-futures-of-compositefuture)
- - [Mapping the Original `Future`s of a `CompositeFuture` on Failure](#mapping-the-original-futures-of-a-compositefuture-on-failure)
- - [Access `CompositeFuture` and the Original `Future`s on Failure](#access-compositefuture-and-the-original-futures-on-failure)
- - [Setting Default/Fallback Values before Composition](#setting-defaultfallback-values-before-composition)
- 
+## Usage Example 
 ### Futurization
 Convert a callback style Vert.x call to `Future` result style:
 
