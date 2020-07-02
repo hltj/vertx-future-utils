@@ -16,6 +16,8 @@ matrix:
       dist: bionic
       jdk:
         - openjdk8
+      env:
+        - CODECOV=1
 
     - name: macOS 10.15.4 OpenJDK 14
       os: osx
@@ -82,3 +84,10 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
+after_success:
+  - |
+    if [ "$CODECOV" = "1" ]
+    then
+      bash <(curl -s https://codecov.io/bash)
+    fi
