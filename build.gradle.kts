@@ -38,7 +38,7 @@ val javaApiDocUrl = JavaVersion.current().run {
         "https://docs.oracle.com/javase/8/docs/api/"
 }
 
-tasks.withType<Javadoc> {
+tasks.javadoc {
     with(options as StandardJavadocDocletOptions) {
         locale = "en_US"
         encoding = "UTF-8"
@@ -47,7 +47,7 @@ tasks.withType<Javadoc> {
     }
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
 }
 
