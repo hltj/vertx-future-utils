@@ -3,6 +3,7 @@ import com.jfrog.bintray.gradle.BintrayExtension
 plugins {
     java
     `maven-publish`
+    jacoco
     id("com.jfrog.bintray") version "1.8.5"
 }
 
@@ -49,6 +50,16 @@ tasks.javadoc {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.isEnabled = true
+        xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        csv.isEnabled = false
+    }
 }
 
 publishing {
