@@ -39,6 +39,9 @@ import java.util.function.Supplier;
  */
 public final class FutureUtils {
 
+    private FutureUtils() {
+    }
+
     /**
      * Convert a callback style Vert.x call to {@link Future} result style.
      *

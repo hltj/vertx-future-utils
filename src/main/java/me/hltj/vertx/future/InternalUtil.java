@@ -26,7 +26,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-class InternalUtil {
+final class InternalUtil {
+
+    private InternalUtil() {
+    }
+
     static <T> Supplier<T> toSupplier(Runnable onEmpty, T v0) {
         return () -> {
             onEmpty.run();
