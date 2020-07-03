@@ -53,6 +53,11 @@ class CompositeFutureTuple3Test {
         assertFalse(raw.succeeded(1));
         assertFalse(raw.failed(1));
         assertTrue(raw.succeeded(2));
+
+        assertEquals(
+                "CompositeFutureTuple3(FutureTuple3(Future{result=hello}, Future{unresolved}, Future{result=null}))",
+                composite.toString()
+        );
     }
 
     @Test

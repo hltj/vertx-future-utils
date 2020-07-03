@@ -50,6 +50,11 @@ class CompositeFutureTuple2Test {
         assertTrue(raw.succeeded(0));
         assertFalse(raw.succeeded(1));
         assertFalse(raw.failed(1));
+
+        assertEquals(
+                "CompositeFutureTuple2(FutureTuple2(Future{result=hello}, Future{unresolved}))",
+                composite.toString()
+        );
     }
 
     @Test

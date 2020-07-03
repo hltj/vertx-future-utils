@@ -56,6 +56,12 @@ class CompositeFutureTuple5Test {
         assertTrue(raw.succeeded(2));
         assertTrue(raw.succeeded(3));
         assertTrue(raw.succeeded(4));
+
+        assertEquals(
+                "CompositeFutureTuple5(FutureTuple5(Future{result=hello}, Future{unresolved}, " +
+                        "Future{result=null}, Future{result=null}, Future{result=null}))",
+                composite.toString()
+        );
     }
 
     @Test

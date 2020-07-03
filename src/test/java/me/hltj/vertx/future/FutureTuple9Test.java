@@ -46,7 +46,7 @@ class FutureTuple9Test {
         Future<Byte> future5 = Future.succeededFuture((byte) 1);
         Future<Float> future6 = Future.succeededFuture(1f);
         Future<Short> future7 = Future.succeededFuture((short) 1);
-        Future<Integer> future8 = Future.succeededFuture(1);
+        Future<Integer> future8 = Future.failedFuture("fail");
 
         val tuple = FutureTuple9.of(future0, future1, future2, future3, future4, future5, future6, future7, future8);
         assertSame(future0, tuple.get_0());
@@ -58,6 +58,13 @@ class FutureTuple9Test {
         assertSame(future6, tuple.get_6());
         assertSame(future7, tuple.get_7());
         assertSame(future8, tuple.get_8());
+
+        assertEquals(
+                "FutureTuple9(Future{result=null}, Future{unresolved}, Future{result=true}, " +
+                        "Future{result=1.0}, Future{result=a}, Future{result=1}, Future{result=1.0}, " +
+                        "Future{result=1}, Future{cause=fail})",
+                tuple.toString()
+        );
     }
 
     @Test

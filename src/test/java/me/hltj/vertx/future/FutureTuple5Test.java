@@ -49,6 +49,12 @@ class FutureTuple5Test {
         assertSame(future2, tuple.get_2());
         assertSame(future3, tuple.get_3());
         assertSame(future4, tuple.get_4());
+
+        assertEquals(
+                "FutureTuple5(Future{result=null}, Future{unresolved}, Future{result=true}, " +
+                        "Future{result=1.0}, Future{result=a})",
+                tuple.toString()
+        );
     }
 
     @Test

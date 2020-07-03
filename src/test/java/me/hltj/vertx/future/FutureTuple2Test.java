@@ -43,6 +43,8 @@ class FutureTuple2Test {
         val tuple = FutureTuple2.of(future0, future1);
         assertSame(future0, tuple.get_0());
         assertSame(future1, tuple.get_1());
+
+        assertEquals("FutureTuple2(Future{result=null}, Future{unresolved})", tuple.toString());
     }
 
     @Test

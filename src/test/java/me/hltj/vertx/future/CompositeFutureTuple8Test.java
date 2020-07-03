@@ -62,6 +62,13 @@ class CompositeFutureTuple8Test {
         assertTrue(raw.succeeded(5));
         assertTrue(raw.succeeded(6));
         assertTrue(raw.succeeded(7));
+
+        assertEquals(
+                "CompositeFutureTuple8(FutureTuple8(Future{result=hello}, Future{unresolved}, " +
+                        "Future{result=null}, Future{result=null}, Future{result=null}, Future{result=null}, " +
+                        "Future{result=null}, Future{result=null}))",
+                composite.toString()
+        );
     }
 
     @Test
