@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with 'at')
+ * Please contact me (jiaywe#at#gmail.com, replace the '#at#' with '@')
  * if you need additional information or have any questions.
  */
 package me.hltj.vertx.function;
