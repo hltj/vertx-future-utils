@@ -40,6 +40,7 @@ import java.util.function.Function;
  * @param <T5> the type of the 6th argument to the function
  * @param <R>  the type of the result of the function
  * @see Function
+ * @since 1.0.0
  */
 @FunctionalInterface
 public interface Function6<T0, T1, T2, T3, T4, T5, R> {

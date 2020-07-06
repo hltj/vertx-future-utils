@@ -46,6 +46,7 @@ import java.util.function.Consumer;
  * @param <T8> the type of the 9th argument to the operation
  * @param <T9> the type of the 10th argument to the operation
  * @see Consumer
+ * @since 1.0.0
  */
 @FunctionalInterface
 public interface Consumer10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> {

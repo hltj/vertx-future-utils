@@ -43,6 +43,7 @@ import java.util.function.Function;
  * @param <T8> the type of the 9th argument to the function
  * @param <R>  the type of the result of the function
  * @see Function
+ * @since 1.0.0
  */
 @FunctionalInterface
 public interface Function9<T0, T1, T2, T3, T4, T5, T6, T7, T8, R> {

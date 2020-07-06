@@ -34,6 +34,8 @@ import static me.hltj.vertx.FutureUtils.joinWrap;
 
 /**
  * A {@link CompositeFuture} wrapper that provide some convenient operations as a complement.
+ *
+ * @since 1.0.0
  */
 @AllArgsConstructor
 public class CompositeFutureWrapper {

@@ -45,6 +45,7 @@ import static me.hltj.vertx.FutureUtils.joinWrap;
  * @param <T0> the type parameter of the 1st {@code Future}
  * @param <T1> the type parameter of the 2nd {@code Future}
  * @param <T2> the type parameter of the 3rd {@code Future}
+ * @since 1.0.0
  */
 @ToString(includeFieldNames = false)
 final public class CompositeFutureTuple3<T0, T1, T2> extends CompositeFutureWrapper {

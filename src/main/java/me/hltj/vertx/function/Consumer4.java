@@ -39,6 +39,7 @@ import java.util.function.Consumer;
  * @param <T2> the type of the 3rd argument to the operation
  * @param <T3> the type of the 4th argument to the operation
  * @see Consumer
+ * @since 1.0.0
  */
 @FunctionalInterface
 public interface Consumer4<T0, T1, T2, T3> {

@@ -37,6 +37,7 @@ import java.util.function.Function;
  * @param <T2> the type of the 3rd argument to the function
  * @param <R>  the type of the result of the function
  * @see Function
+ * @since 1.0.0
  */
 @FunctionalInterface
 public interface Function3<T0, T1, T2, R> {

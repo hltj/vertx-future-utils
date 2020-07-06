@@ -36,6 +36,7 @@ import java.util.function.Supplier;
  * <p>
  *
  * @author <a href="https://hltj.me">JiaYanwei</a>
+ * @since 1.0.0
  */
 public final class FutureUtils {
 

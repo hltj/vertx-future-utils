@@ -52,6 +52,7 @@ import static me.hltj.vertx.future.InternalUtil.toSupplier;
  * @param <T4> the type parameter of the 5th {@code Future}
  * @param <T5> the type parameter of the 6th {@code Future}
  * @param <T6> the type parameter of the 7th {@code Future}
+ * @since 1.0.0
  */
 @Getter
 @AllArgsConstructor(staticName = "of")
