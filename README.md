@@ -8,11 +8,13 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 [![License: LGPL v3](https://img.shields.io/badge/license-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![HitCount](http://hits.dwyl.io/hltj/vertx-future-utils.svg)](https://github.com/hltj/vertx-future-utils)
 
+- [Compatibility](#compatibility)
 - [Build Status](#build-status)
 - [Install](#install)
   - [Maven](#maven)
   - [Gradle Kotlin DSL](#gradle-kotlin-dsl)
   - [Gradle Groovy DSL](#gradle-groovy-dsl)
+  - [With `vertx-core` Excluded](#with-vertx-core-excluded)
 - [Usage Example](#usage-example)
   - [Futurization](#futurization)
   - [Default Value on Empty](#default-value-on-empty)
@@ -24,6 +26,19 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
   - [Mapping the Original `Future`s of a `CompositeFuture` on Failure](#mapping-the-original-futures-of-a-compositefuture-on-failure)
   - [Access `CompositeFuture` and the Original `Future`s on Failure](#access-compositefuture-and-the-original-futures-on-failure)
   - [Setting Default/Fallback Values before Composition](#setting-defaultfallback-values-before-composition)
+
+## Compatibility
+
+### Java
+- [x] Java 8
+- [x] Java 11
+- [x] Java 14
+
+### Vert.x
+- [x] 3.9.1
+- [x] 4.0.0-milestone5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 3.9.0 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 3.8.5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 
 ## Build Status
 
@@ -55,6 +70,46 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.0.1"
 ``` groovy
 implementation 'me.hltj:vertx-future-utils:1.0.1'
 ```
+
+### With `vertx-core` Excluded
+The default dependent version of `io.vertx:vertx-core` is `3.9.1`,
+if you want to use `vertx-future-utils` with `vertx-core` `3.8.0`/`3.9.0` or `4.0.0-milestone5`,
+please exclude the default one.
+
+<details>
+
+#### for Maven
+
+``` xml
+<dependency>
+  <groupId>me.hltj</groupId>
+  <artifactId>vertx-future-utils</artifactId>
+  <version>1.0.1</version>
+  <exclusions>
+    <exclusion>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
+    </exclusion>
+  </exclusions>
+</dependency>
+```
+
+#### for Gradle Kotlin DSL
+
+``` kotlin
+implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.0.1") {
+    exclude(group = "io.vertx", module = "vertx-core")
+}
+```
+
+#### for Gradle Groovy DSL
+
+``` groovy
+implementation 'me.hltj:vertx-future-utils:1.0.1' {
+    exclude group: "io.vertx", module: "vertx-core"
+}
+```
+</details>
 
 ## Usage Example 
 ### Futurization
