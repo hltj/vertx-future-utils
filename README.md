@@ -39,6 +39,8 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 ### Vert.x
 - [x] 3.9.1
 - [x] 4.0.0-milestone5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 4.0.0.Beta1 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 3.9.2 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 3.9.0 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 3.8.5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 
