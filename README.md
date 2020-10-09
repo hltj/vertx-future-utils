@@ -109,7 +109,7 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.0.1"
 #### for Gradle Groovy DSL
 
 ``` groovy
-implementation 'me.hltj:vertx-future-utils:1.0.1' {
+implementation 'me.hltj:vertx-future-utils:1.0.1', {
     exclude group: "io.vertx", module: "vertx-core"
 }
 ```
