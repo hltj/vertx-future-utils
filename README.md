@@ -319,7 +319,7 @@ e.g. :
 
 ``` java
 Future<Double> sumFuture = FutureUtils.join(
-        CompositeFuture.join(Future.succeededFuture(1.0), Future.<Integer>failedFuture("error"))
+        Future.succeededFuture(1.0), Future.<Integer>failedFuture("error")
 ).through((fut0, fut1) -> fallbackWith(fut0, 0.0).result() + fallbackWith(fut1, 0).result());
 ``` 
 
