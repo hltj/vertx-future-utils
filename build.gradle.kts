@@ -20,7 +20,7 @@ dependencies {
     implementation(group = "io.vertx", name = "vertx-core", version = vertxVersion)
     compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.12")
     annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.6.2")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.7.0")
     testCompileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.12")
     testAnnotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
 }
@@ -51,6 +51,10 @@ tasks.javadoc {
 tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
+}
+
+jacoco {
+    toolVersion = "0.8.6"
 }
 
 tasks.jacocoTestReport {
