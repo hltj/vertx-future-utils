@@ -14,7 +14,7 @@ repositories {
     mavenCentral()
 }
 
-val vertxVersion = "3.9.3"
+val vertxVersion = "3.9.4"
 
 dependencies {
     implementation(group = "io.vertx", name = "vertx-core", version = vertxVersion)

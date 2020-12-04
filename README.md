@@ -39,10 +39,13 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 
 ### Vert.x
 - [x] 3.9.1
-- [ ] ~~4.0.0.Beta3~~ not supported for incorrect `SucceededFuture#otherwise(Object)` behavior. 
+- [x] 4.0.0.CR2 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 4.0.0.CR1 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [ ] ~~4.0.0.Beta3~~ not supported for incorrect `SucceededFuture#otherwise(Object)` behavior.
 - [ ] ~~4.0.0.Beta2~~  not supported for incorrect `SucceededFuture#otherwise(Object)` behavior.
 - [x] 4.0.0.Beta1 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 4.0.0-milestone5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 3.9.4 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 3.9.3 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 3.9.2 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 3.9.0 ([with `vertx-core` excluded](#with-vertx-core-excluded))
@@ -80,9 +83,10 @@ implementation 'me.hltj:vertx-future-utils:1.0.1'
 ```
 
 ### With `vertx-core` Excluded
-The default dependent version of `io.vertx:vertx-core` is `3.9.1`,
-if you want to use `vertx-future-utils` with `vertx-core` `3.8.0`/`3.9.0`/`3.9.2` to `3.9.3` or
-`4.0.0-milestone5` to `4.0.0.Beta1`, please exclude the default one.
+
+The default dependent version of `io.vertx:vertx-core` is `3.9.1`, if you want to use `vertx-future-utils`
+with `vertx-core` `3.8.0`/`3.9.0`/`3.9.2` to `3.9.4`,
+`4.0.0-milestone5` to `4.0.0.Beta1` or `4.0.0.CR1` to `4.0.0.CR2`, please exclude the default one.
 
 <details>
 
