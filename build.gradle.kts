@@ -17,12 +17,14 @@ repositories {
 val vertxVersion = "3.9.4"
 
 dependencies {
+    val lombokDependency = "org.projectlombok:lombok:1.18.16"
+
+    compileOnly(lombokDependency)
+    annotationProcessor(lombokDependency)
     implementation(group = "io.vertx", name = "vertx-core", version = vertxVersion)
-    compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.12")
-    annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
+    testCompileOnly(lombokDependency)
+    testAnnotationProcessor(lombokDependency)
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.7.0")
-    testCompileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.12")
-    testAnnotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
 }
 
 java {
