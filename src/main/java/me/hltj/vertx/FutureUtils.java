@@ -155,7 +155,9 @@ public final class FutureUtils {
      * @param <T>      the type parameter of the {@code Future}
      * @return the result {@code Future}
      */
-    public static <T> Future<T> flatFallbackWith(Future<T> future, Function<Throwable, Future<T>> mapper, Supplier<Future<T>> supplier) {
+    public static <T> Future<T> flatFallbackWith(
+            Future<T> future, Function<Throwable, Future<T>> mapper, Supplier<Future<T>> supplier
+    ) {
         return flatDefaultWith(future.recover(mapper), supplier);
     }
 
