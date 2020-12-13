@@ -83,6 +83,47 @@ class FutureUtilsTest {
     }
 
     @Test
+    void flatDefaultWith() {
+        val numbers = new HashSet<Integer>();
+
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.flatDefaultWith(Future.succeededFuture("value"), () -> {
+            numbers.add(0);
+            return Future.succeededFuture("default");
+        }));
+        assertFalse(numbers.contains(0));
+
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.flatDefaultWith(Future.succeededFuture("value"), () -> {
+            numbers.add(1);
+            return Future.failedFuture("new failure");
+        }));
+        assertFalse(numbers.contains(1));
+
+        SharedTestUtils.assertSucceedWith("default", FutureUtils.flatDefaultWith(Future.succeededFuture(), () -> {
+            numbers.add(2);
+            return Future.succeededFuture("default");
+        }));
+        assertTrue(numbers.contains(2));
+
+        SharedTestUtils.assertFailedWith("new failure", FutureUtils.flatDefaultWith(Future.succeededFuture(), () -> {
+            numbers.add(3);
+            return Future.failedFuture("new failure");
+        }));
+        assertTrue(numbers.contains(3));
+
+        SharedTestUtils.assertFailedWith("error", FutureUtils.flatDefaultWith(Future.failedFuture("error"), () -> {
+            numbers.add(4);
+            return Future.succeededFuture("default");
+        }));
+        assertFalse(numbers.contains(4));
+
+        SharedTestUtils.assertFailedWith("error", FutureUtils.flatDefaultWith(Future.failedFuture("error"), () -> {
+            numbers.add(5);
+            return Future.failedFuture("new failure");
+        }));
+        assertFalse(numbers.contains(5));
+    }
+
+    @Test
     void fallbackWith() {
         SharedTestUtils.assertSucceedWith("value", FutureUtils.fallbackWith(Future.succeededFuture("value"), "fallback"));
         SharedTestUtils.assertSucceedWith("fallback", FutureUtils.fallbackWith(Future.succeededFuture(), "fallback"));
@@ -153,6 +194,128 @@ class FutureUtilsTest {
         }));
         assertFalse(throwables.isEmpty());
         assertFalse(numbers.contains(2));
+    }
+
+    @Test
+    void flatFallbackWith_function() {
+        val throwables = new ArrayList<Throwable>();
+        val numbers = new HashSet<Integer>();
+
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.flatFallbackWith(Future.succeededFuture("value"), opt -> {
+            opt.ifPresent(throwables::add);
+            numbers.add(0);
+            return Future.succeededFuture("fallback");
+        }));
+        assertTrue(throwables.isEmpty());
+        assertFalse(numbers.contains(0));
+
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.flatFallbackWith(Future.succeededFuture("value"), opt -> {
+            opt.ifPresent(throwables::add);
+            numbers.add(1);
+            return Future.failedFuture("new failure");
+        }));
+        assertTrue(throwables.isEmpty());
+        assertFalse(numbers.contains(1));
+
+        SharedTestUtils.assertSucceedWith("fallback", FutureUtils.flatFallbackWith(Future.succeededFuture(), opt -> {
+            opt.ifPresent(throwables::add);
+            numbers.add(2);
+            return Future.succeededFuture("fallback");
+        }));
+        assertTrue(throwables.isEmpty());
+        assertTrue(numbers.contains(2));
+
+        SharedTestUtils.assertFailedWith("new failure", FutureUtils.flatFallbackWith(Future.succeededFuture(), opt -> {
+            opt.ifPresent(throwables::add);
+            numbers.add(3);
+            return Future.failedFuture("new failure");
+        }));
+        assertTrue(throwables.isEmpty());
+        assertTrue(numbers.contains(3));
+
+        SharedTestUtils.assertSucceedWith("fallback", FutureUtils.flatFallbackWith(Future.failedFuture("error"), opt -> {
+            opt.ifPresent(throwables::add);
+            numbers.add(4);
+            return Future.succeededFuture("fallback");
+        }));
+        assertFalse(throwables.isEmpty());
+        assertTrue(numbers.contains(4));
+
+        throwables.clear();
+        SharedTestUtils.assertFailedWith("new failure", FutureUtils.flatFallbackWith(Future.failedFuture("error"), opt -> {
+            opt.ifPresent(throwables::add);
+            numbers.add(5);
+            return Future.failedFuture("new failure");
+        }));
+        assertFalse(throwables.isEmpty());
+        assertTrue(numbers.contains(5));
+    }
+
+    @Test
+    void flatFallbackWith_mapper_supplier() {
+        val throwables = new ArrayList<Throwable>();
+        val numbers = new HashSet<Integer>();
+
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.flatFallbackWith(Future.succeededFuture("value"), t -> {
+            throwables.add(t);
+
+            return Future.succeededFuture("otherwise");
+        }, () -> {
+            numbers.add(0);
+            return Future.succeededFuture("default");
+        }));
+        assertTrue(throwables.isEmpty());
+        assertFalse(numbers.contains(0));
+
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.flatFallbackWith(Future.succeededFuture("value"), t -> {
+            throwables.add(t);
+            return Future.failedFuture("otherwise");
+        }, () -> {
+            numbers.add(1);
+            return Future.failedFuture("default");
+        }));
+        assertTrue(throwables.isEmpty());
+        assertFalse(numbers.contains(1));
+
+        SharedTestUtils.assertSucceedWith("default", FutureUtils.flatFallbackWith(Future.succeededFuture(), t -> {
+            throwables.add(t);
+            return Future.succeededFuture("otherwise");
+        }, () -> {
+            numbers.add(2);
+            return Future.succeededFuture("default");
+        }));
+        assertTrue(throwables.isEmpty());
+        assertTrue(numbers.contains(2));
+
+        SharedTestUtils.assertFailedWith("default", FutureUtils.flatFallbackWith(Future.succeededFuture(), t -> {
+            throwables.add(t);
+            return Future.failedFuture("otherwise");
+        }, () -> {
+            numbers.add(3);
+            return Future.failedFuture("default");
+        }));
+        assertTrue(throwables.isEmpty());
+        assertTrue(numbers.contains(3));
+
+        SharedTestUtils.assertSucceedWith("otherwise", FutureUtils.flatFallbackWith(Future.failedFuture("error"), t -> {
+            throwables.add(t);
+            return Future.succeededFuture("otherwise");
+        }, () -> {
+            numbers.add(4);
+            return Future.succeededFuture("default");
+        }));
+        assertFalse(throwables.isEmpty());
+        assertFalse(numbers.contains(4));
+
+        SharedTestUtils.assertFailedWith("otherwise", FutureUtils.flatFallbackWith(Future.failedFuture("error"), t -> {
+            throwables.add(t);
+            return Future.failedFuture("otherwise");
+        }, () -> {
+            numbers.add(5);
+            return Future.failedFuture("default");
+        }));
+        assertFalse(throwables.isEmpty());
+        assertFalse(numbers.contains(5));
     }
 
     @Test

@@ -81,6 +81,18 @@ public final class FutureUtils {
     }
 
     /**
+     * If a {@link Future} succeed with null, replace it with the default {@link Future}.
+     *
+     * @param future   the {@code Future}
+     * @param supplier a supplier to get the default {@code Future}
+     * @param <T>      the type parameter of the {@code Future}
+     * @return the result {@code Future}
+     */
+    public static <T> Future<T> flatDefaultWith(Future<T> future, Supplier<Future<T>> supplier) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
      * If a {@link Future} failed or succeed with null,
      * replace it with a {@link Future} that succeed with the default value.
      *
@@ -118,6 +130,33 @@ public final class FutureUtils {
      */
     public static <T> Future<T> fallbackWith(Future<T> future, Function<Throwable, T> mapper, Supplier<T> supplier) {
         return defaultWith(future.otherwise(mapper), supplier);
+    }
+
+    /**
+     * If a {@link Future} failed or succeed with null,
+     * replace it with a default {@link Future}.
+     *
+     * @param future   the {@code Future}
+     * @param function a function to get the default {@code Future}
+     * @param <T>      the type parameter of the {@code Future}
+     * @return the result {@code Future}
+     */
+    public static <T> Future<T> flatFallbackWith(Future<T> future, Function<Optional<Throwable>, Future<T>> function) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    /**
+     * If a {@link Future} failed or succeed with null,
+     * replace it with a default {@link Future}.
+     *
+     * @param future   the {@code Future}
+     * @param mapper   a function to get the default {@code Future} on failure
+     * @param supplier a function to get the default {@code Future} on success with null
+     * @param <T>      the type parameter of the {@code Future}
+     * @return the result {@code Future}
+     */
+    public static <T> Future<T> flatFallbackWith(Future<T> future, Function<Throwable, Future<T>> mapper, Supplier<Future<T>> supplier) {
+        throw new RuntimeException("unimplemented");
     }
 
     /**
