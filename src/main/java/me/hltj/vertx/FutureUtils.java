@@ -89,7 +89,7 @@ public final class FutureUtils {
      * @return the result {@code Future}
      */
     public static <T> Future<T> flatDefaultWith(Future<T> future, Supplier<Future<T>> supplier) {
-        throw new RuntimeException("unimplemented");
+        return future.flatMap(x -> x == null ? supplier.get() : Future.succeededFuture(x));
     }
 
     /**
@@ -142,7 +142,7 @@ public final class FutureUtils {
      * @return the result {@code Future}
      */
     public static <T> Future<T> flatFallbackWith(Future<T> future, Function<Optional<Throwable>, Future<T>> function) {
-        throw new RuntimeException("unimplemented");
+        return flatFallbackWith(future, function.compose(Optional::of), () -> function.apply(Optional.empty()));
     }
 
     /**
@@ -156,7 +156,7 @@ public final class FutureUtils {
      * @return the result {@code Future}
      */
     public static <T> Future<T> flatFallbackWith(Future<T> future, Function<Throwable, Future<T>> mapper, Supplier<Future<T>> supplier) {
-        throw new RuntimeException("unimplemented");
+        return flatDefaultWith(future.recover(mapper), supplier);
     }
 
     /**
