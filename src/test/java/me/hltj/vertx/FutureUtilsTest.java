@@ -319,6 +319,79 @@ class FutureUtilsTest {
     }
 
     @Test
+    void nonEmpty() {
+        SharedTestUtils.assertSucceedWith("value", FutureUtils.nonEmpty(Future.succeededFuture("value")));
+        SharedTestUtils.assertFailedWith(NullPointerException.class, FutureUtils.nonEmpty(Future.succeededFuture()));
+        SharedTestUtils.assertFailedWith("error", FutureUtils.nonEmpty(Future.failedFuture("error")));
+    }
+
+    @Test
+    void mapSome() {
+        val numbers = new HashSet<Integer>();
+
+        SharedTestUtils.assertSucceedWith(5, FutureUtils.mapSome(Future.succeededFuture("value"), v -> {
+            numbers.add(0);
+            return v.length();
+        }));
+        assertTrue(numbers.contains(0));
+
+        SharedTestUtils.assertSucceedWith(null, FutureUtils.mapSome(Future.<String>succeededFuture(), v -> {
+            numbers.add(1);
+            return v.length();
+        }));
+        assertFalse(numbers.contains(1));
+
+        SharedTestUtils.assertFailedWith("error", FutureUtils.mapSome(Future.<String>failedFuture("error"), v -> {
+            numbers.add(2);
+            return v.length();
+        }));
+        assertFalse(numbers.contains(2));
+    }
+
+    @Test
+    void flatMapSome() {
+        val numbers = new HashSet<Integer>();
+
+        SharedTestUtils.assertSucceedWith(5, FutureUtils.flatMapSome(Future.succeededFuture("value"), v -> {
+            numbers.add(0);
+            return Future.succeededFuture(v.length());
+        }));
+        assertTrue(numbers.contains(0));
+
+        SharedTestUtils.assertFailedWith("new failure", FutureUtils.flatMapSome(Future.succeededFuture("value"), v -> {
+            numbers.add(1);
+            return Future.failedFuture("new failure");
+        }));
+        assertTrue(numbers.contains(1));
+
+        SharedTestUtils.assertSucceedWith(null, FutureUtils.flatMapSome(Future.<String>succeededFuture(), v -> {
+            numbers.add(2);
+            return Future.succeededFuture(v.length());
+        }));
+        assertFalse(numbers.contains(2));
+
+        SharedTestUtils.assertSucceedWith(null, FutureUtils.flatMapSome(Future.<String>succeededFuture(), v -> {
+            numbers.add(3);
+            return Future.failedFuture("new failure");
+        }));
+        assertFalse(numbers.contains(3));
+
+        SharedTestUtils.assertFailedWith("error", FutureUtils.flatMapSome(Future.<String>failedFuture("error"), v -> {
+            numbers.add(4);
+            return Future.succeededFuture(v.length());
+        }));
+        assertFalse(numbers.contains(4));
+
+        SharedTestUtils.assertFailedWith("error", FutureUtils.flatMapSome(Future.<String>failedFuture("error"), v -> {
+            numbers.add(5);
+            return Future.failedFuture("new failure");
+
+
+        }));
+        assertFalse(numbers.contains(5));
+    }
+
+    @Test
     void wrap() {
         SharedTestUtils.assertSucceedWith(1, FutureUtils.wrap(() -> Integer.parseInt("1")));
         assertFailedWith(NumberFormatException.class, "For input string: \"@\"",

@@ -161,6 +161,18 @@ public final class FutureUtils {
         return flatDefaultWith(future.recover(mapper), supplier);
     }
 
+    public static <T> Future<T> nonEmpty(Future<T> future) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    public static <T, R> Future<R> mapSome(Future<T> future, Function<T, R> mapper) {
+        throw new RuntimeException("unimplemented");
+    }
+
+    public static <T, R> Future<R> flatMapSome(Future<T> future, Function<T, Future<R>> mapper) {
+        throw new RuntimeException("unimplemented");
+    }
+
     /**
      * Wraps an evaluation result within {@link Future}.
      *
