@@ -162,15 +162,15 @@ public final class FutureUtils {
     }
 
     public static <T> Future<T> nonEmpty(Future<T> future) {
-        throw new RuntimeException("unimplemented");
+        return flatDefaultWith(future, () -> Future.failedFuture(new NullPointerException()));
     }
 
     public static <T, R> Future<R> mapSome(Future<T> future, Function<T, R> mapper) {
-        throw new RuntimeException("unimplemented");
+        return future.map(v -> v == null ? null : mapper.apply(v));
     }
 
     public static <T, R> Future<R> flatMapSome(Future<T> future, Function<T, Future<R>> mapper) {
-        throw new RuntimeException("unimplemented");
+        return future.flatMap(v -> v == null ? Future.succeededFuture() : mapper.apply(v));
     }
 
     /**
