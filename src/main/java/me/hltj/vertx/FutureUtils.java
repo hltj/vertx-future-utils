@@ -133,8 +133,7 @@ public final class FutureUtils {
     }
 
     /**
-     * If a {@link Future} failed or succeed with null,
-     * replace it with a default {@link Future}.
+     * If a {@link Future} failed or succeed with null, replace it with a default {@link Future}.
      *
      * @param future   the {@code Future}
      * @param function a function to get the default {@code Future}
@@ -146,8 +145,7 @@ public final class FutureUtils {
     }
 
     /**
-     * If a {@link Future} failed or succeed with null,
-     * replace it with a default {@link Future}.
+     * If a {@link Future} failed or succeed with null, replace it with a default {@link Future}.
      *
      * @param future   the {@code Future}
      * @param mapper   a function to get the default {@code Future} on failure
@@ -161,14 +159,47 @@ public final class FutureUtils {
         return flatDefaultWith(future.recover(mapper), supplier);
     }
 
+    /**
+     * If a {@link Future} succeed with null, replace it with a {@link Future} failed with NullPointerException.
+     *
+     * @param future the {@code Future}
+     * @param <T>    the type parameter of the {@code Future}
+     * @return the result {@code Future}
+     */
     public static <T> Future<T> nonEmpty(Future<T> future) {
         return flatDefaultWith(future, () -> Future.failedFuture(new NullPointerException()));
     }
 
+    /**
+     * Apply the {code mapper} function to the {@link Future} on non-empty.
+     * <p>
+     * When the {@code Future} succeeds with non-null value, the {code mapper} will be called with the completed value,
+     * and the result will be the value of the returned {@code Future}. otherwise, the succeeded null value or the
+     * failure will be propagated to the returned {@code Future} and the {@code mapper} will not be called.
+     *
+     * @param future the {@code Future}
+     * @param mapper the mapper function
+     * @param <T>    the type parameter of the {@code Future}
+     * @param <R>    the type parameter of the result {@code Future}
+     * @return the result {@code Future}
+     */
     public static <T, R> Future<R> mapSome(Future<T> future, Function<T, R> mapper) {
         return future.map(v -> v == null ? null : mapper.apply(v));
     }
 
+    /**
+     * Compose the {@link Future} with the {code mapper} function on non-empty.
+     * <p>
+     * When the {@code Future} succeeds with non-null value, the {code mapper} will be called with the completed value,
+     * and the result will be the returned {@code Future}. otherwise, the succeeded null value or the failure will be
+     * propagated to the returned {@code Future} and the {@code mapper} will not be called.
+     *
+     * @param future the {@code Future}
+     * @param mapper the mapper function
+     * @param <T>    the type parameter of the {@code Future}
+     * @param <R>    the type parameter of the result {@code Future}
+     * @return the result {@code Future}
+     */
     public static <T, R> Future<R> flatMapSome(Future<T> future, Function<T, Future<R>> mapper) {
         return future.flatMap(v -> v == null ? Future.succeededFuture() : mapper.apply(v));
     }
