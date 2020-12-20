@@ -61,20 +61,20 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 <dependency>
   <groupId>me.hltj</groupId>
   <artifactId>vertx-future-utils</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 
 ### Gradle Kotlin DSL
 
 ``` kotlin
-implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.0")
+implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1")
 ```
 
 ### Gradle Groovy DSL
 
 ``` groovy
-implementation 'me.hltj:vertx-future-utils:1.1.0'
+implementation 'me.hltj:vertx-future-utils:1.1.1'
 ```
 
 ### With `vertx-core` Excluded
@@ -90,7 +90,7 @@ with `vertx-core` `3.8.5` or `3.9.0` to `3.9.4`, please exclude the default one.
 <dependency>
   <groupId>me.hltj</groupId>
   <artifactId>vertx-future-utils</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <exclusions>
     <exclusion>
       <groupId>io.vertx</groupId>
@@ -103,7 +103,7 @@ with `vertx-core` `3.8.5` or `3.9.0` to `3.9.4`, please exclude the default one.
 #### for Gradle Kotlin DSL
 
 ``` kotlin
-implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.0") {
+implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1") {
     exclude(group = "io.vertx", module = "vertx-core")
 }
 ```
@@ -111,7 +111,7 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.0"
 #### for Gradle Groovy DSL
 
 ``` groovy
-implementation 'me.hltj:vertx-future-utils:1.1.0', {
+implementation 'me.hltj:vertx-future-utils:1.1.1', {
     exclude group: "io.vertx", module: "vertx-core"
 }
 ```
