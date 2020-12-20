@@ -70,7 +70,7 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1"
 ### Gradle Groovy DSL
 
 ``` groovy
-implementation 'me.hltj:vertx-future-utils:1.1.1'
+implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1'
 ```
 
 ### With `vertx-core` Excluded
@@ -107,7 +107,7 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1"
 #### for Gradle Groovy DSL
 
 ``` groovy
-implementation 'me.hltj:vertx-future-utils:1.1.1', {
+implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1', {
     exclude group: "io.vertx", module: "vertx-core"
 }
 ```
@@ -123,58 +123,7 @@ Future<Integer> lengthFuture = FutureUtils.<HttpResponse<Buffer>>futurize(handle
 ).map(response -> response.bodyAsString().length());
 ```
 
-Vert.x will provide `Future` result style APIs since 4.0, while `futurize()` can also be used for third party APIs.
-
-### Default Value on Empty
-If a `Future` succeed with `null`, map it with a default value:
-
-``` java
-// Succeed with 1
-Future<Integer> plusOneFuture = defaultWith(Future.succeededFuture(), 0).map(i -> i + 1);
-```
-
-the lazy version:
-
-``` java
-Future<Double> doubleFuture = FutureUtils.<Double>defaultWith(Future.succeededFuture(), () -> {
-    double rand = Math.random();
-    System.out.println("default with random value: " + rand);
-    return rand;
-}).map(d -> d + 1);
-```
-
-### Fallback Values on Failure/Empty
-If a `Future` failed or succeed with `null`, replace it with a `Future` that succeed with a default value:
-
-``` java
-Future<Integer> plusOneFuture = fallbackWith(intFuture, 0).map(i -> i + 1);
-```
-
-the lazy version:
-
-``` java
-Future<Double> plusOneFuture = FutureUtils.<Double>fallbackWith(doubleFuture, errorOpt -> {
-    if (errorOpt.isPresent()) {
-        log.warn("fallback error with -0.5, the error is: ", errorOpt.get());
-        return -0.5;
-    } else {
-        log.warn("fallback empty with 0.5");
-        return 0.5;
-    }
-}).map(d -> d + 1);
-```
-
-or with separated lambdas for failure & empty:
-
-``` java
-Future<Double> plusOneFuture = fallbackWith(doubleFuture, error -> {
-    System.out.println("fallback error with -0.5, the error is " + error);
-    return -0.5;
-}, () -> {
-    System.out.println("fallback empty with 0.5");
-    return 0.5;
-}).map(d -> d + 1);
-```
+Vert.x provided `Future` result style APIs since 4.0.0, while `futurize()` can also be used for third party APIs.
 
 ### Wrapping Evaluation Result
 Wraps an evaluation result within `Future`:
@@ -205,6 +154,57 @@ Function<String, Future<Integer>> stringToIntFuture = s -> FutureUtils.wrap(s, I
 
 Future<Integer> futureC = joinWrap("1", stringToIntFuture); // Succeed with 1
 Future<Integer> futureD = joinWrap("@", stringToIntFuture); // Failed with a NumberFormatException
+```
+
+### Default Value on Empty
+If a `Future` succeed with `null`, map it with a default value:
+
+``` java
+// Succeed with 1
+Future<Integer> plusOneFuture = defaultWith(Future.succeededFuture(), 0).map(i -> i + 1);
+```
+
+the lazy version:
+
+``` java
+Future<Double> doubleFuture = FutureUtils.<Double>defaultWith(Future.succeededFuture(), () -> {
+    double rand = Math.random();
+    System.out.println("default with random value: " + rand);
+    return rand;
+}).map(d -> d + 1);
+```
+
+### Fallback Values on Failure/Empty
+If a `Future` failed or succeed with `null`, replace it with a `Future` that succeed with a default value:
+
+``` java
+Future<Integer> plusOneFuture = fallbackWith(intFuture, 0).map(i -> i + 1);
+```
+
+the lazy version:
+
+``` java
+Future<Double> plusOneFuture = FutureUtils.<Double>fallbackWith(doubleFuture, throwableOpt ->
+        throwableOpt.map(t -> {
+            log.warn("fallback error with -0.5, the error is: ", t);
+            return -0.5;
+        }).orElseGet(() -> {
+            log.warn("fallback empty with 0.5");
+            return 0.5;
+        })
+).map(d -> d + 1);
+```
+
+or with separated lambdas for failure & empty:
+
+``` java
+Future<Double> plusOneFuture = fallbackWith(doubleFuture, error -> {
+    System.out.println("fallback error with -0.5, the error is " + error);
+    return -0.5;
+}, () -> {
+    System.out.println("fallback empty with 0.5");
+    return 0.5;
+}).map(d -> d + 1);
 ```
 
 ### Access `CompositeFuture` Itself on Failure
