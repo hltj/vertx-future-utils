@@ -1,11 +1,17 @@
 package me.hltj.vertx;
 
 import io.vertx.core.Future;
+import lombok.experimental.ExtensionMethod;
 
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * For working with lombok {@link ExtensionMethod}.
+ *
+ * @since 1.1.0
+ */
 public final class FutureExtensions {
 
     private FutureExtensions() {

@@ -87,6 +87,7 @@ public final class FutureUtils {
      * @param supplier a supplier to get the default {@code Future}
      * @param <T>      the type parameter of the {@code Future}
      * @return the result {@code Future}
+     * @since 1.1.0
      */
     public static <T> Future<T> flatDefaultWith(Future<T> future, Supplier<Future<T>> supplier) {
         return future.flatMap(x -> x == null ? supplier.get() : Future.succeededFuture(x));
@@ -139,6 +140,7 @@ public final class FutureUtils {
      * @param function a function to get the default {@code Future}
      * @param <T>      the type parameter of the {@code Future}
      * @return the result {@code Future}
+     * @since 1.1.0
      */
     public static <T> Future<T> flatFallbackWith(Future<T> future, Function<Optional<Throwable>, Future<T>> function) {
         return flatFallbackWith(future, function.compose(Optional::of), () -> function.apply(Optional.empty()));
@@ -152,6 +154,7 @@ public final class FutureUtils {
      * @param supplier a function to get the default {@code Future} on success with null
      * @param <T>      the type parameter of the {@code Future}
      * @return the result {@code Future}
+     * @since 1.1.0
      */
     public static <T> Future<T> flatFallbackWith(
             Future<T> future, Function<Throwable, Future<T>> mapper, Supplier<Future<T>> supplier
@@ -165,6 +168,7 @@ public final class FutureUtils {
      * @param future the {@code Future}
      * @param <T>    the type parameter of the {@code Future}
      * @return the result {@code Future}
+     * @since 1.1.0
      */
     public static <T> Future<T> nonEmpty(Future<T> future) {
         return flatDefaultWith(future, () -> Future.failedFuture(new NullPointerException()));
@@ -182,6 +186,7 @@ public final class FutureUtils {
      * @param <T>    the type parameter of the {@code Future}
      * @param <R>    the type parameter of the result {@code Future}
      * @return the result {@code Future}
+     * @since 1.1.0
      */
     public static <T, R> Future<R> mapSome(Future<T> future, Function<T, R> mapper) {
         return future.map(v -> v == null ? null : mapper.apply(v));
@@ -199,6 +204,7 @@ public final class FutureUtils {
      * @param <T>    the type parameter of the {@code Future}
      * @param <R>    the type parameter of the result {@code Future}
      * @return the result {@code Future}
+     * @since 1.1.0
      */
     public static <T, R> Future<R> flatMapSome(Future<T> future, Function<T, Future<R>> mapper) {
         return future.flatMap(v -> v == null ? Future.succeededFuture() : mapper.apply(v));
