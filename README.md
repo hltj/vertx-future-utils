@@ -176,7 +176,7 @@ Future<Double> doubleFuture = FutureUtils.<Double>defaultWith(Future.succeededFu
 }).map(d -> d + 1);
 ```
 
-If you want to replace the `Future` succeed with `null` with another `Future` that may be failed, you can
+If you want to replace the `Future` (succeed with `null`) with another `Future` that may be failed, you can
 use`flatDefaultWith()`:
 
 ``` java
@@ -186,9 +186,8 @@ Future<Integer> countFuture = flatDefaultWith(countFuture, () -> getCountFutureV
 
 ### Empty to Failure
 
-If you want treat a `Future` succeed with `null` as failure, you can use `nonEmpty()`. If the parameter `Future` failed
-or succeed with non-null value, `nonEmtpy()` returns the `Future` itself, otherwise (i.e. succeed with null), returns
-a `Future` failed with a `NullPointerException`:
+If a `Future` failed or succeed with a non-null value, `nonEmtpy()` returns the `Future` itself,
+otherwise (i.e. succeed with null), it returns a `Future` failed with a `NullPointerException`:
 
 ``` java
 nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
@@ -228,7 +227,7 @@ Future<Double> plusOneFuture = fallbackWith(doubleFuture, error -> {
 }).map(d -> d + 1);
 ```
 
-If you want to replace the `Future` failed or succeed with `null` with another `Future` that may be failed, you can
+If you want to replace the `Future` (failed or succeed with `null`) with another `Future` that may be failed, you can
 use`flatFallbackWith()`:
 
 ``` java
@@ -241,8 +240,8 @@ Future<Integer> countFuture2 = flatFallbackWith(
 
 ### Map Non-Null Value Only
 
-If you want map a `Future` only when it succeeds with non-null value, you can use `mapSome()`. If the parameter `Future`
-succeeds with null, `mapSome()` also returns a `Future` succeed with null:
+Maps a `Future` only when it succeeds with a non-null value. If the parameter `Future` succeeds with null,
+`mapSome()` also returns a `Future` succeed with null:
 
 ``` java
 Future<List<Integer>> intsFuture = getIntegers();
