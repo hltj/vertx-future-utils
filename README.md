@@ -19,9 +19,11 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
   - [With `vertx-core` Excluded](#with-vertx-core-excluded)
 - [Usage Example](#usage-example)
   - [Futurization](#futurization)
-  - [Default Value on Empty](#default-value-on-empty)
-  - [Fallback Values on Failure/Empty](#fallback-values-on-failureempty)
   - [Wrapping Evaluation Result](#wrapping-evaluation-result)
+  - [Default Value on Empty](#default-value-on-empty)
+  - [Empty to Failure](#empty-to-failure)
+  - [Fallback Values on Failure/Empty](#fallback-values-on-failureempty)
+  - [Map Non-Null Value Only](#map-non-null-value-only)
   - [Access `CompositeFuture` Itself on Failure](#access-compositefuture-itself-on-failure)
   - [Mapping `CompositeFuture` on Failure](#mapping-compositefuture-on-failure)
   - [Keep Generic Type of the Original `Future`s of `CompositeFuture`](#keep-generic-type-of-the-original-futures-of-compositefuture)
@@ -174,7 +176,26 @@ Future<Double> doubleFuture = FutureUtils.<Double>defaultWith(Future.succeededFu
 }).map(d -> d + 1);
 ```
 
+If you want to replace the `Future` succeed with `null` with another `Future` that may be failed, you can
+use`flatDefaultWith()`:
+
+``` java
+Future<Integer> cachedCountFuture = getCountFutureFromCache().otherwiseEmpty();
+Future<Integer> countFuture = flatDefaultWith(countFuture, () -> getCountFutureViaHttp());
+```
+
+### Empty to Failure
+
+If you want treat a `Future` succeed with `null` as failure, you can use `nonEmpty()`. If the parameter `Future` failed
+or succeed with non-null value, `nonEmtpy()` returns the `Future` itself, otherwise (i.e. succeed with null), returns
+a `Future` failed with a `NullPointerException`:
+
+``` java
+nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
+```
+
 ### Fallback Values on Failure/Empty
+
 If a `Future` failed or succeed with `null`, replace it with a `Future` that succeed with a default value:
 
 ``` java
@@ -207,12 +228,43 @@ Future<Double> plusOneFuture = fallbackWith(doubleFuture, error -> {
 }).map(d -> d + 1);
 ```
 
+If you want to replace the `Future` failed or succeed with `null` with another `Future` that may be failed, you can
+use`flatFallbackWith()`:
+
+``` java
+Future<Integer> cachedCountFuture = getCountFutureFromCache();
+Future<Integer> countFuture1 = flatFallbackWith(countFuture, _throwableOpt -> getCountFutureViaHttp());
+Future<Integer> countFuture2 = flatFallbackWith(
+        countFuture, throwable -> getCountFutureViaHttpOnFailure(throwable), () -> getCountFutureViaHttpOnEmpty()
+);
+```
+
+### Map Non-Null Value Only
+
+If you want map a `Future` only when it succeeds with non-null value, you can use `mapSome()`. If the parameter `Future`
+succeeds with null, `mapSome()` also returns a `Future` succeed with null:
+
+``` java
+Future<List<Integer>> intsFuture = getIntegers();
+Future<List<String>> hexStringsFuture = mapSome(intsFuture, ints ->
+        ints.stream().map(i -> Integer.toString(i, 16)).collect(Collectors.toUnmodifiableList())
+);
+```
+
+If the mapper itself returns a `Future`, you can use `flatMapSome()`:
+
+``` java
+Future<String> userIdFuture = getUserIdFuture();
+Future<User> userFuture = flatMapSome(userIdFuture, id -> getUserFuture(id));
+```
+
 ### Access `CompositeFuture` Itself on Failure
-When a [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) failed,
-we cannot access the `CompositeFuture` itself directly inside the lambda argument of
+
+When a [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) failed, we cannot access
+the `CompositeFuture` itself directly inside the lambda argument of
 [`onComplete()`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onComplete-io.vertx.core.Handler-)
-or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-).
-A work round is introducing a local variable, e.g:
+or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-). A
+work round is introducing a local variable, e.g:
 
 ``` java
 CompositeFuture composite = CompositeFuture.join(
@@ -244,7 +296,7 @@ CompositeFutureWrapper.of(CompositeFuture.join(
 }));
 ```
 
-While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful subclasses
+While it's not recommended using `CompositeFutureWrapper` directly, please use more powerful subclasses
 `CompositeFutureTuple[2-9]` instead.
 
 ### Mapping `CompositeFuture` on Failure
@@ -269,7 +321,7 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 ).joinThrough(composite -> wrap(() -> composite.<Double>resultAt(0) + composite.<Integer>resultAt(1)));
 ```
 
-While it's not recommended to use `CompositeFutureWrapper` directly, please use more powerful subclasses
+While it's not recommended using `CompositeFutureWrapper` directly, please use more powerful subclasses
 `CompositeFutureTuple[2-9]` instead.
 
 ### Keep Generic Type of the Original `Future`s of `CompositeFuture`
