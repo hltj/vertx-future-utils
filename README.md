@@ -117,7 +117,7 @@ implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1', {
 
 ## Usage Example 
 ### Futurization
-Convert a callback style Vert.x call to `Future` result style:
+Convert a callback style Vert.x call to `Future` result style. e.g.:
 
 ``` java
 Future<Integer> lengthFuture = FutureUtils.<HttpResponse<Buffer>>futurize(handler ->
@@ -128,14 +128,14 @@ Future<Integer> lengthFuture = FutureUtils.<HttpResponse<Buffer>>futurize(handle
 Vert.x provided `Future` result style APIs since 4.0.0, while `futurize()` can also be used for third party APIs.
 
 ### Wrapping Evaluation Result
-Wraps an evaluation result within `Future`:
+Wraps an evaluation result within `Future`. e.g.:
 
 ``` java
 Future<Integer> futureA = wrap(() -> Integer.parseInt("1")); // Succeed with 1
 Future<Integer> futureB = wrap(() -> Integer.parseInt("@")); // Failed with a NumberFormatException
 ```
 
-Wraps a function application result within `Future`:
+Wraps a function application result within `Future`. e.g.:
 
 ``` java
 Future<Integer> futureA = wrap("1", Integer::parseInt); // Succeed with 1
@@ -143,7 +143,7 @@ Future<Integer> futureB = wrap("@", Integer::parseInt); // Failed with a NumberF
 ```
 
 If the evaluation result itself is a `Future`, use `joinWrap()`(or its alias `flatWrap()`)
-to flatten the nested result `Future`s:
+to flatten the nested result `Future`s. e.g.:
 
 ``` java
 Future<Integer> future0 = wrap("0", Integer::parseInt);
@@ -159,7 +159,7 @@ Future<Integer> futureD = joinWrap("@", stringToIntFuture); // Failed with a Num
 ```
 
 ### Default Value on Empty
-If a `Future` succeed with `null`, map it with a default value:
+If a `Future` succeed with `null`, map it with a default value. e.g.:
 
 ``` java
 // Succeed with 1
@@ -176,8 +176,8 @@ Future<Double> doubleFuture = FutureUtils.<Double>defaultWith(Future.succeededFu
 }).map(d -> d + 1);
 ```
 
-If you want to replace the `Future` (succeed with `null`) with another `Future` that may be failed, you can
-use`flatDefaultWith()`:
+If you want to replace the `Future` (succeed with `null`) with another `Future`
+(asynchronous and/or may be failed), you can use`flatDefaultWith()`. e.g.:
 
 ``` java
 Future<Integer> cachedCountFuture = getCountFutureFromCache().otherwiseEmpty();
@@ -186,8 +186,8 @@ Future<Integer> countFuture = flatDefaultWith(countFuture, () -> getCountFutureV
 
 ### Empty to Failure
 
-If a `Future` failed or succeed with a non-null value, `nonEmtpy()` returns the `Future` itself,
-otherwise (i.e. succeed with null), it returns a `Future` failed with a `NullPointerException`:
+If a `Future` failed or succeed with a non-null value, returns the `Future` itself.
+Otherwise (i.e. succeed with `null`), returns a `Future` failed with a `NullPointerException`. e.g.:
 
 ``` java
 nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
@@ -195,7 +195,7 @@ nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
 
 ### Fallback Values on Failure/Empty
 
-If a `Future` failed or succeed with `null`, replace it with a `Future` that succeed with a default value:
+If a `Future` failed or succeed with `null`, replace it with a `Future` that succeed with a default value. e.g.:
 
 ``` java
 Future<Integer> plusOneFuture = fallbackWith(intFuture, 0).map(i -> i + 1);
@@ -227,8 +227,8 @@ Future<Double> plusOneFuture = fallbackWith(doubleFuture, error -> {
 }).map(d -> d + 1);
 ```
 
-If you want to replace the `Future` (failed or succeed with `null`) with another `Future` that may be failed, you can
-use`flatFallbackWith()`:
+If you want to replace the `Future` (failed or succeed with `null`) with another `Future`
+(asynchronous and/or may be failed), you can use`flatFallbackWith()`. e.g.:
 
 ``` java
 Future<Integer> cachedCountFuture = getCountFutureFromCache();
@@ -240,8 +240,8 @@ Future<Integer> countFuture2 = flatFallbackWith(
 
 ### Map Non-Null Value Only
 
-Maps a `Future` only when it succeeds with a non-null value. If the parameter `Future` succeeds with null,
-`mapSome()` also returns a `Future` succeed with null:
+Maps a `Future` only when it succeeds with a non-null value. If the parameter `Future` succeeds with `null`,
+`mapSome()` also returns a `Future` succeed with `null`. e.g.:
 
 ``` java
 Future<List<Integer>> intsFuture = getIntegers();
@@ -250,7 +250,7 @@ Future<List<String>> hexStringsFuture = mapSome(intsFuture, ints ->
 );
 ```
 
-If the mapper itself returns a `Future`, you can use `flatMapSome()`:
+If the mapper itself returns a `Future`, you can use `flatMapSome()`. e.g.:
 
 ``` java
 Future<String> userIdFuture = getUserIdFuture();
@@ -262,8 +262,8 @@ Future<User> userFuture = flatMapSome(userIdFuture, id -> getUserFuture(id));
 When a [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) failed, we cannot access
 the `CompositeFuture` itself directly inside the lambda argument of
 [`onComplete()`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onComplete-io.vertx.core.Handler-)
-or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-). A
-work round is introducing a local variable, e.g:
+or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-).
+A work round is introducing a local variable. e.g:
 
 ``` java
 CompositeFuture composite = CompositeFuture.join(
@@ -280,7 +280,7 @@ composite.onFailure(t -> {
 ```
 
 But this is not fluent and cause an extra variable introduced, especially we repeat to do this again and again.
-In this case, we can use `CompositeFutureWrapper#use()` instead:
+In this case, we can use `CompositeFutureWrapper#use()` instead. e.g.:
 
 ``` java
 CompositeFutureWrapper.of(CompositeFuture.join(
@@ -300,8 +300,8 @@ While it's not recommended using `CompositeFutureWrapper` directly, please use m
 
 ### Mapping `CompositeFuture` on Failure
 When a `CompositeFuture` failed, its `map()`/`flatMap()` method won't be invoked.
-If we still want to map the partial succeed results, we can use `CompositeFutureWrapper#through()` (or its alias
-`mapAnyway()`):
+If you still want to map the partial succeed results, you can use `CompositeFutureWrapper#through()` (or its alias
+`mapAnyway()`). e.g.:
 
 ``` java
 Future<Double> sumFuture = CompositeFutureWrapper.of(
@@ -312,7 +312,7 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 ```
 
 If the mapper itself returns a `Future`, we can use `CompositeFutureWrapper#joinThrough()` (or its alias
-`flatMapAnyway()`) to flatten the nested result `Future`s:
+`flatMapAnyway()`) to flatten the nested result `Future`s. e.g.:
 
 ``` java
 Future<Double> sumFuture = CompositeFutureWrapper.of(
@@ -337,7 +337,7 @@ Future<Double> productFuture = CompositeFuture.all(future0, future1).map(
 
 The result `productFuture` is 'succeed with 7.0'? Unfortunately, NO. It is 'failed with a ClassCastException',
 because the type parameters are misspecified. They are `(Integer, Double`), not `(Double, Integer)`!
-We can use `CompositeFutureTuple2#applift()` (or its alias `mapTyped()`) to avoid this error-prone case:
+We can use `CompositeFutureTuple2#applift()` (or its alias `mapTyped()`) to avoid this error-prone case. e.g.:
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -350,7 +350,7 @@ because the `CompositeFutureTuple2` has already kept them.
 Moreover, the code is significantly simplified with the boilerplate code reduced.
 
 If the lambda result itself is a `Future`, we can use `CompositeFutureTuple2#joinApplift()` (or its alias
-`flatMapTyped()`) to flatten the nested result `Future`s, e.g:
+`flatMapTyped()`) to flatten the nested result `Future`s. e.g:
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -363,7 +363,7 @@ for 3-9 arities.
 
 ### Mapping the Original `Future`s of a `CompositeFuture` on Failure
 In `CompositeFutureTuple[2-9]`, there are additional overload `through()` & `joinThrough()` (or their alias
-`mapAnyway` & `flatMapAnyway`) methods, they provide the original `Future`s as parameters to invoke the lambda argument,
+`mapAnyway` & `flatMapAnyway`) methods, they provide the original `Future`s as parameters to invoke the lambda argument.
 e.g. :
 
 ``` java
@@ -374,7 +374,7 @@ Future<Double> sumFuture = FutureUtils.join(
 
 ### Access `CompositeFuture` and the Original `Future`s on Failure
 In `CompositeFutureTuple[2-9]`, there is an additional overload `use()` method, it provides the `CompositeFuture` itself
-as well as the original `Future`s as parameters to invoke the lambda argument, e.g.:
+as well as the original `Future`s as parameters to invoke the lambda argument. e.g.:
 
 ``` java
 Future<Double> future0 = Future.succeededFuture(1.0);
@@ -385,7 +385,7 @@ FutureUtils.join(future0, future1).use((composite, fut0, fut1) -> composite.onCo
 }));
 ```
 
-Moreover, there is a new method `with()` that likes `use()` but return a value, e.g.:
+Moreover, there is a new method `with()` that likes `use()` but return a value. e.g.:
 
 ``` java
 Future<Double> future0 = Future.succeededFuture(1.0);
@@ -397,7 +397,7 @@ Future<String> stringFuture = join(future0, future1).with((composite, fut0, fut1
 ```
 
 ### Setting Default/Fallback Values before Composition
-We can set default values for each original `Future`s before composition to avoid `null` check, e.g.:
+We can set default values for each original `Future`s before composition to avoid `null` check. e.g.:
 
 ``` java
 Future<Integer> future0 = defaultWith(futureA, 1);
@@ -407,7 +407,8 @@ Future<Double> productFuture = FutureUtils.all(future0, future1, future2)
         .applift((i1, i2, d) -> i1 * i2 * d);
 ```
 
-In fact, it's unnecessary to introduce so many temporary variables, we can use `FutureTuple3#defaults()` to simplify it:
+In fact, it's unnecessary to introduce so many temporary variables, we can use `FutureTuple3#defaults()` to simplify it.
+e.g.:
 
 ``` java
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
@@ -420,7 +421,7 @@ the factory method `tuple()` creates a `FutureTuple3` object, and then invoke it
 method to set default values, then invoke its `join()` method to get a `CompositeFutureTuple3` object.
 
 Another useful method of `FutureTuple[2-9]` is `fallback`, just likes `defaults()`, we can use it to set the fallback
-values at once:
+values at once. e.g.:
 
 ``` java
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
