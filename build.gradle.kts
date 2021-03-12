@@ -1,3 +1,4 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.jfrog.bintray.gradle.BintrayExtension
 
 plugins {
@@ -5,6 +6,7 @@ plugins {
     `maven-publish`
     jacoco
     id("com.jfrog.bintray") version "1.8.5"
+    id("com.github.ben-manes.versions") version "0.38.0"
 }
 
 group = "me.hltj"
@@ -14,17 +16,17 @@ repositories {
     mavenCentral()
 }
 
-val vertxVersion = "4.0.0"
+val vertxVersion = "4.0.2"
 
 dependencies {
-    val lombokDependency = "org.projectlombok:lombok:1.18.16"
+    val lombokDependency = "org.projectlombok:lombok:1.18.18"
 
     compileOnly(lombokDependency)
     annotationProcessor(lombokDependency)
     implementation(group = "io.vertx", name = "vertx-core", version = vertxVersion)
     testCompileOnly(lombokDependency)
     testAnnotationProcessor(lombokDependency)
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.7.0")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.7.1")
 }
 
 java {
@@ -118,4 +120,16 @@ bintray {
 }
 
 fun BintrayExtension.propertyOrEnv(propertyName: String, envName: String) =
-    project.properties[propertyName]?.toString() ?: System.getenv(envName)
+        project.properties[propertyName]?.toString() ?: System.getenv(envName)
+
+tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
+    rejectVersionIf {
+        isNonStable(candidate.version)
+    }
+}
+
+fun isNonStable(version: String): Boolean {
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+    return !stableKeyword && !regex.matches(version)
+}
