@@ -52,22 +52,11 @@
 
 ## 构建状态
 
-| | Java 14 | Java 11 | Java 8| |--|---------|---------|-------|
-| [![Ubuntu 18.04](https://img.shields.io/badge/Ubuntu_18-black?logo=ubuntu&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/1)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/2)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/3)](https://travis-ci.org/hltj/vertx-future-utils)
-|
-| [![macOS](https://img.shields.io/badge/macOS-black?logo=apple&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/4)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/5)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/6)](https://travis-ci.org/hltj/vertx-future-utils)
-|
-| [![Windows](https://img.shields.io/badge/Windows-black?logo=windows&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/7)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/8)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/9)](https://travis-ci.org/hltj/vertx-future-utils)
-|
+|  | Java 14 | Java 11 | Java 8|
+|--|---------|---------|-------|
+| [![Ubuntu 18.04](https://img.shields.io/badge/Ubuntu_18-black?logo=ubuntu&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/1)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/2)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/3)](https://travis-ci.org/hltj/vertx-future-utils) |
+| [![macOS](https://img.shields.io/badge/macOS-black?logo=apple&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/4)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/5)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/6)](https://travis-ci.org/hltj/vertx-future-utils) |
+| [![Windows](https://img.shields.io/badge/Windows-black?logo=windows&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/7)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/8)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/9)](https://travis-ci.org/hltj/vertx-future-utils) |
 
 ## 安装
 
@@ -164,7 +153,8 @@ Future<Integer> futureA = wrap("1", Integer::parseInt); // 成功值为 1
 Future<Integer> futureB = wrap("@", Integer::parseInt); // 失败异常为 NumberFormatException
 ```
 
-如果求值结果自身就是 `Future`，那么可以使用 `joinWrap()`（或其别名 `flatWrap()`） 将嵌套的两层 `Future` 展平。例如：
+如果求值结果自身就是 `Future`，那么可以使用 `joinWrap()`（或其别名 `flatWrap()`）
+将嵌套的两层 `Future` 展平。例如：
 
 ``` java
 Future<Integer> future0 = wrap("0", Integer::parseInt);
@@ -208,7 +198,8 @@ Future<Integer> countFuture = flatDefaultWith(countFuture, () -> getCountFutureV
 
 ### 空转为失败
 
-如果 `Future` 失败或者成功值非空，那么返回该 `Future` 自身。 否则（即成功值为 `null`） 返回失败异常为 `NullPointerException` 的 `Future`。例如：
+如果 `Future` 失败或者成功值非空，那么返回该 `Future` 自身。
+否则（即成功值为 `null`） 返回失败异常为 `NullPointerException` 的 `Future`。例如：
 
 ``` java
 nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
@@ -216,7 +207,8 @@ nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
 
 ### 失败或为空时取备用值
 
-如果 `Future` 失败或成功值为 `null`，那么返回成功值为备用值的 `Future`。 否则（即成功值非空） 返回该 `Future` 自身，例如：
+如果 `Future` 失败或成功值为 `null`，那么返回成功值为备用值的 `Future`。
+否则（即成功值非空） 返回该 `Future` 自身，例如：
 
 ``` java
 Future<Integer> plusOneFuture = fallbackWith(intFuture, 0).map(i -> i + 1);
@@ -261,7 +253,8 @@ Future<Integer> countFuture2 = flatFallbackWith(
 
 ### 只映射非空值
 
-仅在 `Future` 成功值非空时对其值进行映射。如果该参数 `Future` 成功值为 `null`， 那么 `mapSome()` 也返回一个成功值为 `null` 的 `Future`。例如：
+仅在 `Future` 成功值非空时对其值进行映射。如果该参数 `Future` 成功值为 `null`，
+那么 `mapSome()` 也返回一个成功值为 `null` 的 `Future`。例如：
 
 ``` java
 Future<List<Integer>> intsFuture = getIntegers();
@@ -282,7 +275,8 @@ Future<User> userFuture = flatMapSome(userIdFuture, id -> getUserFuture(id));
 当 [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) 失败时， 无法直接在
 [`onComplete()`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onComplete-io.vertx.core.Handler-)
 或 [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-)
-的参数 lambda 表达式内部访问该 `CompositeFuture` 自身。 一个变通方式是引入局部变量。例如：
+的参数 lambda 表达式内部访问该 `CompositeFuture` 自身。
+一个变通方式是引入局部变量。例如：
 
 ``` java
 CompositeFuture composite = CompositeFuture.join(
@@ -298,7 +292,8 @@ composite.onFailure(t -> {
 });
 ```
 
-但是这并不流畅，而且还会引入额外的变量，当一次次这样重复时尤为明显。 对于这种情况， 可以改用 `CompositeFutureWrapper#use()`。例如：
+但是这并不流畅，而且还会引入额外的变量，当一次次这样重复时尤为明显。
+对于这种情况， 可以改用 `CompositeFutureWrapper#use()`。例如：
 
 ``` java
 CompositeFutureWrapper.of(CompositeFuture.join(
@@ -319,7 +314,7 @@ CompositeFutureWrapper.of(CompositeFuture.join(
 ### 失败时映射 `CompositeFuture`
 
 当 `CompositeFuture` 失败时，不会调用其 `map()`/`flatMap()` 方法传入的 lambda 表达式。
-如果你还是想映射其中部分成功的结果，那么可以使用 `CompositeFutureWrapper#through()`（或其别名
+如果还是想映射其中部分成功的结果，那么可以使用 `CompositeFutureWrapper#through()`（或其别名
 `mapAnyway()`）。例如：
 
 ``` java
@@ -344,7 +339,8 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 
 ### 保留 `CompositeFuture` 对应的各原始 `Future` 的泛型类型
 
-在 `CompositeFuture` 中，所有原始 `Future` 的类型都被擦除了。 于是必须频繁指定结果的类型参数。 例如：
+在 `CompositeFuture` 中，所有原始 `Future` 的类型都被擦除了。
+于是必须频繁指定结果的类型参数。 例如：
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -354,8 +350,9 @@ Future<Double> productFuture = CompositeFuture.all(future0, future1).map(
 );
 ```
 
-其结果 `productFuture` 是“成功，值为 7.0”，没错吧？很不幸，错了。而是“失败，错误为 ClassCastException”， 因为类型参数指定错了。应该是 `(Integer, Double)`
-，而不是 `(Double, Integer)`！ 可以用 `CompositeFutureTuple2#applift()`（或其别名 `mapTyped()`）来避免这种易错情形。例如：
+其结果 `productFuture` 是“成功，值为 7.0”，没错吧？很不幸，错了。而是“失败，错误为 ClassCastException”，
+因为类型参数指定错了。应该是 `(Integer, Double)`，而不是 `(Double, Integer)`！
+可以用 `CompositeFutureTuple2#applift()`（或其别名 `mapTyped()`）来避免这种易错情形。例如：
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -363,7 +360,9 @@ Future<Double> future1 = Future.succeededFuture(3.5);
 Future<Double> productFuture = FutureUtils.all(future0, future1).applift((i, d) -> i * d);
 ```
 
-在 `applift()` 的参数 lambda 表达式内部不需要再手动指定类型参数了， 因为 `CompositeFutureTuple2` 已经保留了这些类型。 此外，由于样板代码的减少，上述代码显著简化了。
+在 `applift()` 的参数 lambda 表达式内部不需要再手动指定类型参数了，
+因为 `CompositeFutureTuple2` 已经保留了这些类型。
+此外，由于样板代码的减少，上述代码显著简化了。
 
 如果该 lambda 表达式的结果自身就是 `Future`，那么可以使用 `CompositeFutureTuple2#joinApplift()`（或其别名
 `flatMapTyped()`）来展平嵌套的结果 `Future`。例如：
@@ -380,7 +379,8 @@ Future<Double> productFuture = FutureUtils.all(future0, future1).joinApplift((i,
 ### 失败时映射 `CompositeFuture` 对应的各原始 `Future`
 
 在 `CompositeFutureTuple[2-9]` 中，还重载了 `through()` 与 `joinThrough()`（及其别名
-`mapAnyway` 与 `flatMapAnyway`）方法，它们以各原始 `Future` 作为参数来调用其 lambda 表达式参数。 例如：
+`mapAnyway` 与 `flatMapAnyway`）方法，它们以各原始 `Future` 作为参数来调用其 lambda 表达式参数。
+例如：
 
 ``` java
 Future<Double> sumFuture = FutureUtils.join(
@@ -425,7 +425,8 @@ Future<Double> productFuture = FutureUtils.all(future0, future1, future2)
         .applift((i1, i2, d) -> i1 * i2 * d);
 ```
 
-其实完全没必要引入那么多临时变量，可以用 `FutureTuple3#defaults()` 来简化之。 例如：
+其实完全没必要引入那么多临时变量，可以用 `FutureTuple3#defaults()`
+来简化之。 例如：
 
 ``` java
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
@@ -437,7 +438,8 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
 工厂方法 `tuple()` 创建了一个 `FutureTuple3` 对象，然后调用其 `defaults()`
 方法来设置各个默认值，再调用其 `join()` 方法得到一个 `CompositeFutureTuple3` 对象。
 
-`FutureTuple[2-9]` 的另一个好用的方法是 `fallback()`，与 `defaults()` 类似，可以一次性设置各个备用值。 例如：
+`FutureTuple[2-9]` 的另一个好用的方法是 `fallback()`，与 `defaults()` 类似，
+可以一次性设置各个备用值。例如：
 
 ``` java
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
@@ -447,8 +449,8 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
 ```
 
 `FutureTuple[2-9]` 中还有其他类似方法：`mapEmpty()`、 `otherwise()`、 `otherwiseEmpty()`
-以及带有副作用的 `otherwise`、 `defaults()`、 `fallback()` 重载方法，参见其
-[Java doc](https://javadoc.io/doc/me.hltj/vertx-future-utils/latest/me/hltj/vertx/future/FutureTuple2.html#method.summary)
+以及带有副作用的 `otherwise`、 `defaults()`、 `fallback()` 重载方法，
+参见其 [Java doc](https://javadoc.io/doc/me.hltj/vertx-future-utils/latest/me/hltj/vertx/future/FutureTuple2.html#method.summary)
 。例如：
 
 ``` java

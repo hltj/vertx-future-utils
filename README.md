@@ -52,22 +52,11 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 
 ## Build Status
 
-| | Java 14 | Java 11 | Java 8| |--|---------|---------|-------|
-| [![Ubuntu 18.04](https://img.shields.io/badge/Ubuntu_18-black?logo=ubuntu&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/1)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/2)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/3)](https://travis-ci.org/hltj/vertx-future-utils)
-|
-| [![macOS](https://img.shields.io/badge/macOS-black?logo=apple&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/4)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/5)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/6)](https://travis-ci.org/hltj/vertx-future-utils)
-|
-| [![Windows](https://img.shields.io/badge/Windows-black?logo=windows&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/7)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/8)](https://travis-ci.org/hltj/vertx-future-utils)
-| [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/9)](https://travis-ci.org/hltj/vertx-future-utils)
-|
+|  | Java 14 | Java 11 | Java 8|
+|--|---------|---------|-------|
+| [![Ubuntu 18.04](https://img.shields.io/badge/Ubuntu_18-black?logo=ubuntu&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/1)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/2)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/3)](https://travis-ci.org/hltj/vertx-future-utils) |
+| [![macOS](https://img.shields.io/badge/macOS-black?logo=apple&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/4)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/5)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/6)](https://travis-ci.org/hltj/vertx-future-utils) |
+| [![Windows](https://img.shields.io/badge/Windows-black?logo=windows&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/7)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/8)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/9)](https://travis-ci.org/hltj/vertx-future-utils) |
 
 ## Install
 
@@ -209,8 +198,8 @@ Future<Integer> countFuture = flatDefaultWith(countFuture, () -> getCountFutureV
 
 ### Empty to Failure
 
-If a `Future` failed or succeed with a non-null value, returns the `Future` itself. Otherwise (i.e. succeed with `null`)
-, returns a `Future` failed with a `NullPointerException`. e.g.:
+If a `Future` failed or succeed with a non-null value, returns the `Future` itself.
+Otherwise (i.e. succeed with `null`), returns a `Future` failed with a `NullPointerException`. e.g.:
 
 ``` java
 nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
@@ -218,8 +207,8 @@ nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
 
 ### Fallback Values on Failure/Empty
 
-If a `Future` failed or succeed with `null`, returns a `Future` that succeed with a default value. Otherwise (i.e.
-succeed with a non-null value), returns the `Future` itself. e.g.:
+If a `Future` failed or succeed with `null`, returns a `Future` that succeed with a default value.
+Otherwise (i.e. succeed with a non-null value), returns the `Future` itself. e.g.:
 
 ``` java
 Future<Integer> plusOneFuture = fallbackWith(intFuture, 0).map(i -> i + 1);
@@ -286,8 +275,8 @@ Future<User> userFuture = flatMapSome(userIdFuture, id -> getUserFuture(id));
 When a [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) failed, we cannot access
 the `CompositeFuture` itself directly inside the lambda argument of
 [`onComplete()`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onComplete-io.vertx.core.Handler-)
-or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-). A A
-workaround is introducing a local variable. e.g:
+or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-).
+A workaround is introducing a local variable. e.g:
 
 ``` java
 CompositeFuture composite = CompositeFuture.join(
@@ -303,8 +292,8 @@ composite.onFailure(t -> {
 });
 ```
 
-But this is not fluent and cause an extra variable introduced, especially we repeat to do this again and again. In this
-case, we can use `CompositeFutureWrapper#use()` instead. e.g.:
+But this is not fluent and cause an extra variable introduced, especially we repeat to do this again and again.
+In this case, we can use `CompositeFutureWrapper#use()` instead. e.g.:
 
 ``` java
 CompositeFutureWrapper.of(CompositeFuture.join(
@@ -324,8 +313,8 @@ While it's not recommended using `CompositeFutureWrapper` directly, please use m
 
 ### Mapping `CompositeFuture` on Failure
 
-When a `CompositeFuture` failed, the lambda passed to its `map()`/`flatMap()` method won't be invoked. If you still want
-to map the partial succeed results, you can use `CompositeFutureWrapper#through()` (or its alias
+When a `CompositeFuture` failed, the lambda passed to its `map()`/`flatMap()` method won't be invoked.
+If you still want to map the partial succeed results, you can use `CompositeFutureWrapper#through()` (or its alias
 `mapAnyway()`). e.g.:
 
 ``` java
@@ -361,8 +350,8 @@ Future<Double> productFuture = CompositeFuture.all(future0, future1).map(
 );
 ```
 
-The result `productFuture` is 'succeed with 7.0'? Unfortunately, NO. It is 'failed with a ClassCastException', because
-the type parameters are misspecified. They are `(Integer, Double)`, not `(Double, Integer)`!
+The result `productFuture` is 'succeed with 7.0'? Unfortunately, NO. It is 'failed with a ClassCastException',
+because the type parameters are misspecified. They are `(Integer, Double)`, not `(Double, Integer)`!
 We can use `CompositeFutureTuple2#applift()` (or its alias `mapTyped()`) to avoid this error-prone case. e.g.:
 
 ``` java
@@ -449,8 +438,8 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
 the factory method `tuple()` creates a `FutureTuple3` object, and then invoke its `defaults()`
 method to set default values, then invoke its `join()` method to get a `CompositeFutureTuple3` object.
 
-Another useful method of `FutureTuple[2-9]` is `fallback()`, just likes `defaults()`, we can use it to set the fallback
-values at once. e.g.:
+Another useful method of `FutureTuple[2-9]` is `fallback()`, just likes `defaults()`,
+we can use it to set the fallback values at once. e.g.:
 
 ``` java
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
@@ -460,8 +449,8 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
 ```
 
 There are other similar methods in `FutureTuple[2-9]`: `mapEmpty()`, `otherwise()`, `otherwiseEmpty()`
-and overload methods for `otherwise`, `defaults()`, `fallback()` with effect, see
-the [Java doc](https://javadoc.io/doc/me.hltj/vertx-future-utils/latest/me/hltj/vertx/future/FutureTuple2.html#method.summary)
+and overload methods for `otherwise`, `defaults()`, `fallback()` with effect,
+see the [Java doc](https://javadoc.io/doc/me.hltj/vertx-future-utils/latest/me/hltj/vertx/future/FutureTuple2.html#method.summary)
 . e.g.:
 
 ``` java
