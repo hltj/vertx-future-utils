@@ -1,40 +1,40 @@
 # vertx-future-utils
 
-Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vertx/core/Future.html).
+易用的 Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vertx/core/Future.html) 实用工具。
 
-[![Build Status](https://img.shields.io/travis/hltj/vertx-future-utils)](https://travis-ci.org/hltj/vertx-future-utils)
+[![构建状态](https://img.shields.io/travis/hltj/vertx-future-utils?label=构建)](https://travis-ci.org/hltj/vertx-future-utils)
 [![Maven Central](https://img.shields.io/maven-central/v/me.hltj/vertx-future-utils)](https://search.maven.org/search?q=g:me.hltj%20AND%20a:vertx-future-utils)
 [![javadoc](https://javadoc.io/badge2/me.hltj/vertx-future-utils/javadoc.svg)](https://javadoc.io/doc/me.hltj/vertx-future-utils)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/hltj/vertx-future-utils.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/hltj/vertx-future-utils/alerts/)
-[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/hltj/vertx-future-utils.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/hltj/vertx-future-utils/context:java)
-[![Codecov](https://img.shields.io/codecov/c/github/hltj/vertx-future-utils)](https://codecov.io/gh/hltj/vertx-future-utils)
-[![License: LGPL v3](https://img.shields.io/badge/license-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
-[![HitCount](http://hits.dwyl.io/hltj/vertx-future-utils.svg)](https://github.com/hltj/vertx-future-utils)
+[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/hltj/vertx-future-utils.svg?logo=lgtm&logoWidth=18&label=代码质量：java)](https://lgtm.com/projects/g/hltj/vertx-future-utils/context:java)
+[![测试覆盖率](https://img.shields.io/codecov/c/github/hltj/vertx-future-utils?label=测试覆盖)](https://codecov.io/gh/hltj/vertx-future-utils)
+[![授权许可：LGPL v3](https://img.shields.io/badge/授权许可-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![点击次数](http://hits.dwyl.io/hltj/vertx-future-utils.svg)](https://github.com/hltj/vertx-future-utils)
 
-🇺🇸 English | [🇨🇳 简体中文](README_zh_CN.md)
+[🇺🇸 English](README.md) | 🇨🇳 简体中文
 
-- [Compatibility](#compatibility)
-- [Build Status](#build-status)
-- [Install](#install)
+- [兼容性](#兼容性)
+- [构建状态](#构建状态)
+- [安装](#安装)
   - [Maven](#maven)
   - [Gradle Kotlin DSL](#gradle-kotlin-dsl)
   - [Gradle Groovy DSL](#gradle-groovy-dsl)
-  - [With `vertx-core` Excluded](#with-vertx-core-excluded)
-- [Usage Example](#usage-example)
-  - [Futurization](#futurization)
-  - [Wrapping Evaluation Result](#wrapping-evaluation-result)
-  - [Default Value on Empty](#default-value-on-empty)
-  - [Empty to Failure](#empty-to-failure)
-  - [Fallback Values on Failure/Empty](#fallback-values-on-failureempty)
-  - [Map Non-Null Value Only](#map-non-null-value-only)
-  - [Access `CompositeFuture` Itself on Failure](#access-compositefuture-itself-on-failure)
-  - [Mapping `CompositeFuture` on Failure](#mapping-compositefuture-on-failure)
-  - [Keep Generic Type of the Original `Future`s of `CompositeFuture`](#keep-generic-type-of-the-original-futures-of-compositefuture)
-  - [Mapping the Original `Future`s of a `CompositeFuture` on Failure](#mapping-the-original-futures-of-a-compositefuture-on-failure)
-  - [Access `CompositeFuture` and the Original `Future`s on Failure](#access-compositefuture-and-the-original-futures-on-failure)
-  - [Setting Default/Fallback Values before Composition](#setting-defaultfallback-values-before-composition)
+  - [排除 `vertx-core` 方式](#排除-vertx-core-方式)
+- [用法示例](#用法示例)
+  - [`Future` 化](#future-化)
+  - [包装求值结果](#包装求值结果)
+  - [为空时取默认值](#为空时取默认值)
+  - [空转为失败](#空转为失败)
+  - [失败或为空时取备用值](#失败或为空时取备用值)
+  - [只映射非空值](#只映射非空值)
+  - [失败时访问 `CompositeFuture` 自身](#失败时访问-compositefuture-自身)
+  - [失败时映射 `CompositeFuture`](#失败时映射-compositefuture)
+  - [保留 `CompositeFuture` 对应的各原始 `Future` 的泛型类型](#保留-compositefuture-对应的各原始-future-的泛型类型)
+  - [失败时映射 `CompositeFuture` 对应的各原始 `Future`](#失败时映射-compositefuture-对应的各原始-future)
+  - [失败时访问 `CompositeFuture` 以及各原始 `Future`](#失败时访问-compositefuture-以及各原始-future)
+  - [组合前批量设置默认/备用值](#组合前批量设置默认备用值)
 
-## Compatibility
+## 兼容性
 
 ### Java
 
@@ -45,12 +45,12 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 
 ### Vert.x
 
-- [x] 4.0.2 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 4.0.2（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 - [x] 4.0.0
-- [x] 3.9.0 - 3.9.5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
-- [x] 3.8.5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 3.9.0 - 3.9.5（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
+- [x] 3.8.5（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 
-## Build Status
+## 构建状态
 
 | | Java 14 | Java 11 | Java 8| |--|---------|---------|-------|
 | [![Ubuntu 18.04](https://img.shields.io/badge/Ubuntu_18-black?logo=ubuntu&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils)
@@ -69,7 +69,7 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/9)](https://travis-ci.org/hltj/vertx-future-utils)
 |
 
-## Install
+## 安装
 
 ### Maven
 
@@ -93,14 +93,14 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1"
 implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1'
 ```
 
-### With `vertx-core` Excluded
+### 排除 `vertx-core` 方式
 
-The default dependent version of `io.vertx:vertx-core` is `4.0.0`, if you want to use `vertx-future-utils`
-with `vertx-core` `3.8.5`, `3.9.0` to `3.9.5`, or `4.0.2` please exclude the default one.
+默认依赖的 `io.vertx:vertx-core` 版本是 `4.0.0`，如果想将 `vertx-future-utils`
+用于 `vertx-core` 为 `3.8.5`、 `3.9.0` 到 `3.9.5` 或者 `4.0.2` 的场景，那么需要排除默认依赖。
 
 <details>
 
-#### for Maven
+#### 对于 Maven
 
 ``` xml
 <dependency>
@@ -116,7 +116,7 @@ with `vertx-core` `3.8.5`, `3.9.0` to `3.9.5`, or `4.0.2` please exclude the def
 </dependency>
 ```
 
-#### for Gradle Kotlin DSL
+#### 对于 Gradle Kotlin DSL
 
 ``` kotlin
 implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1") {
@@ -124,7 +124,7 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1"
 }
 ```
 
-#### for Gradle Groovy DSL
+#### 对于 Gradle Groovy DSL
 
 ``` groovy
 implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1', {
@@ -134,11 +134,11 @@ implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1', {
 
 </details>
 
-## Usage Example
+## 用法示例
 
-### Futurization
+### `Future` 化
 
-Convert a callback style Vert.x call to `Future` result style. e.g.:
+将回调风格的 Vert.x 调用转换为 `Future` 返回风格。例如：
 
 ``` java
 Future<Integer> lengthFuture = FutureUtils.<HttpResponse<Buffer>>futurize(handler ->
@@ -146,50 +146,49 @@ Future<Integer> lengthFuture = FutureUtils.<HttpResponse<Buffer>>futurize(handle
 ).map(response -> response.bodyAsString().length());
 ```
 
-Vert.x provided `Future` result style APIs since 4.0.0, while `futurize()` can also be used for third party APIs.
+Vert.x 自 4.0.0 起已经提供了 `Future` 返回风格的 API，当然 `futurize()` 还可以用于第三方 API。
 
-### Wrapping Evaluation Result
+### 包装求值结果
 
-Wraps an evaluation result within `Future`. e.g.:
-
-``` java
-Future<Integer> futureA = wrap(() -> Integer.parseInt("1")); // Succeed with 1
-Future<Integer> futureB = wrap(() -> Integer.parseInt("@")); // Failed with a NumberFormatException
-```
-
-Wraps a function application result within `Future`. e.g.:
+将求值结果包装到 `Future` 中。例如：
 
 ``` java
-Future<Integer> futureA = wrap("1", Integer::parseInt); // Succeed with 1
-Future<Integer> futureB = wrap("@", Integer::parseInt); // Failed with a NumberFormatException
+Future<Integer> futureA = wrap(() -> Integer.parseInt("1")); // 成功值为 1
+Future<Integer> futureB = wrap(() -> Integer.parseInt("@")); // 失败异常为 NumberFormatException
 ```
 
-If the evaluation result itself is a `Future`, use `joinWrap()`(or its alias `flatWrap()`)
-to flatten the nested result `Future`s. e.g.:
+将函数应用的结果包装到 `Future` 中。例如：
+
+``` java
+Future<Integer> futureA = wrap("1", Integer::parseInt); // 成功值为 1
+Future<Integer> futureB = wrap("@", Integer::parseInt); // 失败异常为 NumberFormatException
+```
+
+如果求值结果自身就是 `Future`，那么可以使用 `joinWrap()`（或其别名 `flatWrap()`） 将嵌套的两层 `Future` 展平。例如：
 
 ``` java
 Future<Integer> future0 = wrap("0", Integer::parseInt);
 Future<Integer> future1 = wrap("1", Integer::parseInt);
 
-Future<Integer> futureA = joinWrap(() -> future0.map(i -> 2 / i)); // Failed with a ArithmeticException
-Future<Integer> futureB = joinWrap(() -> future1.map(i -> 2 / i)); // Succeed with 2
+Future<Integer> futureA = joinWrap(() -> future0.map(i -> 2 / i)); // 失败异常为 ArithmeticException
+Future<Integer> futureB = joinWrap(() -> future1.map(i -> 2 / i)); // 成功值为 2
 
 Function<String, Future<Integer>> stringToIntFuture = s -> FutureUtils.wrap(s, Integer::parseInt);
 
-Future<Integer> futureC = joinWrap("1", stringToIntFuture); // Succeed with 1
-Future<Integer> futureD = joinWrap("@", stringToIntFuture); // Failed with a NumberFormatException
+Future<Integer> futureC = joinWrap("1", stringToIntFuture); // 成功值为 1
+Future<Integer> futureD = joinWrap("@", stringToIntFuture); // 失败异常为 NumberFormatException
 ```
 
-### Default Value on Empty
+### 为空时取默认值
 
-If a `Future` succeed with `null`, map it with a default value. e.g.:
+如果一个 `Future` 成功值为 `null`，那么将其值以默认值取代。例如：
 
 ``` java
-// Succeed with 1
+// 成功值为 1
 Future<Integer> plusOneFuture = defaultWith(Future.succeededFuture(), 0).map(i -> i + 1);
 ```
 
-the lazy version:
+惰性求值版：
 
 ``` java
 Future<Double> doubleFuture = FutureUtils.<Double>defaultWith(Future.succeededFuture(), () -> {
@@ -199,33 +198,31 @@ Future<Double> doubleFuture = FutureUtils.<Double>defaultWith(Future.succeededFu
 }).map(d -> d + 1);
 ```
 
-If you want to replace the `Future` (succeed with `null`) with another `Future`
-(asynchronous and/or maybe failed), you can use`flatDefaultWith()`. e.g.:
+如果想将值为 `null` 的 `Future` 替换为另一个 `Future`
+（异步且/或可能失败），那么可以使用 `flatDefaultWith()`。例如：
 
 ``` java
 Future<Integer> cachedCountFuture = getCountFutureFromCache().otherwiseEmpty();
 Future<Integer> countFuture = flatDefaultWith(countFuture, () -> getCountFutureViaHttp());
 ```
 
-### Empty to Failure
+### 空转为失败
 
-If a `Future` failed or succeed with a non-null value, returns the `Future` itself. Otherwise (i.e. succeed with `null`)
-, returns a `Future` failed with a `NullPointerException`. e.g.:
+如果 `Future` 失败或者成功值非空，那么返回该 `Future` 自身。 否则（即成功值为 `null`） 返回失败异常为 `NullPointerException` 的 `Future`。例如：
 
 ``` java
 nonEmpty(future).onFailure(t -> log.error("either failed or empty, ", t);
 ```
 
-### Fallback Values on Failure/Empty
+### 失败或为空时取备用值
 
-If a `Future` failed or succeed with `null`, returns a `Future` that succeed with a default value. Otherwise (i.e.
-succeed with a non-null value), returns the `Future` itself. e.g.:
+如果 `Future` 失败或成功值为 `null`，那么返回成功值为备用值的 `Future`。 否则（即成功值非空） 返回该 `Future` 自身，例如：
 
 ``` java
 Future<Integer> plusOneFuture = fallbackWith(intFuture, 0).map(i -> i + 1);
 ```
 
-the lazy version:
+惰性求值版：
 
 ``` java
 Future<Double> plusOneFuture = FutureUtils.<Double>fallbackWith(doubleFuture, throwableOpt ->
@@ -239,7 +236,7 @@ Future<Double> plusOneFuture = FutureUtils.<Double>fallbackWith(doubleFuture, th
 ).map(d -> d + 1);
 ```
 
-or with separated lambdas for failure & empty:
+还可以对失败与为空分别用不同的 lambda 表达式：
 
 ``` java
 Future<Double> plusOneFuture = fallbackWith(doubleFuture, error -> {
@@ -251,8 +248,8 @@ Future<Double> plusOneFuture = fallbackWith(doubleFuture, error -> {
 }).map(d -> d + 1);
 ```
 
-If you want to replace the `Future` (failed or succeed with `null`) with another `Future`
-(asynchronous and/or maybe failed), you can use`flatFallbackWith()`. e.g.:
+如果想将失败或成功值为空的 `Future` 替换为另一个 `Future`
+（异步且/或可能失败），那么可以使用 `flatFallbackWith()`。例如：
 
 ``` java
 Future<Integer> cachedCountFuture = getCountFutureFromCache();
@@ -262,10 +259,9 @@ Future<Integer> countFuture2 = flatFallbackWith(
 );
 ```
 
-### Map Non-Null Value Only
+### 只映射非空值
 
-Maps a `Future` only when it succeeds with a non-null value. If the parameter `Future` succeeds with `null`,
-`mapSome()` also returns a `Future` succeed with `null`. e.g.:
+仅在 `Future` 成功值非空时对其值进行映射。如果该参数 `Future` 成功值为 `null`， 那么 `mapSome()` 也返回一个成功值为 `null` 的 `Future`。例如：
 
 ``` java
 Future<List<Integer>> intsFuture = getIntegers();
@@ -274,20 +270,19 @@ Future<List<String>> hexStringsFuture = mapSome(intsFuture, ints ->
 );
 ```
 
-If the mapper itself returns a `Future`, you can use `flatMapSome()` to flatten the nested `Future`s. e.g.:
+如果映射函数自身就返回 `Future`，那么可以使用 `flatMapSome()` 来展平嵌套的 `Future`。例如：
 
 ``` java
 Future<String> userIdFuture = getUserIdFuture();
 Future<User> userFuture = flatMapSome(userIdFuture, id -> getUserFuture(id));
 ```
 
-### Access `CompositeFuture` Itself on Failure
+### 失败时访问 `CompositeFuture` 自身
 
-When a [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) failed, we cannot access
-the `CompositeFuture` itself directly inside the lambda argument of
+当 [`CompositeFuture`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html) 失败时， 无法直接在
 [`onComplete()`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onComplete-io.vertx.core.Handler-)
-or [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-). A A
-workaround is introducing a local variable. e.g:
+或 [`onFailure`](https://vertx.io/docs/apidocs/io/vertx/core/CompositeFuture.html#onFailure-io.vertx.core.Handler-)
+的参数 lambda 表达式内部访问该 `CompositeFuture` 自身。 一个变通方式是引入局部变量。例如：
 
 ``` java
 CompositeFuture composite = CompositeFuture.join(
@@ -303,8 +298,7 @@ composite.onFailure(t -> {
 });
 ```
 
-But this is not fluent and cause an extra variable introduced, especially we repeat to do this again and again. In this
-case, we can use `CompositeFutureWrapper#use()` instead. e.g.:
+但是这并不流畅，而且还会引入额外的变量，当一次次这样重复时尤为明显。 对于这种情况， 可以改用 `CompositeFutureWrapper#use()`。例如：
 
 ``` java
 CompositeFutureWrapper.of(CompositeFuture.join(
@@ -319,14 +313,14 @@ CompositeFutureWrapper.of(CompositeFuture.join(
 }));
 ```
 
-While it's not recommended using `CompositeFutureWrapper` directly, please use more powerful subclasses
-`CompositeFutureTuple[2-9]` instead.
+当然，并不建议直接使用 `CompositeFutureWrapper`，请改用更为强大的子类
+`CompositeFutureTuple[2-9]`。
 
-### Mapping `CompositeFuture` on Failure
+### 失败时映射 `CompositeFuture`
 
-When a `CompositeFuture` failed, the lambda passed to its `map()`/`flatMap()` method won't be invoked. If you still want
-to map the partial succeed results, you can use `CompositeFutureWrapper#through()` (or its alias
-`mapAnyway()`). e.g.:
+当 `CompositeFuture` 失败时，不会调用其 `map()`/`flatMap()` 方法传入的 lambda 表达式。
+如果你还是想映射其中部分成功的结果，那么可以使用 `CompositeFutureWrapper#through()`（或其别名
+`mapAnyway()`）。例如：
 
 ``` java
 Future<Double> sumFuture = CompositeFutureWrapper.of(
@@ -336,8 +330,8 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 );
 ```
 
-If the mapper itself returns a `Future`, we can use `CompositeFutureWrapper#joinThrough()` (or its alias
-`flatMapAnyway()`) to flatten the nested result `Future`s. e.g.:
+如果映射函数自身就返回 `Future`，那么可以使用 `CompositeFutureWrapper#joinThrough()`（或其别名
+`flatMapAnyway()`）将嵌套的结果 `Future` 展平。例如：
 
 ``` java
 Future<Double> sumFuture = CompositeFutureWrapper.of(
@@ -345,13 +339,12 @@ Future<Double> sumFuture = CompositeFutureWrapper.of(
 ).joinThrough(composite -> wrap(() -> composite.<Double>resultAt(0) + composite.<Integer>resultAt(1)));
 ```
 
-While it's not recommended using `CompositeFutureWrapper` directly, please use more powerful subclasses
-`CompositeFutureTuple[2-9]` instead.
+当然，并不建议直接使用 `CompositeFutureWrapper`，请改用更为强大的子类
+`CompositeFutureTuple[2-9]`。
 
-### Keep Generic Type of the Original `Future`s of `CompositeFuture`
+### 保留 `CompositeFuture` 对应的各原始 `Future` 的泛型类型
 
-In a `CompositeFuture`, all the original `Future`s are type erased.
-We have to specify type parameters for the results frequently. e.g.:
+在 `CompositeFuture` 中，所有原始 `Future` 的类型都被擦除了。 于是必须频繁指定结果的类型参数。 例如：
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -361,9 +354,8 @@ Future<Double> productFuture = CompositeFuture.all(future0, future1).map(
 );
 ```
 
-The result `productFuture` is 'succeed with 7.0'? Unfortunately, NO. It is 'failed with a ClassCastException', because
-the type parameters are misspecified. They are `(Integer, Double)`, not `(Double, Integer)`!
-We can use `CompositeFutureTuple2#applift()` (or its alias `mapTyped()`) to avoid this error-prone case. e.g.:
+其结果 `productFuture` 是“成功，值为 7.0”，没错吧？很不幸，错了。而是“失败，错误为 ClassCastException”， 因为类型参数指定错了。应该是 `(Integer, Double)`
+，而不是 `(Double, Integer)`！ 可以用 `CompositeFutureTuple2#applift()`（或其别名 `mapTyped()`）来避免这种易错情形。例如：
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -371,12 +363,10 @@ Future<Double> future1 = Future.succeededFuture(3.5);
 Future<Double> productFuture = FutureUtils.all(future0, future1).applift((i, d) -> i * d);
 ```
 
-We needn't specify the type parameters manually inside the lambda argument of `applift()` anymore,
-because the `CompositeFutureTuple2` has already kept them.
-Moreover, the code is significantly simplified with the boilerplate code reduced.
+在 `applift()` 的参数 lambda 表达式内部不需要再手动指定类型参数了， 因为 `CompositeFutureTuple2` 已经保留了这些类型。 此外，由于样板代码的减少，上述代码显著简化了。
 
-If the lambda result itself is a `Future`, we can use `CompositeFutureTuple2#joinApplift()` (or its alias
-`flatMapTyped()`) to flatten the nested result `Future`s. e.g:
+如果该 lambda 表达式的结果自身就是 `Future`，那么可以使用 `CompositeFutureTuple2#joinApplift()`（或其别名
+`flatMapTyped()`）来展平嵌套的结果 `Future`。例如：
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
@@ -384,14 +374,13 @@ Future<Double> future1 = Future.failedFuture("error");
 Future<Double> productFuture = FutureUtils.all(future0, future1).joinApplift((i, d) -> wrap(() -> i * d));
 ```
 
-There are also `any()` and `join()` factory methods, and `CompositeFutureTuple3` to `CompositeFutureTuple9`
-for 3-9 arities.
+还有 `any()` 与 `join()` 工厂方法，以及用于 3-9 元的
+`CompositeFutureTuple3` 到 `CompositeFutureTuple9`。
 
-### Mapping the Original `Future`s of a `CompositeFuture` on Failure
+### 失败时映射 `CompositeFuture` 对应的各原始 `Future`
 
-In `CompositeFutureTuple[2-9]`, there are additional overload `through()` & `joinThrough()` (and their alias
-`mapAnyway` & `flatMapAnyway`) methods, they provide the original `Future`s as parameters to invoke the lambda argument.
-e.g. :
+在 `CompositeFutureTuple[2-9]` 中，还重载了 `through()` 与 `joinThrough()`（及其别名
+`mapAnyway` 与 `flatMapAnyway`）方法，它们以各原始 `Future` 作为参数来调用其 lambda 表达式参数。 例如：
 
 ``` java
 Future<Double> sumFuture = FutureUtils.join(
@@ -399,10 +388,10 @@ Future<Double> sumFuture = FutureUtils.join(
 ).through((fut0, fut1) -> fallbackWith(fut0, 0.0).result() + fallbackWith(fut1, 0).result());
 ``` 
 
-### Access `CompositeFuture` and the Original `Future`s on Failure
+### 失败时访问 `CompositeFuture` 以及各原始 `Future`
 
-In `CompositeFutureTuple[2-9]`, there is an additional overload `use()` method, it provides the `CompositeFuture` itself
-as well as the original `Future`s as parameters to invoke the lambda argument. e.g.:
+在 `CompositeFutureTuple[2-9]` 中，还重载了 `use()` 方法，它以该 `CompositeFuture`
+自身以及各原始 `Future` 作为参数来调用其 lambda 表达式参数。例如：
 
 ``` java
 Future<Double> future0 = Future.succeededFuture(1.0);
@@ -413,7 +402,7 @@ FutureUtils.join(future0, future1).use((composite, fut0, fut1) -> composite.onCo
 }));
 ```
 
-Moreover, there is a new method `with()` that likes `use()` but return a value. e.g.:
+此外，还有一个新方法 `with()`，它与 `use()` 类似，只是还返回一个值。例如：
 
 ``` java
 Future<Double> future0 = Future.succeededFuture(1.0);
@@ -424,9 +413,9 @@ Future<String> stringFuture = join(future0, future1).with((composite, fut0, fut1
 ));
 ```
 
-### Setting Default/Fallback Values before Composition
+### 组合前批量设置默认/备用值
 
-We can set default values for each original `Future`s before composition to avoid `null` check. e.g.:
+我们可以在组合之前为每个原始 `Future` 设置默认值以避免空（`null`）检测。例如：
 
 ``` java
 Future<Integer> future0 = defaultWith(futureA, 1);
@@ -436,8 +425,7 @@ Future<Double> productFuture = FutureUtils.all(future0, future1, future2)
         .applift((i1, i2, d) -> i1 * i2 * d);
 ```
 
-In fact, it's unnecessary to introduce so many temporary variables at all, we can use `FutureTuple3#defaults()`
-to simplify it. e.g.:
+其实完全没必要引入那么多临时变量，可以用 `FutureTuple3#defaults()` 来简化之。 例如：
 
 ``` java
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
@@ -446,11 +434,10 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
         .applift((i1, i2, d) -> i1 * i2 * d);
 ```
 
-the factory method `tuple()` creates a `FutureTuple3` object, and then invoke its `defaults()`
-method to set default values, then invoke its `join()` method to get a `CompositeFutureTuple3` object.
+工厂方法 `tuple()` 创建了一个 `FutureTuple3` 对象，然后调用其 `defaults()`
+方法来设置各个默认值，再调用其 `join()` 方法得到一个 `CompositeFutureTuple3` 对象。
 
-Another useful method of `FutureTuple[2-9]` is `fallback()`, just likes `defaults()`, we can use it to set the fallback
-values at once. e.g.:
+`FutureTuple[2-9]` 的另一个好用的方法是 `fallback()`，与 `defaults()` 类似，可以一次性设置各个备用值。 例如：
 
 ``` java
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
@@ -459,10 +446,10 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
         .applift((i1, i2, d) -> i1 * i2 * d);
 ```
 
-There are other similar methods in `FutureTuple[2-9]`: `mapEmpty()`, `otherwise()`, `otherwiseEmpty()`
-and overload methods for `otherwise`, `defaults()`, `fallback()` with effect, see
-the [Java doc](https://javadoc.io/doc/me.hltj/vertx-future-utils/latest/me/hltj/vertx/future/FutureTuple2.html#method.summary)
-. e.g.:
+`FutureTuple[2-9]` 中还有其他类似方法：`mapEmpty()`、 `otherwise()`、 `otherwiseEmpty()`
+以及带有副作用的 `otherwise`、 `defaults()`、 `fallback()` 重载方法，参见其
+[Java doc](https://javadoc.io/doc/me.hltj/vertx-future-utils/latest/me/hltj/vertx/future/FutureTuple2.html#method.summary)
+。例如：
 
 ``` java
 Future<String> productFutureA = tuple(futureA, futureB, futureC)
