@@ -16,7 +16,7 @@ repositories {
     mavenCentral()
 }
 
-val vertxVersion = "4.0.2"
+val vertxVersion = "4.0.3"
 
 dependencies {
     val lombokDependency = "org.projectlombok:lombok:1.18.18"

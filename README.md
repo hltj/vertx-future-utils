@@ -45,7 +45,7 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 
 ### Vert.x
 
-- [x] 4.0.2 ([with `vertx-core` excluded](#with-vertx-core-excluded))
+- [x] 4.0.2 - 4.0.3 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 4.0.0
 - [x] 3.9.0 - 3.9.5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 3.8.5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
@@ -85,7 +85,7 @@ implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1'
 ### With `vertx-core` Excluded
 
 The default dependent version of `io.vertx:vertx-core` is `4.0.0`, if you want to use `vertx-future-utils`
-with `vertx-core` `3.8.5`, `3.9.0` to `3.9.5`, or `4.0.2` please exclude the default one.
+with `vertx-core` `3.8.5`, `3.9.0` to `3.9.5`, or `4.0.2` to `4.0.3` please exclude the default one.
 
 <details>
 
