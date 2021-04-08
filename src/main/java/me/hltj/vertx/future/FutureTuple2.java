@@ -79,7 +79,7 @@ public final class FutureTuple2<T0, T1> {
     }
 
     /**
-     * Map the failure of the {@link Future}s to specific values, and execute @{code onFailure} before mapping.
+     * Map the failure of the {@link Future}s to specific values, and execute {@code onFailure} before mapping.
      * <p>
      * If the {@code onFailure} throws an exception, the returned {@code Future} will be failed with this exception.
      * Otherwise, the return value as the same as applying {@link Future#otherwise(Object)} to each {@code Future}.
@@ -118,7 +118,7 @@ public final class FutureTuple2<T0, T1> {
     }
 
     /**
-     * Map {@link Future}s that succeed with null to default values, and execute @{code onEmpty} before mapping.
+     * Map {@link Future}s that succeed with null to default values, and execute {@code onEmpty} before mapping.
      * <p>
      * If the {@code onEmpty} throws an exception, the returned {@code Future} will be failed with this exception.
      * Otherwise, the return value as the same as applying {@link FutureUtils#defaultWith(Future, Object)} to each
@@ -150,10 +150,10 @@ public final class FutureTuple2<T0, T1> {
     }
 
     /**
-     * Map {@link Future}s that failed or succeed with null to default values, and execute @{code onFailure}
-     * / @{code onEmpty} before mapping.
+     * Map {@link Future}s that failed or succeed with null to default values, and execute {@code onFailure}
+     * / {@code onEmpty} before mapping.
      * <p>
-     * If @{code onFailure} / {@code onEmpty} throws an exception,the returned {@code Future} will be failed with this
+     * If {@code onFailure} / {@code onEmpty} throws an exception,the returned {@code Future} will be failed with this
      * exception. Otherwise, the return value as the same as applying {@link FutureUtils#fallbackWith(Future, Object)}
      * to each {@code Future}.
      *

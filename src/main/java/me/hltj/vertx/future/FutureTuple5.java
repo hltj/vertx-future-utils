@@ -80,7 +80,7 @@ public final class FutureTuple5<T0, T1, T2, T3, T4> {
     }
 
     /**
-     * Map the failure of the {@link Future}s to specific values, and execute @{code onFailure} before mapping.
+     * Map the failure of the {@link Future}s to specific values, and execute {@code onFailure} before mapping.
      * <p>
      * It likes {@link FutureTuple2#otherwise(Consumer, Object, Object)} but with 5-arity.
      */
@@ -119,7 +119,7 @@ public final class FutureTuple5<T0, T1, T2, T3, T4> {
     }
 
     /**
-     * Map {@link Future}s that succeed with null to default values, and execute @{code onEmpty} before mapping.
+     * Map {@link Future}s that succeed with null to default values, and execute {@code onEmpty} before mapping.
      * <p>
      * It likes {@link FutureTuple2#defaults(Runnable, Object, Object)} but with 5-arity.
      */
@@ -146,8 +146,8 @@ public final class FutureTuple5<T0, T1, T2, T3, T4> {
     }
 
     /**
-     * Map {@link Future}s that failed or succeed with null to default values, and execute @{code onFailure}
-     * / @{code onEmpty} before mapping.
+     * Map {@link Future}s that failed or succeed with null to default values, and execute {@code onFailure}
+     * / {@code onEmpty} before mapping.
      * <p>
      * It likes {@link FutureTuple2#fallback(Consumer, Runnable, Object, Object)} but with 5-arity.
      */

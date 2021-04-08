@@ -175,9 +175,9 @@ public final class FutureUtils {
     }
 
     /**
-     * Apply the {code mapper} function to the {@link Future} on non-empty.
+     * Apply the {@code mapper} function to the {@link Future} on non-empty.
      * <p>
-     * When the {@code Future} succeeds with non-null value, the {code mapper} will be called with the completed value,
+     * When the {@code Future} succeeds with non-null value, the {@code mapper} will be called with the completed value,
      * and the result will be the value of the returned {@code Future}. otherwise, the succeeded null value or the
      * failure will be propagated to the returned {@code Future} and the {@code mapper} will not be called.
      *
@@ -193,9 +193,9 @@ public final class FutureUtils {
     }
 
     /**
-     * Compose the {@link Future} with the {code mapper} function on non-empty.
+     * Compose the {@link Future} with the {@code mapper} function on non-empty.
      * <p>
-     * When the {@code Future} succeeds with non-null value, the {code mapper} will be called with the completed value,
+     * When the {@code Future} succeeds with non-null value, the {@code mapper} will be called with the completed value,
      * and the result will be the returned {@code Future}. otherwise, the succeeded null value or the failure will be
      * propagated to the returned {@code Future} and the {@code mapper} will not be called.
      *
