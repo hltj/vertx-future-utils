@@ -19,7 +19,7 @@ repositories {
 val vertxVersion = "4.0.3"
 
 dependencies {
-    val lombokDependency = "org.projectlombok:lombok:1.18.18"
+    val lombokDependency = "org.projectlombok:lombok:1.18.20"
 
     compileOnly(lombokDependency)
     annotationProcessor(lombokDependency)
