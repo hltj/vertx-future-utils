@@ -45,8 +45,8 @@
 
 ### Vert.x
 
-- [x] 4.0.2 - 4.0.3（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
-- [x] 4.0.0
+- [x] 4.0.3
+- [x] 4.0.0 - 4.0.2（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 - [x] 3.9.0 - 3.9.5（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 - [x] 3.8.5（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 
@@ -66,26 +66,26 @@
 <dependency>
   <groupId>me.hltj</groupId>
   <artifactId>vertx-future-utils</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 
 ### Gradle Kotlin DSL
 
 ``` kotlin
-implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1")
+implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.2")
 ```
 
 ### Gradle Groovy DSL
 
 ``` groovy
-implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1'
+implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.2'
 ```
 
 ### 排除 `vertx-core` 方式
 
-默认依赖的 `io.vertx:vertx-core` 版本是 `4.0.0`，如果想将 `vertx-future-utils`
-用于 `vertx-core` 为 `3.8.5`、 `3.9.0` 到 `3.9.5` 或者 `4.0.2` to `4.0.3` 的场景，那么需要排除默认依赖。
+默认依赖的 `io.vertx:vertx-core` 版本是 `4.0.3`，如果想将 `vertx-future-utils`
+用于 `vertx-core` 为 `3.8.5`、 `3.9.0` 到 `3.9.5` 或者 `4.0.0` 到 `4.0.2` 的场景，那么需要排除默认依赖。
 
 <details>
 
@@ -95,7 +95,7 @@ implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1'
 <dependency>
   <groupId>me.hltj</groupId>
   <artifactId>vertx-future-utils</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <exclusions>
     <exclusion>
       <groupId>io.vertx</groupId>
@@ -108,7 +108,7 @@ implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1'
 #### 对于 Gradle Kotlin DSL
 
 ``` kotlin
-implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1") {
+implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.2") {
     exclude(group = "io.vertx", module = "vertx-core")
 }
 ```
@@ -116,7 +116,7 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1"
 #### 对于 Gradle Groovy DSL
 
 ``` groovy
-implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1', {
+implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.2', {
     exclude group: "io.vertx", module: "vertx-core"
 }
 ```

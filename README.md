@@ -45,8 +45,8 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 
 ### Vert.x
 
-- [x] 4.0.2 - 4.0.3 ([with `vertx-core` excluded](#with-vertx-core-excluded))
-- [x] 4.0.0
+- [x] 4.0.3
+- [x] 4.0.0 - 4.0.2 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 3.9.0 - 3.9.5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 - [x] 3.8.5 ([with `vertx-core` excluded](#with-vertx-core-excluded))
 
@@ -66,26 +66,26 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 <dependency>
   <groupId>me.hltj</groupId>
   <artifactId>vertx-future-utils</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 
 ### Gradle Kotlin DSL
 
 ``` kotlin
-implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1")
+implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.2")
 ```
 
 ### Gradle Groovy DSL
 
 ``` groovy
-implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1'
+implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.2'
 ```
 
 ### With `vertx-core` Excluded
 
-The default dependent version of `io.vertx:vertx-core` is `4.0.0`, if you want to use `vertx-future-utils`
-with `vertx-core` `3.8.5`, `3.9.0` to `3.9.5`, or `4.0.2` to `4.0.3` please exclude the default one.
+The default dependent version of `io.vertx:vertx-core` is `4.0.3`, if you want to use `vertx-future-utils`
+with `vertx-core` `3.8.5`, `3.9.0` to `3.9.5`, or `4.0.0` to `4.0.2` please exclude the default one.
 
 <details>
 
@@ -95,7 +95,7 @@ with `vertx-core` `3.8.5`, `3.9.0` to `3.9.5`, or `4.0.2` to `4.0.3` please excl
 <dependency>
   <groupId>me.hltj</groupId>
   <artifactId>vertx-future-utils</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <exclusions>
     <exclusion>
       <groupId>io.vertx</groupId>
@@ -108,7 +108,7 @@ with `vertx-core` `3.8.5`, `3.9.0` to `3.9.5`, or `4.0.2` to `4.0.3` please excl
 #### for Gradle Kotlin DSL
 
 ``` kotlin
-implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1") {
+implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.2") {
     exclude(group = "io.vertx", module = "vertx-core")
 }
 ```
@@ -116,7 +116,7 @@ implementation(group = "me.hltj", name = "vertx-future-utils", version = "1.1.1"
 #### for Gradle Groovy DSL
 
 ``` groovy
-implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.1', {
+implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.2', {
     exclude group: "io.vertx", module: "vertx-core"
 }
 ```
