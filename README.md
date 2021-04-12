@@ -41,7 +41,7 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 - [x] Java 8
 - [x] Java 11
 - [x] Java 14
-- [x] Java 15
+- [x] Java 16
 
 ### Vert.x
 
