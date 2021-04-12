@@ -2,13 +2,13 @@ language: java
 
 matrix:
   include:
-    - name: Ubuntu 18.04 OpenJDK 14
-      dist: bionic
+    - name: Ubuntu 20.04 OpenJDK 16
+      dist: focal
       jdk:
-        - openjdk14
+        - openjdk16
 
-    - name: Ubuntu 18.04 OpenJDK 11
-      dist: bionic
+    - name: Ubuntu 20.04 OpenJDK 11
+      dist: focal
       jdk:
         - openjdk11
 
@@ -19,9 +19,11 @@ matrix:
       env:
         - CODECOV=1
 
-    - name: macOS 10.15.4 OpenJDK 14
+    - name: macOS 10.15.7 OpenJDK 16
       os: osx
-      osx_image: xcode11.6
+      osx_image: xcode12.2
+      env:
+        - JAVAVER=16
 
     - name: macOS 10.13 OpenJDK 11
       os: osx
@@ -31,11 +33,11 @@ matrix:
       os: osx
       osx_image: xcode9.3
 
-    - name: Windows 18.09 OpenJDK 14
+    - name: Windows 18.09 OpenJDK 16
       os: windows
       language: bash
       env:
-        - JAVAVER=14
+        - JAVAVER=16
 
     - name: Windows 18.09 Zulu OpenJDK 11
       os: windows
@@ -53,15 +55,27 @@ before_install:
   - |
     if [ "$TRAVIS_OS_NAME" == "windows" ]
     then
-      if ((JAVAVER == 14))
+      if ((JAVAVER == 16))
       then
-        choco install openjdk --version=14.0.1 -y
-        export JAVA_HOME=${JAVA_HOME:-/c/Program Files/OpenJDK/jdk-14.0.1}
+        choco install openjdk --version=16.0.0 -y
+        export JAVA_HOME=${JAVA_HOME:-/c/Program Files/OpenJDK/jdk-16}
       else
         choco install zulu$JAVAVER -y
         export JAVA_HOME=${JAVA_HOME:-/c/Program Files/Zulu/zulu-$JAVAVER}
       fi
       export PATH=$JAVA_HOME/bin:$PATH
+    elif [ "$TRAVIS_OS_NAME" == "osx" ]
+    then
+      if ((JAVAVER == 16))
+      then
+        cd /tmp
+        wget https://download.java.net/java/GA/jdk16/7863447f0ab643c585b9bdebf67c69db/36/GPL/openjdk-16_osx-x64_bin.tar.gz
+        tar mxf openjdk-16_osx-x64_bin.tar.gz
+        sudo mv jdk-16.jdk /Library/Java/JavaVirtualMachines/
+        export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-16.jdk/Contents/Home
+        java --version
+        cd -
+      fi
     fi
 
 script:
