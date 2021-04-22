@@ -1,11 +1,10 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import com.jfrog.bintray.gradle.BintrayExtension
 
 plugins {
     java
     `maven-publish`
     jacoco
-    id("com.jfrog.bintray") version "1.8.5"
+    signing
     id("com.github.ben-manes.versions") version "0.38.0"
 }
 
@@ -72,7 +71,7 @@ tasks.jacocoTestReport {
 
 publishing {
     publications {
-        create<MavenPublication>("bintray") {
+        create<MavenPublication>("mavenJava") {
             from(components["java"])
             pom {
                 name.set("Vert.x Future Utils")
@@ -97,30 +96,25 @@ publishing {
             }
         }
     }
-}
 
-bintray {
-    user = propertyOrEnv("bintray.user", "BINTRAY_USER")
-    key = propertyOrEnv("bintray.key", "BINTRAY_KEY")
-    setPublications("bintray")
-
-    with(pkg) {
-        repo = "mvn"
-        name = project.name
-        vcsUrl = "https://github.com/hltj/vertx-future-utils.git"
-        setLicenses("LGPL-3.0")
-        setLabels("vert.x", "future", "utilities", "utility-library")
-
-        with(version) {
-            val versionString = project.version.toString()
-            name = versionString
-            vcsTag = versionString
+    repositories {
+        maven {
+            name = "sonatype"
+            setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            credentials {
+                username = propertyOrEnv("ossrhUsername", "OSSRH_USER")
+                password = propertyOrEnv("ossrhPassword", "OSSRH_PASS")
+            }
         }
     }
 }
 
-fun BintrayExtension.propertyOrEnv(propertyName: String, envName: String) =
+fun propertyOrEnv(propertyName: String, envName: String) =
         project.properties[propertyName]?.toString() ?: System.getenv(envName)
+
+signing {
+    sign(publishing.publications["mavenJava"])
+}
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     rejectVersionIf {
