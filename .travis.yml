@@ -19,11 +19,9 @@ matrix:
       env:
         - CODECOV=1
 
-    - name: macOS 10.15.7 OpenJDK 16
+    - name: macOS 11.3 OpenJDK 16
       os: osx
-      osx_image: xcode12.2
-      env:
-        - JAVAVER=16
+      osx_image: xcode12.5
 
     - name: macOS 10.13 OpenJDK 11
       os: osx
@@ -64,18 +62,6 @@ before_install:
         export JAVA_HOME=${JAVA_HOME:-/c/Program Files/Zulu/zulu-$JAVAVER}
       fi
       export PATH=$JAVA_HOME/bin:$PATH
-    elif [ "$TRAVIS_OS_NAME" == "osx" ]
-    then
-      if ((JAVAVER == 16))
-      then
-        cd /tmp
-        wget https://download.java.net/java/GA/jdk16/7863447f0ab643c585b9bdebf67c69db/36/GPL/openjdk-16_osx-x64_bin.tar.gz
-        tar mxf openjdk-16_osx-x64_bin.tar.gz
-        sudo mv jdk-16.jdk /Library/Java/JavaVirtualMachines/
-        export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-16.jdk/Contents/Home
-        java --version
-        cd -
-      fi
     fi
 
 script:
