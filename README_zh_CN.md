@@ -2,7 +2,7 @@
 
 易用的 Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vertx/core/Future.html) 实用工具。
 
-[![构建状态](https://img.shields.io/travis/hltj/vertx-future-utils?label=构建)](https://travis-ci.org/hltj/vertx-future-utils)
+[![构建状态](https://img.shields.io/github/workflow/status/hltj/vertx-future-utils/Build?logo=github&label=构建)](https://github.com/hltj/vertx-future-utils/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/me.hltj/vertx-future-utils)](https://search.maven.org/artifact/me.hltj/vertx-future-utils)
 [![javadoc](https://javadoc.io/badge2/me.hltj/vertx-future-utils/javadoc.svg)](https://javadoc.io/doc/me.hltj/vertx-future-utils)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/hltj/vertx-future-utils.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/hltj/vertx-future-utils/alerts/)
@@ -14,7 +14,7 @@
 [🇺🇸 English](README.md) | 🇨🇳 简体中文
 
 - [兼容性](#兼容性)
-- [构建状态](#构建状态)
+<!-- - [构建状态](#构建状态) -->
 - [安装](#安装)
   - [Maven](#maven)
   - [Gradle Kotlin DSL](#gradle-kotlin-dsl)
@@ -50,6 +50,7 @@
 - [x] 3.9.0 - 3.9.5（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 - [x] 3.8.5（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 
+<!--
 ## 构建状态
 
 |  | Java 16 | Java 11 | Java 8|
@@ -57,6 +58,7 @@
 | [![Ubuntu](https://img.shields.io/badge/Ubuntu-black?logo=ubuntu&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/1)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/2)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/3)](https://travis-ci.org/hltj/vertx-future-utils) |
 | [![macOS](https://img.shields.io/badge/macOS-black?logo=apple&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/4)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/5)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/6)](https://travis-ci.org/hltj/vertx-future-utils) |
 | [![Windows](https://img.shields.io/badge/Windows-black?logo=windows&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/7)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/8)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/9)](https://travis-ci.org/hltj/vertx-future-utils) |
+-->
 
 ## 安装
 
