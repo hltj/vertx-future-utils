@@ -5,7 +5,7 @@ plugins {
     `maven-publish`
     jacoco
     signing
-    id("com.github.ben-manes.versions") version "0.38.0"
+    id("com.github.ben-manes.versions") version "0.39.0"
 }
 
 group = "me.hltj"
@@ -25,7 +25,7 @@ dependencies {
     implementation(group = "io.vertx", name = "vertx-core", version = vertxVersion)
     testCompileOnly(lombokDependency)
     testAnnotationProcessor(lombokDependency)
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.7.1")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.7.2")
 }
 
 java {
@@ -63,9 +63,9 @@ jacoco {
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
-        xml.isEnabled = true
-        xml.destination = file("$buildDir/reports/jacoco/report.xml")
-        csv.isEnabled = false
+        xml.required.set(true)
+        xml.outputLocation.set(file("$buildDir/reports/jacoco/report.xml"))
+        csv.required.set(false)
     }
 }
 
