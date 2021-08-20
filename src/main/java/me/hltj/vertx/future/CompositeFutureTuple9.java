@@ -51,7 +51,7 @@ import static me.hltj.vertx.FutureUtils.joinWrap;
  * @since 1.0.0
  */
 @ToString(includeFieldNames = false)
-final public class CompositeFutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> extends CompositeFutureWrapper {
+public final class CompositeFutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> extends CompositeFutureWrapper {
     private final FutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> tuple9;
 
     private CompositeFutureTuple9(CompositeFuture composite, FutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> tuple9) {
@@ -158,6 +158,7 @@ final public class CompositeFutureTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> ext
      * <p>
      * It likes {@link CompositeFutureTuple2#joinThrough(BiFunction)} but with 9-arity.
      */
+    @SuppressWarnings("java:S117")
     public <R> Future<R> joinThrough(
             Function9<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>, Future<T6>, Future<T7>,
                     Future<T8>, Future<R>> function9

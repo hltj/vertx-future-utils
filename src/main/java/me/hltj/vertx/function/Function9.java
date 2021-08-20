@@ -45,6 +45,7 @@ import java.util.function.Function;
  * @see Function
  * @since 1.0.0
  */
+@SuppressWarnings("java:S107")
 @FunctionalInterface
 public interface Function9<T0, T1, T2, T3, T4, T5, T6, T7, T8, R> {
 

@@ -254,6 +254,7 @@ class FutureUtilsTest {
     }
 
     @Test
+    @SuppressWarnings("java:S5961")
     void flatFallbackWith_mapper_supplier() {
         val throwables = new ArrayList<Throwable>();
         val numbers = new HashSet<Integer>();
@@ -459,6 +460,7 @@ class FutureUtilsTest {
         assertFailedWith(NumberFormatException.class, "null", FutureUtils.flatWrap(null, stringToIntFuture));
     }
 
+    @SuppressWarnings("java:S2925")
     @SneakyThrows
     private static void delayParseInt(String s, Handler<AsyncResult<Integer>> handler) {
         Thread.sleep(1_000);
@@ -1052,6 +1054,7 @@ class FutureUtilsTest {
     }
 
     @Test
+    @SuppressWarnings("java:S5961")
     void any8() {
         Future<String> future0 = Future.succeededFuture();
         Promise<Integer> promise1 = Promise.promise();
@@ -1102,6 +1105,7 @@ class FutureUtilsTest {
     }
 
     @Test
+    @SuppressWarnings("java:S5961")
     void any9() {
         Future<String> future0 = Future.succeededFuture();
         Promise<Integer> promise1 = Promise.promise();

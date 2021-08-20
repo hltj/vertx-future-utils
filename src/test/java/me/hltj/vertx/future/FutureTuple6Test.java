@@ -140,6 +140,7 @@ class FutureTuple6Test {
     }
 
     @Test
+    @SuppressWarnings("java:S5961")
     void otherwise_withEffect() {
         Future<Integer> future0 = Future.succeededFuture(1);
         Future<Integer> failedFuture0 = Future.failedFuture("fail0");

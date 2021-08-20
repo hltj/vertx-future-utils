@@ -46,7 +46,7 @@ import static me.hltj.vertx.FutureUtils.joinWrap;
  * @since 1.0.0
  */
 @ToString(includeFieldNames = false)
-final public class CompositeFutureTuple4<T0, T1, T2, T3> extends CompositeFutureWrapper {
+public final class CompositeFutureTuple4<T0, T1, T2, T3> extends CompositeFutureWrapper {
     private final FutureTuple4<T0, T1, T2, T3> tuple4;
 
     private CompositeFutureTuple4(CompositeFuture composite, FutureTuple4<T0, T1, T2, T3> tuple4) {
@@ -127,6 +127,7 @@ final public class CompositeFutureTuple4<T0, T1, T2, T3> extends CompositeFuture
      * <p>
      * It likes {@link CompositeFutureTuple2#joinThrough(BiFunction)} but with 4-arity.
      */
+    @SuppressWarnings("java:S117")
     public <R> Future<R> joinThrough(Function4<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<R>> function4) {
         Supplier<Future<R>> supplier = () -> function4.apply(
                 tuple4.get_0(), tuple4.get_1(), tuple4.get_2(), tuple4.get_3()

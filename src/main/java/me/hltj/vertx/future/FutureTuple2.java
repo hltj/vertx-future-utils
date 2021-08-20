@@ -46,6 +46,7 @@ import static me.hltj.vertx.future.InternalUtil.toSupplier;
  * @param <T1> the type parameter of the 2nd {@code Future}
  * @since 1.0.0
  */
+@SuppressWarnings("java:S116")
 @Getter
 @AllArgsConstructor(staticName = "of")
 @ToString(includeFieldNames = false)

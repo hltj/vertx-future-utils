@@ -74,6 +74,7 @@ class CompositeFutureTuple9Test {
         );
     }
 
+    @SuppressWarnings("java:S5961")
     @Test
     void use() {
         Promise<Double> promise0 = Promise.promise();

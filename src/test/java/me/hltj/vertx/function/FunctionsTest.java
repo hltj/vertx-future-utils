@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FunctionsTest {
 
@@ -117,6 +118,7 @@ class FunctionsTest {
 
         val length = function10.andThen(String::length)
                 .apply("hello", true, 1, 2.0, (byte) 3, 4f, 5L, (short) 6, 'a', null);
-        assertEquals(44, length);
+        assertNotNull(length);
+        assertEquals(44, length.intValue());
     }
 }

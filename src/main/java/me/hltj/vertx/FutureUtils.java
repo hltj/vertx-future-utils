@@ -38,6 +38,7 @@ import java.util.function.Supplier;
  * @author <a href="https://hltj.me">JiaYanwei</a>
  * @since 1.0.0
  */
+@SuppressWarnings("java:S107")
 public final class FutureUtils {
 
     private FutureUtils() {
@@ -217,6 +218,7 @@ public final class FutureUtils {
      * @param <R>      the result type of the evaluation
      * @return succeed {@code Future} for main scenario and failed {@code Future} if a non-checked exception thrown
      */
+    @SuppressWarnings("java:S1181")
     public static <R> Future<R> wrap(Supplier<R> supplier) {
         try {
             return Future.succeededFuture(supplier.get());
@@ -254,6 +256,7 @@ public final class FutureUtils {
      * @return the evaluated {@code Future} for main scenario and failed {@code Future} if a non-checked exception
      * thrown
      */
+    @SuppressWarnings("java:S1181")
     public static <R> Future<R> joinWrap(Supplier<Future<R>> supplier) {
         try {
             return supplier.get();

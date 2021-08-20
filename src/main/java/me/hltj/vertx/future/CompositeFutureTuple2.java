@@ -45,7 +45,7 @@ import static me.hltj.vertx.FutureUtils.joinWrap;
  * @since 1.0.0
  */
 @ToString(includeFieldNames = false)
-final public class CompositeFutureTuple2<T0, T1> extends CompositeFutureWrapper {
+public final class CompositeFutureTuple2<T0, T1> extends CompositeFutureWrapper {
     private final FutureTuple2<T0, T1> tuple2;
 
     private CompositeFutureTuple2(CompositeFuture composite, FutureTuple2<T0, T1> tuple2) {
@@ -155,6 +155,7 @@ final public class CompositeFutureTuple2<T0, T1> extends CompositeFutureWrapper 
      * @param <R>       the type parameter of the result type of the {@code function}
      * @return the result {@code Future}
      */
+    @SuppressWarnings("java:S117")
     public <R> Future<R> joinThrough(BiFunction<Future<T0>, Future<T1>, Future<R>> function2) {
         Supplier<Future<R>> supplier = () -> function2.apply(tuple2.get_0(), tuple2.get_1());
         return composite.compose(_x -> joinWrap(supplier), _t -> joinWrap(supplier));

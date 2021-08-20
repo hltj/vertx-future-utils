@@ -127,6 +127,7 @@ public class CompositeFutureWrapper {
      * @param <R>      the type parameter of the result {@code Future}
      * @return the result {@code Future}
      */
+    @SuppressWarnings("java:S117")
     public <R> Future<R> joinThrough(Function<CompositeFuture, Future<R>> function) {
         return composite.compose(_x -> joinWrap(composite, function), _t -> joinWrap(composite, function));
     }

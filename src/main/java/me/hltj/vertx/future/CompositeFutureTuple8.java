@@ -50,7 +50,7 @@ import static me.hltj.vertx.FutureUtils.joinWrap;
  * @since 1.0.0
  */
 @ToString(includeFieldNames = false)
-final public class CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends CompositeFutureWrapper {
+public final class CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends CompositeFutureWrapper {
     private final FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> tuple8;
 
     private CompositeFutureTuple8(CompositeFuture composite, FutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> tuple8) {
@@ -156,6 +156,7 @@ final public class CompositeFutureTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends
      * <p>
      * It likes {@link CompositeFutureTuple2#joinThrough(BiFunction)} but with 8-arity.
      */
+    @SuppressWarnings("java:S117")
     public <R> Future<R> joinThrough(
             Function8<Future<T0>, Future<T1>, Future<T2>, Future<T3>, Future<T4>, Future<T5>, Future<T6>, Future<T7>,
                     Future<R>> function8
