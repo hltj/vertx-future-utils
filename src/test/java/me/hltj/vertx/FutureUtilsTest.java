@@ -38,6 +38,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtensionMethod({Future.class, FutureExtensions.class})
 class FutureUtilsTest {
 
+    private static final String PARSE_NULL_NUMBER_ERR_MSG =
+            Integer.parseInt(System.getProperty("java.version").split("\\.")[0]) >= 17 ?
+                    "Cannot parse null string" : "null";
+
     @SneakyThrows
     @Test
     void futurize() {
@@ -456,8 +460,10 @@ class FutureUtilsTest {
                 FutureUtils.flatWrap("!", stringToIntFuture)
         );
 
-        assertFailedWith(NumberFormatException.class, "null", FutureUtils.joinWrap(null, stringToIntFuture));
-        assertFailedWith(NumberFormatException.class, "null", FutureUtils.flatWrap(null, stringToIntFuture));
+        assertFailedWith(NumberFormatException.class, PARSE_NULL_NUMBER_ERR_MSG,
+                FutureUtils.joinWrap(null, stringToIntFuture));
+        assertFailedWith(NumberFormatException.class, PARSE_NULL_NUMBER_ERR_MSG,
+                FutureUtils.flatWrap(null, stringToIntFuture));
     }
 
     @SuppressWarnings("java:S2925")

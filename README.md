@@ -38,7 +38,7 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 
 ### Java
 
-- [x] Java 16
+- [x] Java 17
 - [x] Java 11
 - [x] Java 8
 
@@ -53,7 +53,7 @@ Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vert
 <!--
 ## Build Status
 
-|  | Java 16 | Java 11 | Java 8|
+|  | Java 17 | Java 11 | Java 8|
 |--|---------|---------|-------|
 | [![Ubuntu](https://img.shields.io/badge/Ubuntu-black?logo=ubuntu&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/1)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/2)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/3)](https://travis-ci.org/hltj/vertx-future-utils) |
 | [![macOS](https://img.shields.io/badge/macOS-black?logo=apple&labelColor=black)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/4)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/5)](https://travis-ci.org/hltj/vertx-future-utils) | [![](https://travis-matrix-badges.herokuapp.com/repos/hltj/vertx-future-utils/branches/master/6)](https://travis-ci.org/hltj/vertx-future-utils) |
