@@ -44,6 +44,7 @@
 
 ### Vert.x
 
+- [x] 4.2.0 - 4.2.1（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 - [x] 4.1.0 - 4.1.2（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
 - [x] 4.0.3
 - [x] 4.0.0 - 4.0.2（[排除 `vertx-core` 方式](#排除-vertx-core-方式)）
@@ -87,7 +88,7 @@ implementation group: 'me.hltj', name: 'vertx-future-utils', version: '1.1.2'
 ### 排除 `vertx-core` 方式
 
 默认依赖的 `io.vertx:vertx-core` 版本是 `4.0.3`，如果想将 `vertx-future-utils`
-用于 `vertx-core` 为 `3.8.5`、 `3.9.0` 到 `3.9.8`、 `4.0.0` 到 `4.0.2` 或者 `4.1.0` 到 `4.1.2` 的场景，那么需要排除默认依赖。
+用于 `vertx-core` 为 `3.8.5` 到 `3.9.8`、 `4.0.0` 到 `4.0.2` 或者 `4.1.0` 到 `4.2.1` 的场景，那么需要排除默认依赖。
 
 <details>
 

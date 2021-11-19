@@ -1,5 +1,3 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-
 plugins {
     java
     `maven-publish`
@@ -15,17 +13,17 @@ repositories {
     mavenCentral()
 }
 
-val vertxVersion = "4.1.2"
+val vertxVersion = "4.2.1"
 
 dependencies {
-    val lombokDependency = "org.projectlombok:lombok:1.18.20"
+    val lombokDependency = "org.projectlombok:lombok:1.18.22"
 
     compileOnly(lombokDependency)
     annotationProcessor(lombokDependency)
     implementation(group = "io.vertx", name = "vertx-core", version = vertxVersion)
     testCompileOnly(lombokDependency)
     testAnnotationProcessor(lombokDependency)
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.7.2")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.8.1")
 }
 
 java {
@@ -116,14 +114,14 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
-tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
+tasks.dependencyUpdates {
     rejectVersionIf {
         isNonStable(candidate.version)
     }
 }
 
 fun isNonStable(version: String): Boolean {
-    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { it in version.toUpperCase() }
     val regex = "^[0-9,.v-]+(-r)?$".toRegex()
     return !stableKeyword && !regex.matches(version)
 }
