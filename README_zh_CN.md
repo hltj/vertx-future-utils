@@ -353,25 +353,25 @@ Future<Double> productFuture = CompositeFuture.all(future0, future1).map(
 
 其结果 `productFuture` 是“成功，值为 7.0”，没错吧？很不幸，错了。而是“失败，错误为 ClassCastException”，
 因为类型参数指定错了。应该是 `(Integer, Double)`，而不是 `(Double, Integer)`！
-可以用 `CompositeFutureTuple2#applift()`（或其别名 `mapTyped()`）来避免这种易错情形。例如：
+可以用 `CompositeFutureTuple2#mapTyped()`（或其别名 `applift()`）来避免这种易错情形。例如：
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
 Future<Double> future1 = Future.succeededFuture(3.5);
-Future<Double> productFuture = FutureUtils.all(future0, future1).applift((i, d) -> i * d);
+Future<Double> productFuture = FutureUtils.all(future0, future1).mapTyped((i, d) -> i * d);
 ```
 
-在 `applift()` 的参数 lambda 表达式内部不需要再手动指定类型参数了，
+在 `mapTyped()` 的参数 lambda 表达式内部不需要再手动指定类型参数了，
 因为 `CompositeFutureTuple2` 已经保留了这些类型。
 此外，由于样板代码的减少，上述代码显著简化了。
 
-如果该 lambda 表达式的结果自身就是 `Future`，那么可以使用 `CompositeFutureTuple2#joinApplift()`（或其别名
-`flatMapTyped()`）来展平嵌套的结果 `Future`。例如：
+如果该 lambda 表达式的结果自身就是 `Future`，那么可以使用 `CompositeFutureTuple2#flatMapTyped()`（或其别名
+`joinApplift()`）来展平嵌套的结果 `Future`。例如：
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
 Future<Double> future1 = Future.failedFuture("error");
-Future<Double> productFuture = FutureUtils.all(future0, future1).joinApplift((i, d) -> wrap(() -> i * d));
+Future<Double> productFuture = FutureUtils.all(future0, future1).flatMapTyped((i, d) -> wrap(() -> i * d));
 ```
 
 还有 `any()` 与 `join()` 工厂方法，以及用于 3-9 元的
@@ -423,7 +423,7 @@ Future<Integer> future0 = defaultWith(futureA, 1);
 Future<Integer> future1 = defaultWith(futureB, 1);
 Future<Double> future2 = defaultWith(futureC, 1.0);
 Future<Double> productFuture = FutureUtils.all(future0, future1, future2)
-        .applift((i1, i2, d) -> i1 * i2 * d);
+        .mapTyped((i1, i2, d) -> i1 * i2 * d);
 ```
 
 其实完全没必要引入那么多临时变量，可以用 `FutureTuple3#defaults()`
@@ -433,7 +433,7 @@ Future<Double> productFuture = FutureUtils.all(future0, future1, future2)
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
         .defaults(1, 1, 1.0)
         .join()
-        .applift((i1, i2, d) -> i1 * i2 * d);
+        .mapTyped((i1, i2, d) -> i1 * i2 * d);
 ```
 
 工厂方法 `tuple()` 创建了一个 `FutureTuple3` 对象，然后调用其 `defaults()`
@@ -446,7 +446,7 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
         .fallback(1, 1, 1.0)
         .all()
-        .applift((i1, i2, d) -> i1 * i2 * d);
+        .mapTyped((i1, i2, d) -> i1 * i2 * d);
 ```
 
 `FutureTuple[2-9]` 中还有其他类似方法：`mapEmpty()`、 `otherwise()`、 `otherwiseEmpty()`
@@ -458,11 +458,11 @@ Future<Double> productFuture = tuple(futureA, futureB, futureC)
 Future<String> productFutureA = tuple(futureA, futureB, futureC)
         .otherwiseEmpty()
         .any()
-        .applift((i1, i2, d) -> String.format("results: (%d, %d, %f)", i1, i2, d));
+        .mapTyped((i1, i2, d) -> String.format("results: (%d, %d, %f)", i1, i2, d));
 
 Future<Double> productFutureB = tuple(futureA, futureB, futureC).fallback(
         t -> log.error("fallback on failure", t),
         () -> log.warn("fallback on empty"),
         1, 1, 1.0
-).all().applift((i1, i2, d) -> i1 * i2 * d);
+).all().mapTyped((i1, i2, d) -> i1 * i2 * d);
 ```
