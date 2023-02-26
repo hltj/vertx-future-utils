@@ -2,11 +2,9 @@
 
 Convenient Utilities for Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vertx/core/Future.html).
 
-[![Build Status](https://img.shields.io/github/workflow/status/hltj/vertx-future-utils/Build?logo=github)](https://github.com/hltj/vertx-future-utils/actions/workflows/build.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/hltj/vertx-future-utils/build.yml?logo=github)](https://github.com/hltj/vertx-future-utils/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/me.hltj/vertx-future-utils)](https://search.maven.org/artifact/me.hltj/vertx-future-utils)
 [![javadoc](https://javadoc.io/badge2/me.hltj/vertx-future-utils/javadoc.svg)](https://javadoc.io/doc/me.hltj/vertx-future-utils)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/hltj/vertx-future-utils.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/hltj/vertx-future-utils/alerts/)
-[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/hltj/vertx-future-utils.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/hltj/vertx-future-utils/context:java)
 [![Codecov](https://img.shields.io/codecov/c/github/hltj/vertx-future-utils)](https://codecov.io/gh/hltj/vertx-future-utils)
 [![License: LGPL v3](https://img.shields.io/badge/license-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhltj%2Fvertx-future-utils&count_bg=%2379C83D&title_bg=%23555555&icon=github.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://github.com/hltj/vertx-future-utils)
@@ -355,25 +353,25 @@ Future<Double> productFuture = CompositeFuture.all(future0, future1).map(
 
 The result `productFuture` is 'succeed with 7.0'? Unfortunately, NO. It is 'failed with a ClassCastException',
 because the type parameters are misspecified. They are `(Integer, Double)`, not `(Double, Integer)`!
-We can use `CompositeFutureTuple2#applift()` (or its alias `mapTyped()`) to avoid this error-prone case. e.g.:
+We can use `CompositeFutureTuple2#mapTyped()` (or its alias `applift()`) to avoid this error-prone case. e.g.:
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
 Future<Double> future1 = Future.succeededFuture(3.5);
-Future<Double> productFuture = FutureUtils.all(future0, future1).applift((i, d) -> i * d);
+Future<Double> productFuture = FutureUtils.all(future0, future1).mapTyped((i, d) -> i * d);
 ```
 
-We needn't specify the type parameters manually inside the lambda argument of `applift()` anymore,
+We needn't specify the type parameters manually inside the lambda argument of `mapTyped()` anymore,
 because the `CompositeFutureTuple2` has already kept them.
 Moreover, the code is significantly simplified with the boilerplate code reduced.
 
-If the lambda result itself is a `Future`, we can use `CompositeFutureTuple2#joinApplift()` (or its alias
-`flatMapTyped()`) to flatten the nested result `Future`s. e.g:
+If the lambda result itself is a `Future`, we can use `CompositeFutureTuple2#flatMapTyped()` (or its alias
+`joinApplift()`) to flatten the nested result `Future`s. e.g:
 
 ``` java
 Future<Integer> future0 = Future.succeededFuture(2);
 Future<Double> future1 = Future.failedFuture("error");
-Future<Double> productFuture = FutureUtils.all(future0, future1).joinApplift((i, d) -> wrap(() -> i * d));
+Future<Double> productFuture = FutureUtils.all(future0, future1).flatMapTyped((i, d) -> wrap(() -> i * d));
 ```
 
 There are also `any()` and `join()` factory methods, and `CompositeFutureTuple3` to `CompositeFutureTuple9`
@@ -425,7 +423,7 @@ Future<Integer> future0 = defaultWith(futureA, 1);
 Future<Integer> future1 = defaultWith(futureB, 1);
 Future<Double> future2 = defaultWith(futureC, 1.0);
 Future<Double> productFuture = FutureUtils.all(future0, future1, future2)
-        .applift((i1, i2, d) -> i1 * i2 * d);
+        .mapTyped((i1, i2, d) -> i1 * i2 * d);
 ```
 
 In fact, it's unnecessary to introduce so many temporary variables at all, we can use `FutureTuple3#defaults()`
@@ -435,7 +433,7 @@ to simplify it. e.g.:
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
         .defaults(1, 1, 1.0)
         .join()
-        .applift((i1, i2, d) -> i1 * i2 * d);
+        .mapTyped((i1, i2, d) -> i1 * i2 * d);
 ```
 
 the factory method `tuple()` creates a `FutureTuple3` object, and then invoke its `defaults()`
@@ -448,7 +446,7 @@ we can use it to set the fallback values at once. e.g.:
 Future<Double> productFuture = tuple(futureA, futureB, futureC)
         .fallback(1, 1, 1.0)
         .all()
-        .applift((i1, i2, d) -> i1 * i2 * d);
+        .mapTyped((i1, i2, d) -> i1 * i2 * d);
 ```
 
 There are other similar methods in `FutureTuple[2-9]`: `mapEmpty()`, `otherwise()`, `otherwiseEmpty()`
@@ -460,11 +458,11 @@ see the [Java doc](https://javadoc.io/doc/me.hltj/vertx-future-utils/latest/me/h
 Future<String> productFutureA = tuple(futureA, futureB, futureC)
         .otherwiseEmpty()
         .any()
-        .applift((i1, i2, d) -> String.format("results: (%d, %d, %f)", i1, i2, d));
+        .mapTyped((i1, i2, d) -> String.format("results: (%d, %d, %f)", i1, i2, d));
 
 Future<Double> productFutureB = tuple(futureA, futureB, futureC).fallback(
         t -> log.error("fallback on failure", t),
         () -> log.warn("fallback on empty"),
         1, 1, 1.0
-).all().applift((i1, i2, d) -> i1 * i2 * d);
+).all().mapTyped((i1, i2, d) -> i1 * i2 * d);
 ```

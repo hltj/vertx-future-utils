@@ -2,11 +2,9 @@
 
 易用的 Vert.x [`Future`](https://vertx.io/docs/apidocs/io/vertx/core/Future.html) 实用工具。
 
-[![构建状态](https://img.shields.io/github/workflow/status/hltj/vertx-future-utils/Build?logo=github&label=构建)](https://github.com/hltj/vertx-future-utils/actions/workflows/build.yml)
+[![构建状态](https://img.shields.io/github/actions/workflow/status/hltj/vertx-future-utils/build.yml?logo=github&label=构建)](https://github.com/hltj/vertx-future-utils/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/me.hltj/vertx-future-utils)](https://search.maven.org/artifact/me.hltj/vertx-future-utils)
 [![javadoc](https://javadoc.io/badge2/me.hltj/vertx-future-utils/javadoc.svg)](https://javadoc.io/doc/me.hltj/vertx-future-utils)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/hltj/vertx-future-utils.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/hltj/vertx-future-utils/alerts/)
-[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/hltj/vertx-future-utils.svg?logo=lgtm&logoWidth=18&label=代码质量：java)](https://lgtm.com/projects/g/hltj/vertx-future-utils/context:java)
 [![测试覆盖率](https://img.shields.io/codecov/c/github/hltj/vertx-future-utils?label=测试覆盖)](https://codecov.io/gh/hltj/vertx-future-utils)
 [![授权许可：LGPL v3](https://img.shields.io/badge/授权许可-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![访客数](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhltj%2Fvertx-future-utils&count_bg=%2379C83D&title_bg=%23555555&icon=github.svg&icon_color=%23E7E7E7&title=%E8%AE%BF%E5%AE%A2&edge_flat=false)](https://github.com/hltj/vertx-future-utils)
